@@ -31,7 +31,7 @@ Las instrucciones completas, en lenguaje sencillo, están en **[INFORME.txt](INF
 | [`INFORME.txt`](INFORME.txt) | Instrucciones, correcciones del Proyecto 1, lista de errores, etapas, gramática, decisiones, pruebas y uso de IA |
 | [`dist/`](dist) | El programa listo para usar (`.jar`) y el archivo PHP de ejemplo |
 | [`src/`](src/proyectocompiladores2) | El código fuente en Java |
-| [`pruebas/`](pruebas) | 112 casos (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt) y los scripts `ejecutar-pruebas.bat` / `.sh` que los comparan automáticamente |
+| [`pruebas/`](pruebas) | 118 casos (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt) y los scripts `ejecutar-pruebas.bat` / `.sh` que los comparan automáticamente |
 | [`recursos/`](recursos) | Copia del código PHP original de la cátedra |
 | `nbproject/`, `build.xml`, `manifest.mf`, `test/` | Archivos del proyecto NetBeans (*Java with Ant*) |
 
@@ -66,6 +66,7 @@ Cada tarea tiene una tarjeta en Trello y un *Pull Request* en GitHub, donde se e
 | T26 | Control de calidad final | [#27](../../pull/27) |
 | T27 | INFORME y documentación | [#28](../../pull/28) |
 | T29 | Revisión final: comando for, semántico 902/903, codificación del `.log` y simulación en otro equipo | [#29](../../pull/29) |
+| T30 | Pulido tras el code review: expresiones válidas en echo, `%=`, mensajes del 902 y recuperación con llaves faltantes | [#30](../../pull/30) |
 
 - Todos los Pull Requests: [lista completa](../../pulls?q=is%3Apr)
 - Historial de cambios: [commits](../../commits/main)

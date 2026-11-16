@@ -142,7 +142,7 @@ para que las tildes queden exactamente iguales.
      4. Abrir el .log: debajo de esa línea aparece el error.
 
   Forma 2: ejecutar todas las pruebas automáticas (recomendado).
-     La carpeta "pruebas" tiene 112 casos de prueba:
+     La carpeta "pruebas" tiene 118 casos de prueba:
        - pruebas\casos       los archivos .php, cada uno con un error puesto a
                              propósito (algunos no tienen errores, para
                              comprobar que no se marcan errores falsos)
@@ -153,7 +153,7 @@ para que las tildes queden exactamente iguales.
             pruebas\ejecutar-pruebas.bat
      El script ejecuta el programa con todos los casos, compara cada .log con
      el esperado byte por byte y al final muestra:
-            Pruebas correctas: 112   Fallidas: 0
+            Pruebas correctas: 118   Fallidas: 0
 
 
 6. CÓMO COMPILARLO EN NETBEANS
@@ -223,6 +223,13 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
        en UTF-8 y las tildes cambiaban: el .log ya no era una copia exacta.
        Ahora el .log usa la misma codificación del .php y conserva el BOM si
        lo tiene. Pruebas: P109 (UTF-8 con BOM), P110 (ANSI), P111.
+     - En la revisión final de código se encontró que algunas expresiones
+       válidas de PHP dentro de un echo daban el Error 806 (por ejemplo
+       2 ** 3, $a++, (int) $a, $a ?: "x", $obj->nombre). Ahora se aceptan
+       (prueba P112). También: "$x %= 0" da el Error 903 (P115), "$1x %= 2"
+       da el 201 como "$1x += 2" (P116), un echo con "(" sin cerrar avisa
+       que falta el ")" (P113) y el 902 muestra la variable completa
+       ($notas[0]) y si es un if o un elseif (P114).
 
 
 8. LISTA DE ERRORES QUE DETECTA
@@ -412,7 +419,8 @@ Del Proyecto 2:
     código que no está dentro de un while, if, else o for no se revisa,
     porque el enunciado solo pide la indentación de esos bloques.
   - Echo: no se permiten paréntesis que agrupen lo que se imprime
-    (echo ("Hola")), pero sí los de una función (echo count($notas);).
+    (echo ("Hola")), pero sí los de una función (echo count($notas);) y
+    los de una conversión de tipo (echo (int) $promedio;).
     Si una cadena sin cerrar está dentro de un echo se reporta el error del
     echo (803/804) en lugar del general 502, para no repetir el mensaje.
   - El for se valida con las mismas reglas del while (errores 611 a 620),
@@ -452,23 +460,31 @@ Del Proyecto 2:
     list(...) = ... o dentro de funciones por referencia.
   - Una resta escrita sin espacios entre una variable y una palabra
     ($a-total) se toma como un nombre de variable con guion (Error 203).
+  - Los caracteres & | ^ ~ @ y ` no forman parte del alfabeto definido en
+    el Proyecto 1 (Error 501), así que los operadores de bits no se
+    aceptan. Dentro de un echo tampoco se aceptan una asignación
+    (echo $x = 5;) ni un arreglo escrito con corchetes (echo [1, 2][0];).
+  - Cuando faltan llaves en varias estructuras a la vez, la recuperación
+    decide por la indentación a qué estructura pertenece cada "}"; si el
+    código además está mal indentado, puede asignarla a otra.
 
 
 13. PRUEBAS REALIZADAS
 -------------------------------------------------------------------------------
-  - 112 casos de prueba automáticos (sección 5, Forma 2): cada .log se
-    compara byte por byte con el esperado. Resultado: 112 de 112, con Java 8
+  - 118 casos de prueba automáticos (sección 5, Forma 2): cada .log se
+    compara byte por byte con el esperado. Resultado: 118 de 118, con Java 8
     y Java 21.
   - Pruebas de "mutación tipo tutor": un programa cambió el código de
-    ejemplo de 607 formas distintas, como lo haría el tutor (cada error del
-    enunciado en cada lugar posible, variantes válidas de espacios y 400
-    combinaciones de dos errores). En todas aparecieron exactamente los
-    errores esperados y ningún otro.
+    ejemplo de 620 formas distintas, como lo haría el tutor (cada error del
+    enunciado en cada lugar posible, variantes válidas de espacios y de
+    expresiones, y 400 combinaciones de dos errores), más 3000 combinaciones
+    de tres errores. En todas aparecieron exactamente los errores esperados
+    y ningún otro.
   - Comparación con PHP real (versión 8.3): los casos "válidos" son código
     PHP correcto, y los errores de estructura (paréntesis, llaves, punto y
     coma, comillas) también los rechaza PHP. Los errores 901 coinciden con
     los avisos "Undefined variable" de PHP al ejecutar los mismos casos.
-  - Robustez: 8000 archivos con cambios al azar; el programa nunca se
+  - Robustez: 14 000 archivos con cambios al azar; el programa nunca se
     detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
     numeración y los errores queda el .php original byte por byte (R2).
   - Compilación con Ant (lo mismo que hace "Clean and Build" de NetBeans).
@@ -476,7 +492,9 @@ Del Proyecto 2:
     descomprimió en una carpeta con espacios y tildes ("Mis Documentos\
     Compiladores Pablo Cortés"), se compiló desde cero y se ejecutó solo con
     Java 8, desde otra carpeta de trabajo y con la configuración de idioma de
-    Windows en español (Cp1252). Resultado: 112 de 112.
+    Windows en español (Cp1252). Resultado: 118 de 118.
+  - Revisión del .jar: sus 42 clases están compiladas para Java 8 y cada
+    método de Java que usan existe en Java 8 (se comprobó uno por uno).
 
 
 14. VERIFICACIÓN EN OTRO EQUIPO
@@ -492,7 +510,7 @@ un equipo distinto al de desarrollo:
   Ejecución (sección 3): java -jar ProyectoCompiladores2.jar
                          -> se generó CodigoProyecto-errores.log sin errores
   Pruebas (sección 5):   pruebas\ejecutar-pruebas.bat
-                         -> Pruebas correctas: 112   Fallidas: 0
+                         -> Pruebas correctas: 118   Fallidas: 0
   Responsable:           Pablo Cortés
 
 
@@ -553,6 +571,12 @@ Prompts principales cuyo resultado se incorporó al proyecto:
      bastante extensa todo lo que pueda ser como un error ... hacer todas
      las pruebas incluso en un entorno simulado como si fuera otro
      dispositivo" (revisión final antes de la entrega).
+ 10. "Revisa si ya ahora sí está todo actualizado en el repositorio para
+     hacer tus últimas pruebas finales, actualiza también el Trello ... si
+     encuentras más cosas, hacer un último PR con esas mejoras, luego un
+     code review intensivo para revisar que todo esté en orden y óptimo y
+     por último volver a ejecutar pruebas sobre ese código limpio"
+     (revisión de código y pulido final, PR #30).
 
 
 16. FUENTES

@@ -49,7 +49,8 @@ P32_solo_lado_izquierdo.php          201                 Despues de L46: '$copia
 P33_division_multilinea.php          -                   L22 partida: '$promedio = $suma_notas' y '    / $cantidad_notas;' (division, no comentario, T19)
 P34_constantes_validas.php           -                   Despues de L46: 'echo PHP_EOL;' y '$maximo = PHP_INT_MAX;' (constantes, no texto suelto, T19)
 P35_division_tras_comentario.php     -                   Como P33 pero con un comentario al final de la primera linea (T19)
-P36_casos_de_revision.php            201 204 402 704 401 Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
+P36_casos_de_revision.php            201 204 402 704 401
+                                                         Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
                                                          '$nota_extra = 10 // ...' sin ';' seguido de 'continua aqui', y 'if (...)' seguido de '/ comentario'
 P37_llave_sobrante.php               503                 Despues de L46 se agrega una linea con '}' que no cierra nada (sintactico, T20)
 P38_estructura_mal_escrita.php       504                 L37: 'whlie (...) {' en vez de 'while' (sugiere 'while')
@@ -98,7 +99,8 @@ P78_echo_operador_sin_valor.php      806                 L38: echo "Revisando no
 P79_echo_falta_operador.php          806                 L12: echo "Estudiante: " $nombre_estudiante;   (sin el punto)
 P80_echo_validos.php                 -                   echo con funciones (count, trim), coma, constante, signo, indices y en dos lineas
 P81_echo_comillas_mezcladas.php      803                 L44: echo "Hola';   (abre con doble y cierra con simple)
-P82_echo_ejemplos_pdf.php            802 801 803 804 805 Los ejemplos del enunciado (permitidos y con error) uno tras otro
+P82_echo_ejemplos_pdf.php            802 801 803 804 805
+                                                         Los ejemplos del enunciado (permitidos y con error) uno tras otro
 P83_echo_operadores_validos.php      -                   echo con comparaciones, &&, !=, operador ternario (? :) y ??
 P84_semantico_mayuscula.php          901                 L44: echo $Mensaje_final;   (sugiere $mensaje_final; PHP avisa 'Undefined variable' en la L44)
 P85_semantico_en_cadena.php          901                 L25: echo "Promedio: $Promedio\n";   (variable dentro de comillas dobles)
@@ -132,6 +134,14 @@ P109_codificacion_utf8_con_bom.php   301                 El archivo guardado com
 P110_codificacion_ansi.php           -                   El archivo guardado como ANSI (Windows-1252): el .log conserva las tildes byte por byte
 P111_codificacion_byte_no_definido.php
                                      -                   ANSI con un byte que Windows-1252 no define (0x81): el .log lo copia igual
+P112_echo_expresiones_validas.php    -                   Al final: echo con **, <=>, and, $x++, (int), ?:, <<, instanceof y %   (PHP valido)
+P113_echo_parentesis_sin_cerrar.php  802 806             L44: echo ("Final: " . $mensaje_final;   (parentesis que agrupa y sin cerrar)
+P114_semantico_asignacion_arreglo_elseif.php
+                                     902                 L30: } elseif ($notas[0] = 60) {   (el mensaje muestra $notas[0] y "elseif")
+P115_semantico_modulo_cero.php       903                 Despues de L50: $resultado %= 0;   (PHP: DivisionByZeroError "Modulo by zero")
+P116_id_asignacion_modulo.php        201                 Despues de L50: $1resultado %= 2;   (%= es asignacion, igual que +=)
+P117_recuperacion_for_y_while_sin_llaves.php
+                                     615 604             Sin la '}' del for (L20) y sin la '{' del while (L37): sin errores en cascada
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
