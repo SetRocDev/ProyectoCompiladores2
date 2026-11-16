@@ -102,6 +102,7 @@ P84_semantico_mayuscula.php          901                 L44: echo $Mensaje_fina
 P85_semantico_en_cadena.php          901                 L25: echo "Promedio: $Promedio\n";   (variable dentro de comillas dobles)
 P86_semantico_antes_de_asignar.php   901                 L5: echo $cantidad_notas;   (se usa antes de su asignacion)
 P87_semantico_valido.php             -                   foreach con =>, +=, ++, function con parametro, global, comillas simples, \$ y $_SERVER
+P88_parentesis_sin_cerrar.php        603                 L9: array(...;  sin ')'  y L37: while () {   (el '(' abierto no oculta el error del while, T26)
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola

@@ -174,10 +174,13 @@ public class AnalizadorSintactico {
         boolean primero = true;
         while (!fin()) {
             Token token = actual();
-            if (!primero && profundidad == 0 && terminaSentenciaSinPuntoYComa(token)) {
+            // Un paréntesis sin cerrar no debe "tragarse" el resto del archivo:
+            // ';', '{', '}' y '?>' siempre terminan la sentencia
+            if (!primero && (es(token, "{") || es(token, "}") || esEtiqueta(token)
+                    || (profundidad == 0 && terminaSentenciaSinPuntoYComa(token)))) {
                 break;
             }
-            if (es(token, ";") && profundidad == 0) {
+            if (es(token, ";")) {
                 avanzar();
                 break;
             }
@@ -208,9 +211,10 @@ public class AnalizadorSintactico {
         int profundidad = 0;
         while (!fin()) {
             Token token = actual();
-            if (profundidad == 0 && (es(token, "{") || es(token, "}") || esEtiqueta(token))) {
+            if (es(token, "{") || es(token, "}") || esEtiqueta(token)) {
                 break;
             }
+            // En la cabecera de un for los ';' van dentro de los paréntesis
             if (profundidad == 0 && es(token, ";")) {
                 avanzar();
                 return estructura;
