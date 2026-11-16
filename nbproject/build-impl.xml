@@ -17,7 +17,7 @@ is divided into following sections:
   - applet
   - cleanup
 
-        --><project name="ProyectoCompiladores1-impl" default="default" basedir=".." xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" xmlns:if="ant:if" xmlns:unless="ant:unless">
+        --><project name="ProyectoCompiladores2-impl" default="default" basedir=".." xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" xmlns:if="ant:if" xmlns:unless="ant:unless">
     <fail message="Please build using Ant 1.8.0 or higher.">
         <condition>
             <not>
@@ -617,7 +617,7 @@ is divided into following sections:
                     </fileset>
                 </union>
                 <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}"/>
-                <testng listeners="org.testng.reporters.VerboseReporter" mode="${testng.mode}" classfilesetref="test.set" workingDir="${work.dir}" failureProperty="tests.failed" methods="${testng.methods.arg}" outputdir="${build.test.results.dir}" suitename="ProyectoCompiladores1" testname="TestNG tests">
+                <testng listeners="org.testng.reporters.VerboseReporter" mode="${testng.mode}" classfilesetref="test.set" workingDir="${work.dir}" failureProperty="tests.failed" methods="${testng.methods.arg}" outputdir="${build.test.results.dir}" suitename="ProyectoCompiladores2" testname="TestNG tests">
                     <xmlfileset dir="${build.test.classes.dir}" includes="@{testincludes}"/>
                     <propertyset>
                         <propertyref prefix="test-sys-prop."/>
@@ -714,7 +714,7 @@ is divided into following sections:
                 <condition property="test.class.or.method" value="-methods @{testClass}.@{testMethod}" else="-testclass @{testClass}">
                     <isset property="test.method"/>
                 </condition>
-                <condition property="testng.cmd.args" value="@{testClass}" else="-suitename ProyectoCompiladores1 -testname @{testClass} ${test.class.or.method}">
+                <condition property="testng.cmd.args" value="@{testClass}" else="-suitename ProyectoCompiladores2 -testname @{testClass} ${test.class.or.method}">
                     <matches string="@{testClass}" pattern=".*\.xml"/>
                 </condition>
                 <delete dir="${build.test.results.dir}" quiet="true"/>
@@ -1055,7 +1055,7 @@ is divided into following sections:
         <delete file="${built-jar.properties}" quiet="true"/>
     </target>
     <target name="-warn-already-built-jar" if="already.built.jar.${basedir}">
-        <echo level="warn" message="Cycle detected: ProyectoCompiladores1 was already built"/>
+        <echo level="warn" message="Cycle detected: ProyectoCompiladores2 was already built"/>
     </target>
     <target name="deps-jar" depends="init,-deps-jar-init" unless="no.deps">
         <mkdir dir="${build.dir}"/>
@@ -1726,7 +1726,7 @@ is divided into following sections:
         <delete file="${built-clean.properties}" quiet="true"/>
     </target>
     <target name="-warn-already-built-clean" if="already.built.clean.${basedir}">
-        <echo level="warn" message="Cycle detected: ProyectoCompiladores1 was already built"/>
+        <echo level="warn" message="Cycle detected: ProyectoCompiladores2 was already built"/>
     </target>
     <target name="deps-clean" depends="init,-deps-clean-init" unless="no.deps">
         <mkdir dir="${build.dir}"/>

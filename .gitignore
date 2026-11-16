@@ -4,6 +4,8 @@
 
 # Logs generados por el analizador al ejecutar pruebas
 *-errores.log
+# ...excepto los resultados esperados de la batería de pruebas
+!pruebas/esperados/*-errores.log
 
 # Sistema operativo
 Thumbs.db

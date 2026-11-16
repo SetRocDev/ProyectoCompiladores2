@@ -4,7 +4,7 @@
  Curso:        03307 Compiladores - UNED
  Proyecto:     Proyecto 1, III Cuatrimestre 2026
  Estudiante:   Pablo Cortés
- Repositorio:  https://github.com/SetRocDev/ProyectoCompiladores1
+ Repositorio:  https://github.com/SetRocDev/ProyectoCompiladores2
  Control de fujo: https://trello.com/invite/b/6ac4797666a264cc41de73d3/ATTI996458e6e54a45349635f547c161515c85096B7C/proyecto-compiladores
 ===============================================================================
 
@@ -62,7 +62,7 @@ cualquiera se deben seguir estos pasos para su correcta ejecución:
 
   Paso 1. Abrir la carpeta del proyecto y entrar a la carpeta "dist".
           Ahí hay dos archivos:
-              ProyectoCompiladores1.jar   (el programa)
+              ProyectoCompiladores2.jar   (el programa)
               CodigoProyecto.php          (el código PHP que se va a revisar, se adjunta el .php base de AprendeU)
 
   Paso 2. Abrir el Símbolo del sistema (CMD) en esa carpeta.
@@ -71,11 +71,11 @@ cualquiera se deben seguir estos pasos para su correcta ejecución:
           y presionar Enter. Se abrirá el CMD con la ruta del "dist".
 
   Paso 3. Escribir este comando y presionar Enter:
-              java -jar ProyectoCompiladores1.jar
+              java -jar ProyectoCompiladores2.jar
 
   Paso 4. En la ventana aparece un resumen parecido a este:
               === Analizador lexico PHP ===
-              Carpeta: C:\...\ProyectoCompiladores1\dist
+              Carpeta: C:\...\ProyectoCompiladores2\dist
 
               Archivo: CodigoProyecto.php
                 Lineas: 53 | Tokens: 148 | Errores: 0
@@ -91,7 +91,7 @@ cualquiera se deben seguir estos pasos para su correcta ejecución:
      programa los revisa todos y crea un archivo .log para cada uno.
 
   Opcional, para ver más detalle:
-              java -jar ProyectoCompiladores1.jar -tokens
+              java -jar ProyectoCompiladores2.jar -tokens
      Muestra además la lista de tokens (cada palabra o símbolo encontrado y
      su tipo) y la lista de variables encontradas.
 
@@ -123,15 +123,15 @@ de cierre ?>) aparecen al final del archivo.
      2. Cambiar algo. Por ejemplo, en la línea 6, cambiar
             $cantidad_notas = 4;      por      $1cantidad = 4;
      3. Guardar el archivo.
-     4. Ejecutar de nuevo:   java -jar ProyectoCompiladores1.jar
+     4. Ejecutar de nuevo:   java -jar ProyectoCompiladores2.jar
      5. Abrir el .log: debajo de la línea 6 aparece el Error 201.
 
   Forma 2: usar las pruebas incluidas.
-     La carpeta "pruebas" tiene 24 copias del archivo de ejemplo. Cada una
+     La carpeta "pruebas\casos" tiene 24 copias del archivo de ejemplo. Cada una
      tiene un error puesto a propósito (3 de ellas no tienen errores, para
      comprobar que el programa no marca errores falsos).
-     1. Copiar todos los archivos de la carpeta "pruebas" a la carpeta "dist".
-     2. Ejecutar:   java -jar ProyectoCompiladores1.jar
+     1. Copiar todos los archivos de la carpeta "pruebas\casos" a la carpeta "dist".
+     2. Ejecutar:   java -jar ProyectoCompiladores2.jar
      3. Se crea un archivo .log por cada archivo .php.
      4. El archivo  pruebas\esperado.txt  indica qué se cambió en cada prueba
         y qué error debe aparecer.
@@ -188,7 +188,7 @@ de cierre ?>) aparecen al final del archivo.
 
 8. CÓMO ESTÁ ORGANIZADO EL CÓDIGO
 -------------------------------------------------------------------------------
-El código está en la carpeta  src\proyectocompiladores1  y se divide en cuatro
+El código está en la carpeta  src\proyectocompiladores2  y se divide en cuatro
 grupos (paquetes). Cada archivo cumple una sola tarea.
 
   Main.java                          Dirige todo: llama a cada parte en orden.
