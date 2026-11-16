@@ -7,7 +7,7 @@ import proyectocompiladores2.sintactico.arbol.NodoCondicion;
 
 /**
  * Parte común de las estructuras de control: while, if y for.
- * Las dos tienen la misma forma:
+ * Las tres tienen la misma forma:
  *
  *     palabraClave '(' condicion ')' '{' sentencias '}'
  *
