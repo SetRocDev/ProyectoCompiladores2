@@ -49,4 +49,4 @@
 0049 
 0050 $resultado = $total + $Total;
 0051 echo "\nResultado final: $resultado\n";
-Error 305. No se encontró la etiqueta de cierre '?>' en el archivo
+Error 305. No se encontró la etiqueta de cierre '?>'; debe estar en la última línea del archivo (línea 0051)
