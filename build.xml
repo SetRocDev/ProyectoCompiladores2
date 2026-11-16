@@ -61,4 +61,10 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <!-- Después de "Clean and Build" se copia el PHP de ejemplo de la cátedra junto al .jar,
+         porque el programa busca los .php en la carpeta del .jar (R1) y "clean" borra dist/.
+         Uso de IA: agregado con apoyo de Claude Code y revisado por el estudiante. -->
+    <target name="-post-jar">
+        <copy file="recursos/CodigoProyecto.php" todir="${dist.dir}"/>
+    </target>
 </project>

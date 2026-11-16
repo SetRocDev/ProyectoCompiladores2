@@ -10,7 +10,7 @@ import proyectocompiladores2.errores.CodigoError;
  * Así las reglas comunes a todos los bloques (llaves, bloque vacío,
  * indentación) se programan una sola vez en el AnalizadorSintactico y en el
  * ValidadorIndentacion, y cada estructura reporta con sus propios números de
- * error (6xx el while, 7xx el if...).
+ * error (6xx el while y el for, 7xx el if...).
  *
  * Un código null significa que esa regla no se valida para ese tipo de
  * bloque. Por ejemplo, el enunciado no pide validar foreach ni function
@@ -78,7 +78,7 @@ public enum TipoBloque {
         this.cierreDesalineado = cierreDesalineado;
     }
 
-    /** Error cuando falta el '(' después de la palabra clave (while, if). */
+    /** Error cuando falta el '(' después de la palabra clave (while, if, for). */
     public CodigoError getFaltaParentesisApertura() {
         return faltaParentesisApertura;
     }

@@ -5,7 +5,7 @@ import proyectocompiladores2.io.ArchivoFuente;
 import proyectocompiladores2.lexico.Token;
 
 /**
- * Regla de indentación común a los bloques del while, del if y del else
+ * Regla de indentación común a los bloques del while, del if, del else y del for
  * (decisión Q9):
  *   - exactamente 4 espacios por nivel: cada línea de código dentro de un
  *     bloque lleva 4 espacios más que la línea que abre el bloque;

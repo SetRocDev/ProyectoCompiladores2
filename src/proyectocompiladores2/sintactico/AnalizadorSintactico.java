@@ -346,8 +346,9 @@ public class AnalizadorSintactico {
     /**
      * La primera línea de cada sentencia dentro de un bloque lleva 4 espacios
      * más que la línea que abrió el bloque. Los códigos de error son los de
-     * la estructura validada más cercana (while, if o else); un bloque de
-     * for que no está dentro de ninguna de ellas no se revisa (decisión Q9).
+     * la estructura validada más cercana (while, if, else o for); el bloque
+     * de un foreach o function que no está dentro de ninguna de ellas no se
+     * revisa (decisión Q9).
      */
     private void validarIndentacionDeSentencia(Token primero) {
         BloqueAbierto actual = abiertos.peek();
@@ -366,7 +367,7 @@ public class AnalizadorSintactico {
         }
     }
 
-    /** @return las reglas del bloque validado (while, if, else) más interno, o null si no hay. */
+    /** @return las reglas del bloque validado (while, if, else, for) más interno, o null si no hay. */
     private TipoBloque reglasDeIndentacion() {
         for (BloqueAbierto bloque : abiertos) {
             if (bloque.tipo.validaIndentacion()) {
@@ -522,7 +523,7 @@ public class AnalizadorSintactico {
 
 
     // =====================================================================
-    //  Movimiento por los tokens (lo usan también ValidadorWhile, If y Echo)
+    //  Movimiento por los tokens (lo usan también ValidadorWhile, If, For y Echo)
     // =====================================================================
 
     /** @return true si ya no quedan tokens. */

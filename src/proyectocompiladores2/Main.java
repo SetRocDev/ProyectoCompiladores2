@@ -176,7 +176,7 @@ public class Main {
      * Toda la salida de consola pasa por aquí. Cada consola de Windows (CMD,
      * NetBeans, PowerShell) usa una codificación distinta y las tildes pueden
      * verse como '?'; por eso en consola se muestran sin tildes. El .log sí
-     * conserva las tildes porque se escribe en UTF-8.
+     * conserva las tildes porque se escribe con la codificación del .php.
      */
     private static void imprimir(String texto) {
         System.out.println(Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll("\\p{M}", ""));
