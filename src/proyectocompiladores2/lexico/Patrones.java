@@ -79,6 +79,21 @@ public final class Patrones {
 
     public static final String ASIGNACION = "=";
 
+    /**
+     * Asignaciones compuestas: también le dan un valor a la variable de la
+     * izquierda ($suma += 5 equivale a $suma = $suma + 5).
+     */
+    public static final Set<String> ASIGNACIONES_COMPUESTAS = conjunto("+=", "-=", "*=", "/=", ".=");
+
+    /**
+     * @return true si el lexema le asigna un valor a la variable de su
+     *         izquierda: '=' o una asignación compuesta. Las comparaciones
+     *         (==, ===, !=, <=, >=) no son asignaciones (decisión Q5).
+     */
+    public static boolean esOperadorDeAsignacion(String lexema) {
+        return lexema.equals(ASIGNACION) || ASIGNACIONES_COMPUESTAS.contains(lexema);
+    }
+
     public static final Set<String> DELIMITADORES = conjunto(";", ",", "(", ")", "{", "}", "[", "]");
 
     /**
@@ -87,6 +102,15 @@ public final class Patrones {
      */
     public static boolean esPalabraReservada(String palabra) {
         return PALABRAS_RESERVADAS.contains(palabra.toLowerCase(Locale.ROOT));
+    }
+
+    /** Palabras que inician una estructura de control con una condición entre paréntesis. */
+    public static final Set<String> ESTRUCTURAS_DE_CONTROL = conjunto(
+            "if", "elseif", "while", "for", "foreach", "switch");
+
+    /** @return true si la palabra inicia una estructura de control (sin distinguir mayúsculas). */
+    public static boolean esEstructuraDeControl(String palabra) {
+        return ESTRUCTURAS_DE_CONTROL.contains(palabra.toLowerCase(Locale.ROOT));
     }
 
     public static boolean esOtraPalabraClave(String palabra) {

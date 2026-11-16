@@ -17,7 +17,10 @@ import proyectocompiladores2.io.ArchivoFuente;
  *
  * Reglas de corte según el primer carácter del lexema:
  *   "//" o "#"       comentario hasta el final de la línea (su contenido no se divide)
- *   "/" al inicio    intento de comentario mal escrito (R5), hasta el final de la línea
+ *   "/" al inicio    intento de comentario mal escrito (R5), hasta el final de la línea,
+ *                    salvo que la línea anterior haya quedado a mitad de una operación
+ *                    (por ejemplo "$x = $a" y en la línea siguiente "/ $b;"): ahí es
+ *                    una división (corrección del Proyecto 1, tarea T19)
  *   "<?" o "<php"    intento de etiqueta de apertura (incluye "<? php")
  *   "?" ... ">"      intento de etiqueta de cierre (incluye "? >")
  *   comillas         cadena hasta la comilla de cierre
@@ -47,18 +50,61 @@ public class AnalizadorLexico {
      */
     public List<Token> obtenerTokens(ArchivoFuente fuente) {
         List<Token> tokens = new ArrayList<>();
+        boolean operacionPendiente = false;
         for (int numero = 1; numero <= fuente.getCantidadLineas(); numero++) {
-            tokens.addAll(obtenerTokensDeLinea(fuente.getLinea(numero), numero));
+            List<Token> deLaLinea = obtenerTokensDeLinea(fuente.getLinea(numero), numero, operacionPendiente);
+            tokens.addAll(deLaLinea);
+            Token primero = null;
+            for (Token token : deLaLinea) {
+                if (!esComentario(token.getLexema())) {
+                    primero = primero == null ? token : primero;
+                    operacionPendiente = terminaEnOperando(token.getLexema());
+                }
+            }
+            // "if (...)" o "while (...)" al final de una línea no es una operación
+            // a medias: la ')' cierra la condición de la estructura
+            if (operacionPendiente && primero != null && Patrones.esEstructuraDeControl(primero.getLexema())) {
+                operacionPendiente = false;
+            }
         }
         return tokens;
     }
 
     /**
-     * @param linea  texto de la línea
-     * @param numero número de línea (desde 1)
+     * @param lexema un lexema ya cortado
+     * @return true si es un comentario ("//", "#" o el intento mal escrito "/ texto")
+     */
+    private boolean esComentario(String lexema) {
+        return lexema.startsWith("//") || lexema.startsWith("#")
+                || (lexema.startsWith("/") && lexema.length() > 1 && !lexema.equals("/="));
+    }
+
+    /**
+     * Un operando es un valor que puede continuar con una operación en la
+     * línea siguiente: una variable, un número, una cadena, el cierre de un
+     * paréntesis o corchete, o un nombre (constante o función) que no sea
+     * palabra clave.
+     *
+     * @return true si después de este lexema todavía puede venir "/ valor"
+     */
+    private boolean terminaEnOperando(String lexema) {
+        char c = lexema.charAt(0);
+        if (c == '$' || c == '"' || c == '\'' || Character.isDigit(c)
+                || lexema.equals(")") || lexema.equals("]")) {
+            return true;
+        }
+        return (Character.isLetter(c) || c == '_')
+                && !Patrones.esPalabraReservada(lexema) && !Patrones.esOtraPalabraClave(lexema);
+    }
+
+    /**
+     * @param linea              texto de la línea
+     * @param numero             número de línea (desde 1)
+     * @param operacionPendiente true si la línea anterior terminó en un operando
+     *                           (la instrucción sigue en esta línea)
      * @return tokens de esa línea
      */
-    public List<Token> obtenerTokensDeLinea(String linea, int numero) {
+    private List<Token> obtenerTokensDeLinea(String linea, int numero, boolean operacionPendiente) {
         List<Token> tokens = new ArrayList<>();
         int i = 0;
         while (i < linea.length()) {
@@ -66,7 +112,7 @@ public class AnalizadorLexico {
                 i++;
                 continue;
             }
-            int fin = finDelLexema(linea, i);
+            int fin = finDelLexema(linea, i, operacionPendiente);
             tokens.add(new Token(linea.substring(i, fin), numero, i + 1));
             i = fin;
         }
@@ -74,7 +120,7 @@ public class AnalizadorLexico {
     }
 
     /** Decide dónde termina el lexema que empieza en la posición i. */
-    private int finDelLexema(String linea, int i) {
+    private int finDelLexema(String linea, int i, boolean operacionPendiente) {
         char c = linea.charAt(i);
 
         // Comentarios: todo hasta el final de la línea es un solo token (R5)
@@ -82,8 +128,9 @@ public class AnalizadorLexico {
             return linea.length();
         }
         // Una línea que empieza con una sola '/' es un intento de comentario
-        // mal escrito (no puede ser una división porque no hay nada antes)
-        if (c == '/' && linea.substring(0, i).trim().isEmpty() && !linea.startsWith("/=", i)) {
+        // mal escrito, salvo que continúe una operación de la línea anterior
+        if (c == '/' && linea.substring(0, i).trim().isEmpty() && !linea.startsWith("/=", i)
+                && !operacionPendiente) {
             return linea.length();
         }
         // Etiquetas (R4). "<php" (sin '?') también se toma como intento de apertura
