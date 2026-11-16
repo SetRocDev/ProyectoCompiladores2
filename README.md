@@ -9,11 +9,11 @@ El programa revisa un archivo de código PHP, busca errores de escritura y crea 
 El programa ya viene compilado. Solo se necesita Java 8 o más nuevo.
 
 1. Presionar el botón verde **Code** y luego **Download ZIP**. Descomprimir el archivo.
-2. Entrar a la carpeta **`dist`**. Ahí están el programa (`ProyectoCompiladores1.jar`) y el código de ejemplo (`CodigoProyecto.php`).
+2. Entrar a la carpeta **`dist`**. Ahí están el programa (`ProyectoCompiladores2.jar`) y el código de ejemplo (`CodigoProyecto.php`).
 3. Abrir el Símbolo del sistema en esa carpeta: hacer clic en la barra de direcciones del Explorador, escribir `cmd` y presionar Enter.
 4. Escribir este comando y presionar Enter:
    ```
-   java -jar ProyectoCompiladores1.jar
+   java -jar ProyectoCompiladores2.jar
    ```
 5. Abrir el archivo nuevo **`CodigoProyecto-errores.log`** con el Bloc de notas.
 
@@ -24,8 +24,8 @@ Las instrucciones completas, en lenguaje sencillo, están en **[INFORME.txt](INF
 |---|---|
 | [`INFORME.txt`](INFORME.txt) | Instrucciones de uso, lista de errores, decisiones y uso de IA |
 | [`dist/`](dist) | El programa listo para usar (`.jar`) y el archivo PHP de ejemplo |
-| [`src/`](src/proyectocompiladores1) | El código fuente en Java |
-| [`pruebas/`](pruebas) | 24 archivos PHP con errores puestos a propósito y la tabla [`esperado.txt`](pruebas/esperado.txt) |
+| [`src/`](src/proyectocompiladores2) | El código fuente en Java |
+| [`pruebas/`](pruebas) | Casos PHP con errores puestos a propósito (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt) y los scripts `ejecutar-pruebas` que los comparan automáticamente |
 | [`recursos/`](recursos) | Copia de respaldo del código PHP original de la cátedra |
 | `nbproject/`, `build.xml`, `manifest.mf`, `test/` | Archivos del proyecto NetBeans (*Java with Ant*) |
 
@@ -34,22 +34,22 @@ Las 4 etapas del análisis léxico:
 
 | Etapa | Archivo | Qué hace |
 |---|---|---|
-| 1. Obtención de tokens | [AnalizadorLexico.java](src/proyectocompiladores1/lexico/AnalizadorLexico.java) | Recorre cada línea letra por letra y la separa en pedazos (lexemas) |
-| 2. Clasificación | [ClasificadorTokens.java](src/proyectocompiladores1/lexico/ClasificadorTokens.java) | Dice de qué tipo es cada pedazo |
-| 3. Patrón | [Patrones.java](src/proyectocompiladores1/lexico/Patrones.java) | Tiene las reglas de cada tipo y las palabras reservadas |
-| 4. Validación del lexema | [ValidadorLexema.java](src/proyectocompiladores1/lexico/ValidadorLexema.java) | Revisa que cada pedazo cumpla sus reglas |
+| 1. Obtención de tokens | [AnalizadorLexico.java](src/proyectocompiladores2/lexico/AnalizadorLexico.java) | Recorre cada línea letra por letra y la separa en pedazos (lexemas) |
+| 2. Clasificación | [ClasificadorTokens.java](src/proyectocompiladores2/lexico/ClasificadorTokens.java) | Dice de qué tipo es cada pedazo |
+| 3. Patrón | [Patrones.java](src/proyectocompiladores2/lexico/Patrones.java) | Tiene las reglas de cada tipo y las palabras reservadas |
+| 4. Validación del lexema | [ValidadorLexema.java](src/proyectocompiladores2/lexico/ValidadorLexema.java) | Revisa que cada pedazo cumpla sus reglas |
 
 Los requisitos del enunciado:
 
 | Requisito | Archivo |
 |---|---|
-| Lectura del archivo `.php` | [LocalizadorArchivo.java](src/proyectocompiladores1/io/LocalizadorArchivo.java), [LectorArchivoPHP.java](src/proyectocompiladores1/io/LectorArchivoPHP.java) |
-| Archivo `-errores.log` | [EscritorLog.java](src/proyectocompiladores1/io/EscritorLog.java) |
-| Identificadores | [ValidadorIdentificadores.java](src/proyectocompiladores1/validacion/ValidadorIdentificadores.java) |
-| Etiquetas `<?php` y `?>` | [ValidadorEtiquetas.java](src/proyectocompiladores1/validacion/ValidadorEtiquetas.java) |
-| Comentarios `//` y `#` | [ValidadorComentarios.java](src/proyectocompiladores1/validacion/ValidadorComentarios.java) |
-| Lista de errores | [CodigoError.java](src/proyectocompiladores1/errores/CodigoError.java) |
-| Punto de inicio | [Main.java](src/proyectocompiladores1/Main.java) |
+| Lectura del archivo `.php` | [LocalizadorArchivo.java](src/proyectocompiladores2/io/LocalizadorArchivo.java), [LectorArchivoPHP.java](src/proyectocompiladores2/io/LectorArchivoPHP.java) |
+| Archivo `-errores.log` | [EscritorLog.java](src/proyectocompiladores2/io/EscritorLog.java) |
+| Identificadores | [ValidadorIdentificadores.java](src/proyectocompiladores2/validacion/ValidadorIdentificadores.java) |
+| Etiquetas `<?php` y `?>` | [ValidadorEtiquetas.java](src/proyectocompiladores2/validacion/ValidadorEtiquetas.java) |
+| Comentarios `//` y `#` | [ValidadorComentarios.java](src/proyectocompiladores2/validacion/ValidadorComentarios.java) |
+| Lista de errores | [CodigoError.java](src/proyectocompiladores2/errores/CodigoError.java) |
+| Punto de inicio | [Main.java](src/proyectocompiladores2/Main.java) |
 
 ## Cómo se desarrolló
 El proyecto se hizo por etapas. Cada etapa tiene una tarjeta en Trello y un *Pull Request* en GitHub, donde se explica qué se cambió y cómo se probó.

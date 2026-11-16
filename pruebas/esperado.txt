@@ -1,7 +1,13 @@
-BATERIA DE PRUEBAS - cada archivo es una copia de CodigoProyecto.php con un error provocado a proposito.
-Como ejecutarla: copiar todos los archivos de esta carpeta junto al .jar (carpeta dist) y ejecutar
-    java -jar ProyectoCompiladores1.jar
-Se genera un archivo nombre-errores.log por cada .php; comparar sus errores con esta tabla.
+BATERIA DE PRUEBAS - cada archivo de la carpeta 'casos' es una copia de CodigoProyecto.php con un
+error provocado a proposito. La carpeta 'esperados' tiene el -errores.log exacto que debe generar cada caso.
+
+Forma automatica (recomendada): ejecutar  pruebas\ejecutar-pruebas.bat  (doble clic en Windows)
+    o  pruebas/ejecutar-pruebas.sh  (Linux / Git Bash). Compara cada .log con el esperado, byte por byte,
+    y al final muestra cuantas pruebas pasaron y cuales fallaron.
+
+Forma manual: copiar los archivos de 'casos' junto al .jar (carpeta dist), ejecutar
+    java -jar ProyectoCompiladores2.jar
+    y comparar los errores de cada nombre-errores.log con esta tabla.
 
 Archivo de prueba                    Errores esperados   Cambio respecto a CodigoProyecto.php (lineas del original)
 P00_original.php                     -                   Ninguno (codigo limpio de la catedra)
