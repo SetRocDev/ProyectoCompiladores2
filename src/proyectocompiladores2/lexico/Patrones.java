@@ -75,9 +75,24 @@ public final class Patrones {
     public static final Set<String> OPERADORES = conjunto(
             "===", "!==", "==", "!=", "<>", "<=", ">=", "<", ">",
             "+", "-", "*", "/", "%", ".", "!", "?", ":",
-            "++", "--", "+=", "-=", "*=", "/=", ".=", "&&", "||", "->", "=>", "::");
+            "++", "--", "+=", "-=", "*=", "/=", ".=", "&&", "||", "->", "=>", "::", "??");
 
     public static final String ASIGNACION = "=";
+
+    /**
+     * Asignaciones compuestas: también le dan un valor a la variable de la
+     * izquierda ($suma += 5 equivale a $suma = $suma + 5).
+     */
+    public static final Set<String> ASIGNACIONES_COMPUESTAS = conjunto("+=", "-=", "*=", "/=", ".=");
+
+    /**
+     * @return true si el lexema le asigna un valor a la variable de su
+     *         izquierda: '=' o una asignación compuesta. Las comparaciones
+     *         (==, ===, !=, <=, >=) no son asignaciones (decisión Q5).
+     */
+    public static boolean esOperadorDeAsignacion(String lexema) {
+        return lexema.equals(ASIGNACION) || ASIGNACIONES_COMPUESTAS.contains(lexema);
+    }
 
     public static final Set<String> DELIMITADORES = conjunto(";", ",", "(", ")", "{", "}", "[", "]");
 
@@ -89,7 +104,39 @@ public final class Patrones {
         return PALABRAS_RESERVADAS.contains(palabra.toLowerCase(Locale.ROOT));
     }
 
+    /** Palabras que inician una estructura de control con una condición entre paréntesis. */
+    public static final Set<String> ESTRUCTURAS_DE_CONTROL = conjunto(
+            "if", "elseif", "while", "for", "foreach", "switch");
+
+    /** @return true si la palabra inicia una estructura de control (sin distinguir mayúsculas). */
+    public static boolean esEstructuraDeControl(String palabra) {
+        return ESTRUCTURAS_DE_CONTROL.contains(palabra.toLowerCase(Locale.ROOT));
+    }
+
     public static boolean esOtraPalabraClave(String palabra) {
         return OTRAS_PALABRAS_CLAVE_PHP.contains(palabra.toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Distancia de edición (Levenshtein): cuántas letras hay que cambiar,
+     * agregar o quitar para convertir una palabra en la otra.
+     */
+    public static int distanciaDeEdicion(String a, String b) {
+        int[] anterior = new int[b.length() + 1];
+        int[] actual = new int[b.length() + 1];
+        for (int j = 0; j <= b.length(); j++) {
+            anterior[j] = j;
+        }
+        for (int i = 1; i <= a.length(); i++) {
+            actual[0] = i;
+            for (int j = 1; j <= b.length(); j++) {
+                int cambio = a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1;
+                actual[j] = Math.min(Math.min(actual[j - 1] + 1, anterior[j] + 1), anterior[j - 1] + cambio);
+            }
+            int[] temporal = anterior;
+            anterior = actual;
+            actual = temporal;
+        }
+        return anterior[b.length()];
     }
 }

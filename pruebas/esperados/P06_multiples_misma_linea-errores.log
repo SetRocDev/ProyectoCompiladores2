@@ -13,6 +13,7 @@ Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser a
 0011 // Mostrar información inicial
 0012 echo "Estudiante: $nombre_estudiante\n";
 0013 echo "Cantidad de notas: $cantidad_notas\n";
+Error 901. La variable '$cantidad_notas' se usa pero no se le asignó un valor antes
 0014 
 0015 // Calcular promedio usando for
 0016 $suma_notas = 0;

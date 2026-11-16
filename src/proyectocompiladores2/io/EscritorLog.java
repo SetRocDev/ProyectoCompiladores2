@@ -2,10 +2,15 @@ package proyectocompiladores2.io;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import proyectocompiladores2.errores.ErrorLexico;
+import java.util.ArrayList;
+import java.util.List;
+import proyectocompiladores2.errores.ErrorCompilacion;
 import proyectocompiladores2.errores.GestorErrores;
 
 /**
@@ -16,11 +21,13 @@ import proyectocompiladores2.errores.GestorErrores;
  *     de 4 dígitos y un espacio: "0001 <?php".
  *   - Los errores de una línea se escriben justo debajo de ella, uno por
  *     renglón: "Error 201. Descripción" (Opción 1 del enunciado).
- *   - Los errores globales (que no pertenecen a una línea, por ejemplo
- *     "falta la etiqueta de cierre") se escriben al final.
+ *   - No hay errores "sueltos" al final: todo error tiene su línea, de forma
+ *     consistente en todo el archivo (corrección del Proyecto 1, tarea T16).
  *
- * El .log se guarda en la misma carpeta del .php, en UTF-8, con el mismo
- * separador de línea que el original. Si ya existe se reemplaza.
+ * El .log se guarda en la misma carpeta del .php, con la misma codificación
+ * (UTF-8, con su BOM si el .php lo tiene, o la de Windows si se guardó como
+ * "ANSI") y con el salto de línea original de cada línea (ver
+ * generarContenido), para que sea una copia exacta. Si ya existe se reemplaza.
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -28,6 +35,8 @@ public class EscritorLog {
 
     /** Sufijo que se agrega al nombre del archivo original. */
     public static final String SUFIJO = "-errores.log";
+
+    private static final byte[] BOM_UTF8 = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
 
     /**
      * @param fuente  archivo .php leído
@@ -47,23 +56,60 @@ public class EscritorLog {
      */
     public Path escribir(ArchivoFuente fuente, GestorErrores errores) throws IOException {
         Path destino = rutaDelLog(fuente);
-        String salto = fuente.getSeparadorLinea();
-
-        try (BufferedWriter out = Files.newBufferedWriter(destino, StandardCharsets.UTF_8)) {
-            for (int numero = 1; numero <= fuente.getCantidadLineas(); numero++) {
-                out.write(numerar(numero, fuente.getLinea(numero)));
-                out.write(salto);
-                for (ErrorLexico error : errores.erroresDeLinea(numero)) {
-                    out.write(error.toString());
-                    out.write(salto);
-                }
+        // Un carácter que no exista en la codificación del .php se escribe como '?'
+        CharsetEncoder codificador = fuente.getCodificacion().newEncoder()
+                .onUnmappableCharacter(CodingErrorAction.REPLACE)
+                .onMalformedInput(CodingErrorAction.REPLACE);
+        try (OutputStream bytes = Files.newOutputStream(destino)) {
+            if (fuente.tieneBom()) {
+                bytes.write(BOM_UTF8);
             }
-            for (ErrorLexico error : errores.erroresGlobales()) {
-                out.write(error.toString());
-                out.write(salto);
+            try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(bytes, codificador))) {
+                out.write(generarContenido(fuente, errores));
             }
         }
         return destino;
+    }
+
+    /**
+     * Arma el contenido completo del .log.
+     *
+     * Regla de los saltos de línea (corrección del Proyecto 1, tarea T15):
+     * cada línea del .php se copia con SU salto de línea original (un archivo
+     * puede mezclar CRLF de Windows, LF de Linux y CR), y los errores que van
+     * debajo de una línea usan ese mismo salto. Así el .log reproduce el
+     * formato exacto del original. Si la última línea del .php no tiene salto
+     * de línea, el .log tampoco termina en salto de línea; si esa línea tiene
+     * errores, se separa de ellos con el salto de la línea anterior.
+     *
+     * @return el texto del .log
+     */
+    public String generarContenido(ArchivoFuente fuente, GestorErrores errores) {
+        List<String> renglones = new ArrayList<>();
+        List<String> saltos = new ArrayList<>();
+        int ultima = fuente.getCantidadLineas();
+        for (int numero = 1; numero <= ultima; numero++) {
+            String salto = fuente.getSaltoDeLinea(numero);
+            renglones.add(numerar(numero, fuente.getLinea(numero)));
+            saltos.add(salto);
+            for (ErrorCompilacion error : errores.erroresDeLinea(numero)) {
+                renglones.add(error.toString());
+                saltos.add(salto);
+            }
+        }
+
+        StringBuilder contenido = new StringBuilder();
+        for (int i = 0; i < renglones.size(); i++) {
+            contenido.append(renglones.get(i));
+            boolean esElUltimoRenglon = i == renglones.size() - 1;
+            if (!saltos.get(i).isEmpty()) {
+                contenido.append(saltos.get(i));
+            } else if (!esElUltimoRenglon) {
+                // La última línea del .php no tiene salto pero debajo van sus errores
+                contenido.append(fuente.getSaltoParaSeparar(ultima));
+            }
+        }
+        return contenido.toString();
     }
 
     /**

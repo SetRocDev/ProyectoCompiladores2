@@ -14,13 +14,13 @@ P00_original.php                     -                   Ninguno (codigo limpio 
 P01_id_digito.php                    201                 L5:  $1nombre_estudiante = "Carlos";
 P02_id_simbolo.php                   202                 L6:  $-cantidad_notas = 4;
 P03_id_caracter_medio.php            203                 L16: $suma@notas = 0;
-P04_reservadas.php                   204 204             L35: $while = 0;   L43: $ECHO = "Proceso finalizado correctamente";
+P04_reservadas.php                   204 204 901 901     L35: $while = 0;   L43: $ECHO = "Proceso finalizado correctamente";
 P05_reservada_derecha.php            -                   L43: $mensaje_final = true;   (reservada a la DERECHA del =)
-P06_multiples_misma_linea.php        201 204             L6:  $1cantidad = 4; $if = 5;   (dos errores en una linea)
+P06_multiples_misma_linea.php        201 204 901         L6:  $1cantidad = 4; $if = 5;   (dos errores en una linea)
 P07_apertura_texto_previo.php        301                 Nueva primera linea: echo "";   antes de <?php
 P08_apertura_espacio.php             301                 L1:  " <?php"  (un espacio antes)
 P09_apertura_mal_escrita.php         302                 L1:  <? php
-P10_cierre_falta.php                 305                 Se borra L53 (?>)
+P10_cierre_falta.php                 305                 Se borra L53 (?>). El 305 va debajo de la ultima linea (0051)
 P11_cierre_mal_escrito.php           304                 L53: ? >
 P12_cierre_linea_siguiente.php       307                 Despues de ?> se agrega la linea: echo "hola";
 P13_cierre_salto_final.php           308                 Un salto de linea (Enter) despues de ?>
@@ -29,11 +29,117 @@ P15_comentario_continua.php          402                 Despues de L8 se agrega
 P16_comentario_mal_formado.php       401                 L8:  / Arreglo de notas   (una sola barra)
 P17_cierre_misma_linea.php           306                 L53: ?> echo "hola";
 P18_cierre_espacios.php              308                 L53: "?>   "  (espacios despues de ?>)
-P19_errores_generales.php            501 502             L12: cadena sin comilla de cierre   L22: caracter @
+P19_errores_generales.php            501 803             L12: cadena sin cierre en un echo (803 en lugar de 502, T23)   L22: caracter @
 P20_id_sin_dolar.php                 206                 L5:  nombre_estudiante = "Carlos";   (sin el simbolo $)
 P21_id_guion_medio.php               203                 L6:  $cantidad-notas = 4;   (guion en medio del nombre)
 P22_apertura_sin_interrogacion.php   302                 L1:  <php   (falta el signo ?)
 P23_comentario_sin_marca.php         402                 L4:  Datos del estudiante   (se quito el # del comentario)
+P24_saltos_mixtos.php                201 204 901         Lineas 1-17 con CRLF, 18-35 con LF, 36-52 con CR y la 53 sin salto.
+                                                         L22: $1promedio = ...;  (linea LF)   L43: $if = ...;  (linea CR)
+                                                         El .log debe conservar el salto de cada linea (correccion P1, T15)
+P25_solo_lf.php                      201                 Todo el archivo con saltos LF (Linux).  L6: $1cantidad_notas = 4;
+P26_lf_cierre_misma_linea.php        306                 Todo con LF y la L53 sin salto: ?> echo "hola";  (el error va separado con LF)
+P27_apertura_falta.php               303                 Se borra L1 (<?php). El 303 va debajo de la linea 0001 (correccion P1, T16)
+P28_archivo_vacio.php                303 305             Archivo vacio (0 bytes): ambos errores debajo de la linea 0001
+P29_sin_etiquetas.php                303 305             Sin <?php ni ?>: 303 debajo de la 0001 y 305 debajo de la ultima linea
+P30_reservada_multilinea.php         204 204             Despues de L46: '$if' y en la linea siguiente '= 10;'; '$else // comentario' y '= 20;'
+                                                         (variable y = en lineas distintas, correccion P1, T17)
+P31_sin_dolar_multilinea.php         206                 Despues de L46: 'nombre_curso' y en la linea siguiente '= "Compiladores";' (T17)
+P32_solo_lado_izquierdo.php          201                 Despues de L46: '$copia = $1abc . $-d;' (a la derecha: sin error, T18) y '$1suma += 5;'
+P33_division_multilinea.php          -                   L22 partida: '$promedio = $suma_notas' y '    / $cantidad_notas;' (division, no comentario, T19)
+P34_constantes_validas.php           -                   Despues de L46: 'echo PHP_EOL;' y '$maximo = PHP_INT_MAX;' (constantes, no texto suelto, T19)
+P35_division_tras_comentario.php     -                   Como P33 pero con un comentario al final de la primera linea (T19)
+P36_casos_de_revision.php            201 204 402 704 401 Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
+                                                         '$nota_extra = 10 // ...' sin ';' seguido de 'continua aqui', y 'if (...)' seguido de '/ comentario'
+P37_llave_sobrante.php               503                 Despues de L46 se agrega una linea con '}' que no cierra nada (sintactico, T20)
+P38_estructura_mal_escrita.php       504                 L37: 'whlie (...) {' en vez de 'while' (sugiere 'while')
+P39_for_sin_cierre.php               615                 Se borra la '}' del for (L20): el bloque del for no cierra (antes 505; el for se valida desde T29)
+P40_while_sin_parentesis.php         601 602             L37: while $contador_revision < $cantidad_notas {   (sin parentesis)
+P41_while_condicion_vacia.php        603                 L37: while () {
+P42_while_sin_parentesis_cierre.php  602                 L37: while ($contador_revision < $cantidad_notas {
+P43_while_sin_llave_apertura.php     604                 L37 sin la '{' (la '}' de L40 sigue)
+P44_while_sin_llave_cierre.php       605                 Se borra la '}' del while (L40): un solo error, sin cascada
+P45_while_llave_otra_linea.php       610                 La '{' del while en la linea siguiente (decision Q7)
+P46_while_bloque_vacio.php           606                 Se borran las 2 lineas del bloque del while
+P47_while_solo_comentario.php        606                 El bloque del while solo tiene un comentario (decision Q8)
+P48_while_indentacion_2.php          607                 L38 con 2 espacios en vez de 4
+P49_while_indentacion_6.php          607                 L39 con 6 espacios en vez de 4
+P50_while_tabulacion.php             608                 L38 indentada con una tabulacion
+P51_while_cierre_desalineado.php     609                 L40: '  }' (la llave de cierre con 2 espacios)
+P52_while_anidado_valido.php         -                   while dentro del if (8 espacios) e if dentro del while: todo valido
+P53_while_anidado_mal_indentado.php  607                 while dentro del if con su contenido a 4 espacios en vez de 8
+P54_while_ejemplos_pdf.php           601 602 603 606 602 606 607 607
+                                                         Los ejemplos del enunciado (permitido y con error) uno tras otro
+P55_if_sin_parentesis.php            701 702             L28: if $promedio >= 70 {
+P56_if_condicion_vacia.php           703                 L28: if () {
+P57_if_sin_parentesis_cierre.php     702                 L28: if ($promedio >= 70 {
+P58_if_sin_llave_apertura.php        704                 L28 sin la '{'
+P59_if_sin_llave_cierre.php          705                 L30: 'else {' (se borro la '}' del if)
+P60_if_llave_otra_linea.php          710                 La '{' del if en la linea siguiente (decision Q7)
+P61_if_bloque_vacio.php              706                 Se borra la unica linea del bloque del if
+P62_if_indentacion.php               707                 L29 con 2 espacios
+P63_if_tabulacion.php                708                 L29 indentada con tabulacion
+P64_if_cierre_desalineado.php        709                 L30: '  } else {' (la '}' del if con 2 espacios)
+P65_else_bloque_vacio.php            713                 Se borra la unica linea del bloque del else
+P66_else_sin_llave_apertura.php      711                 L30: '} else' sin '{' (la '}' final sigue)
+P67_else_en_otra_linea.php           718                 '}' y 'else {' en lineas distintas (decision Q7)
+P68_else_indentacion.php             715                 L31 con 6 espacios
+P69_else_sin_if.php                  714                 Despues de L46: un 'else { ... }' sin if
+P70_elseif_valido.php                -                   if / elseif / else if / else bien escritos (decision Q12)
+P71_elseif_errores.php               701 702 707         elseif sin parentesis y contenido del 'else if' con 6 espacios
+P72_if_ejemplos_pdf.php              701 702 703 702 713 707 707 711
+                                                         Los ejemplos del enunciado (permitidos y con error) uno tras otro
+P73_echo_parentesis.php              802                 L44: echo ($mensaje_final);
+P74_echo_sin_expresion.php           801                 L44: echo;
+P75_echo_comilla_doble_abierta.php   803                 L25: echo "Promedio: $promedio\n;   (sin la comilla doble de cierre)
+P76_echo_comilla_simple_abierta.php  804                 L44: echo 'Proceso finalizado;
+P77_echo_sin_punto_y_coma.php        805                 L44: echo $mensaje_final   (sin ;)
+P78_echo_operador_sin_valor.php      806                 L38: echo "Revisando nota: " . ;
+P79_echo_falta_operador.php          806                 L12: echo "Estudiante: " $nombre_estudiante;   (sin el punto)
+P80_echo_validos.php                 -                   echo con funciones (count, trim), coma, constante, signo, indices y en dos lineas
+P81_echo_comillas_mezcladas.php      803                 L44: echo "Hola';   (abre con doble y cierra con simple)
+P82_echo_ejemplos_pdf.php            802 801 803 804 805 Los ejemplos del enunciado (permitidos y con error) uno tras otro
+P83_echo_operadores_validos.php      -                   echo con comparaciones, &&, !=, operador ternario (? :) y ??
+P84_semantico_mayuscula.php          901                 L44: echo $Mensaje_final;   (sugiere $mensaje_final; PHP avisa 'Undefined variable' en la L44)
+P85_semantico_en_cadena.php          901                 L25: echo "Promedio: $Promedio\n";   (variable dentro de comillas dobles)
+P86_semantico_antes_de_asignar.php   901                 L5: echo $cantidad_notas;   (se usa antes de su asignacion)
+P87_semantico_valido.php             -                   foreach con =>, +=, ++, function con parametro, global, comillas simples, \$ y $_SERVER
+P88_parentesis_sin_cerrar.php        603                 L9: array(...;  sin ')'  y L37: while () {   (el '(' abierto no oculta el error del while, T26)
+P89_for_sin_parentesis_apertura.php  611                 L18: for $i = 0; $i < $cantidad_notas; $i = $i + 1) {
+P90_for_sin_parentesis_cierre.php    612                 L18: for ($i = 0; $i < $cantidad_notas; $i = $i + 1 {
+P91_for_cabecera_dos_partes.php      613                 L18: for ($i = 0; $i < $cantidad_notas) {
+P92_for_cabecera_con_comas.php       613                 L18: for ($i = 0, $i < $cantidad_notas, $i = $i + 1) {   (comas en lugar de ';')
+P93_for_sin_llave_apertura.php       614                 L18: el for sin '{' (la '}' de L20 sigue)
+P94_for_sin_llave_cierre.php         615                 Se borra la '}' del for (L20)
+P95_for_bloque_vacio.php             616                 L19: la unica linea del bloque se cambia por un comentario
+P96_for_indentacion.php              617                 L19 con 2 espacios
+P97_for_tabulacion.php               618                 L19 indentada con tabulacion
+P98_for_cierre_desalineado.php       619                 L20: '  }'   (la '}' del for con 2 espacios)
+P99_for_llave_otra_linea.php         620                 La '{' del for en la linea siguiente (decision Q7)
+P100_for_valido_comas.php            -                   L18: for ($i = 0, $j = 10; ...; $i = $i + 1, $j = $j - 1) {   (comas validas en PHP)
+P101_for_valido_anidado.php          -                   L19: un if anidado dentro del for, con 8 espacios en su contenido
+P102_semantico_asignacion_en_if.php  902                 L28: if ($promedio = 70) {   (asigna en lugar de comparar)
+P103_semantico_asignacion_en_while.php
+                                     902                 L37: while ($contador_revision = 0) {
+P104_semantico_asignacion_valida.php -                   L37: while ($fila = count($notas)) {   (asignar el resultado de una funcion es valido)
+P105_semantico_division_cero.php     903                 L22: $promedio = $suma_notas / 0;   (PHP: DivisionByZeroError)
+P106_semantico_division_cero_echo.php
+                                     903                 L44: echo 10 / 0;
+P107_semantico_division_valida.php   -                   L44: echo "10 / 0";   (dentro de una cadena no es una division)
+P108_recuperacion_for_e_if_sin_llaves.php
+                                     615 704             Sin la '}' del for (L20) y sin la '{' del if (L28): sin errores en cascada
+P109_codificacion_utf8_con_bom.php   301                 El archivo guardado como "UTF-8 con BOM" (el .log conserva el BOM)
+P110_codificacion_ansi.php           -                   El archivo guardado como ANSI (Windows-1252): el .log conserva las tildes byte por byte
+P111_codificacion_byte_no_definido.php
+                                     -                   ANSI con un byte que Windows-1252 no define (0x81): el .log lo copia igual
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
+
+Nota (T15): todos los .log terminan igual que su .php: si el original termina en '?>' sin salto de
+linea, el .log tampoco termina en salto de linea; y cada linea conserva su salto original (CRLF, LF o CR).
+
+Nota (T24): el Error 901 (analisis semantico) aparece cuando una asignacion se cambio y la variable original
+quedo sin valor (P04, P06, P24). Se comprobo ejecutando cada caso con PHP: avisa 'Undefined variable' en las
+mismas variables. Cada variable se reporta una sola vez, y no se reporta si su asignacion ya tiene un error
+lexico parecido ($1nombre, $-dato, $suma@notas), para no repetir el mismo problema.

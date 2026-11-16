@@ -1,11 +1,11 @@
 ===============================================================================
- INFORME - PROYECTO 1: ANALIZADOR LÉXICO DE PHP EN JAVA
+ INFORME - PROYECTO 2: ANALIZADOR LÉXICO, SINTÁCTICO Y SEMÁNTICO DE PHP EN JAVA
 ===============================================================================
- Curso:        03307 Compiladores - UNED
- Proyecto:     Proyecto 1, III Cuatrimestre 2026
- Estudiante:   Pablo Cortés
- Repositorio:  https://github.com/SetRocDev/ProyectoCompiladores2
- Control de fujo: https://trello.com/invite/b/6ac4797666a264cc41de73d3/ATTI996458e6e54a45349635f547c161515c85096B7C/proyecto-compiladores
+ Curso:            03307 Compiladores - UNED
+ Proyecto:         Proyecto 2, III Cuatrimestre 2026 (continuación del Proyecto 1)
+ Estudiante:       Pablo Cortés
+ Repositorio:      https://github.com/SetRocDev/ProyectoCompiladores2
+ Control de flujo: https://trello.com/b/26PHypVS/proyecto-compiladores-2
 ===============================================================================
 
  CONTENIDO
@@ -15,39 +15,45 @@
     4. Cómo leer el resultado
     5. Cómo probar que detecta errores
     6. Cómo compilarlo en NetBeans
-    7. Lista de errores que detecta
-    8. Cómo está organizado el código
-   9. Decisiones tomadas
-   10. Limitaciones
-   11. Uso de inteligencia artificial
-   12. Fuentes
+    7. Correcciones del Proyecto 1
+    8. Lista de errores que detecta
+    9. Etapas del compilador y organización del código
+   10. Gramática que usa el análisis sintáctico
+   11. Decisiones tomadas
+   12. Limitaciones
+   13. Pruebas realizadas
+   14. Verificación en otro equipo
+   15. Uso de inteligencia artificial
+   16. Fuentes
 
 
 1. QUÉ HACE EL PROGRAMA
 -------------------------------------------------------------------------------
-El programa revisa un archivo de código PHP y busca errores de escritura
-(errores léxicos). Trabaja así:
+El programa revisa un archivo de código PHP como lo haría la primera parte de
+un compilador, en seis etapas:
 
-  1. Busca los archivos que terminan en ".php" en la misma carpeta donde
-     está el programa.
-  2. Lee cada archivo sin cambiarle nada.
-  3. Revisa tres cosas:
-        - los nombres de las variables (identificadores),
-        - las etiquetas de inicio y fin de PHP:  <?php  y  ?>
-        - los comentarios:  //  y  #
-  4. Crea un archivo nuevo con el mismo nombre, terminado en "-errores.log".
-     Ese archivo es una copia del .php con cada línea numerada. Debajo de
-     cada línea que tiene un problema aparece el error encontrado.
+  - Análisis léxico (Proyecto 1): corta el código en pedazos (tokens), dice de
+    qué tipo es cada uno y revisa que estén bien escritos: nombres de
+    variables, etiquetas <?php y ?>, y comentarios // y #.
+  - Análisis sintáctico (Proyecto 2): revisa que los tokens estén en el orden
+    correcto en las estructuras while, if/else, for y echo: paréntesis,
+    llaves, punto y coma, comillas, bloques vacíos e indentación.
+  - Análisis semántico (Proyecto 2): revisa que el código tenga sentido:
+    que no se use una variable que nunca recibió un valor, que una condición
+    no asigne un valor fijo en lugar de compararlo (if ($x = 5)) y que no se
+    divida entre cero.
 
-El programa funciona solo en consola (CMD). No tiene
-ventanas ni botones o una interfaz grafica.
+Al terminar crea un archivo nuevo con el mismo nombre, terminado en
+"-errores.log". Ese archivo es una copia exacta del .php con cada línea
+numerada, y debajo de cada línea que tiene un problema aparece el error.
+
+El programa funciona solo en consola (CMD). No tiene ventanas ni botones.
 
 
 2. QUÉ SE NECESITA
 -------------------------------------------------------------------------------
   - Una computadora con Windows.
-  - Java instalado, desde la versión 8 o más nueva. La mayoría de las computadoras ya
-    lo tienen.
+  - Java 8 o una versión más nueva.
     Para comprobarlo: abrir el CMD, escribir
         java -version
     y presionar Enter. Debe aparecer un número de versión.
@@ -57,232 +63,503 @@ ventanas ni botones o una interfaz grafica.
 3. CÓMO EJECUTARLO (PASO A PASO)
 -------------------------------------------------------------------------------
 El programa ya viene compilado en la carpeta "dist", junto con el archivo PHP
-de ejemplo. Tras descargar el .zip y descomprimirlo en una carpeta de nombre
-cualquiera se deben seguir estos pasos para su correcta ejecución:
+de ejemplo. Después de descomprimir el .zip en una carpeta con cualquier
+nombre:
 
   Paso 1. Abrir la carpeta del proyecto y entrar a la carpeta "dist".
           Ahí hay dos archivos:
               ProyectoCompiladores2.jar   (el programa)
-              CodigoProyecto.php          (el código PHP que se va a revisar, se adjunta el .php base de AprendeU)
+              CodigoProyecto.php          (el código PHP de la cátedra)
 
   Paso 2. Abrir el Símbolo del sistema (CMD) en esa carpeta.
           Forma fácil: en el Explorador de archivos, hacer clic en la barra
-          de direcciones (donde aparece la ruta de la carpeta), escribir CMD
-          y presionar Enter. Se abrirá el CMD con la ruta del "dist".
+          de direcciones (donde aparece la ruta de la carpeta), escribir cmd
+          y presionar Enter. Se abre el CMD ya ubicado en "dist".
 
   Paso 3. Escribir este comando y presionar Enter:
               java -jar ProyectoCompiladores2.jar
 
-  Paso 4. En la ventana aparece un resumen parecido a este:
-              === Analizador lexico PHP ===
+  Paso 4. En la ventana aparece un resumen como este:
+              === Analizador de PHP: lexico, sintactico y semantico ===
               Carpeta: C:\...\ProyectoCompiladores2\dist
 
               Archivo: CodigoProyecto.php
-                Lineas: 53 | Tokens: 148 | Errores: 0
+                Lineas: 53 | Tokens: 148
+                Errores: 0 (lexicos: 0, sintacticos: 0, semanticos: 0)
                 Log generado: CodigoProyecto-errores.log
 
-  Paso 5. En la carpeta "dist" aparece un archivo nuevo:
+  Paso 5. En la carpeta "dist" aparece el archivo nuevo
               CodigoProyecto-errores.log
           Abrirlo con el Bloc de notas para ver el resultado.
 
   Para revisar otro archivo PHP:
      Copiarlo a la carpeta "dist" y repetir el paso 3. Puede tener cualquier
      nombre, siempre que termine en ".php". Si hay varios archivos .php, el
-     programa los revisa todos y crea un archivo .log para cada uno.
+     programa los revisa todos y crea un .log para cada uno.
 
-  Opcional, para ver más detalle:
-              java -jar ProyectoCompiladores2.jar -tokens
-     Muestra además la lista de tokens (cada palabra o símbolo encontrado y
-     su tipo) y la lista de variables encontradas.
+  Opciones para ver más detalle (se pueden usar juntas):
+      java -jar ProyectoCompiladores2.jar -tokens
+          Muestra la lista de tokens (cada palabra o símbolo y su tipo) y la
+          tabla de símbolos (cada variable y la línea donde recibe su valor).
+      java -jar ProyectoCompiladores2.jar -arbol
+          Muestra el árbol sintáctico: cómo entendió el programa la
+          estructura del código (qué hay dentro de cada while, if, else y for).
 
 
 4. CÓMO LEER EL RESULTADO
 -------------------------------------------------------------------------------
 El archivo "-errores.log" es una copia exacta del .php, con dos agregados:
 
-  - Cada línea empieza con su número, de 4 dígitos, y un espacio.
-  - Si una línea tiene un error, el error aparece en el renglón de abajito, con
-    este formato:   Error NÚMERO. Descripción
+  - Cada línea empieza con su número de 4 dígitos y un espacio.
+  - Si una línea tiene errores, aparecen en los renglones de abajo, uno por
+    renglón, con este formato:    Error NÚMERO. Descripción
+
+Todos los errores van debajo de una línea, sin excepción (también los que
+dicen que falta <?php o ?>; ver la sección 7).
 
 Ejemplo de una línea con dos errores:
 
-    0005 $nombre_estudiante = "Carlos";
-    0006 $1cantidad = 4; $if = 5;
-    Error 201. El identificador '$1cantidad' no puede iniciar con un dígito después de '$'
-    Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
-    0007
+    0036
+    0037 while $contador_revision < $cantidad_notas {
+    Error 601. Falta el paréntesis de apertura '(' después de 'while'; la forma correcta es 'while (condición) {'
+    Error 602. Falta el paréntesis de cierre ')' de la condición del while
+    0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 
-Los errores que no pertenecen a una línea (por ejemplo, que falte la etiqueta
-de cierre ?>) aparecen al final del archivo.
+El .log conserva todo el formato del original: espacios, líneas en blanco,
+el tipo de salto de línea de cada línea (Windows, Linux o Mac) y la
+codificación con que se guardó el .php (UTF-8, o "ANSI" del Bloc de notas),
+para que las tildes queden exactamente iguales.
 
 
 5. CÓMO PROBAR QUE DETECTA ERRORES
 -------------------------------------------------------------------------------
   Forma 1: modificar el archivo de ejemplo.
      1. Abrir  dist\CodigoProyecto.php  con el Bloc de notas.
-     2. Cambiar algo. Por ejemplo, en la línea 6, cambiar
-            $cantidad_notas = 4;      por      $1cantidad = 4;
-     3. Guardar el archivo.
-     4. Ejecutar de nuevo:   java -jar ProyectoCompiladores2.jar
-     5. Abrir el .log: debajo de la línea 6 aparece el Error 201.
+     2. Cambiar algo. Por ejemplo, en la línea 37 borrar el "(" del while,
+        o en la línea 44 borrar el ";" del echo.
+     3. Guardar el archivo y ejecutar de nuevo:
+            java -jar ProyectoCompiladores2.jar
+     4. Abrir el .log: debajo de esa línea aparece el error.
 
-  Forma 2: usar las pruebas incluidas.
-     La carpeta "pruebas\casos" tiene 24 copias del archivo de ejemplo. Cada una
-     tiene un error puesto a propósito (3 de ellas no tienen errores, para
-     comprobar que el programa no marca errores falsos).
-     1. Copiar todos los archivos de la carpeta "pruebas\casos" a la carpeta "dist".
-     2. Ejecutar:   java -jar ProyectoCompiladores2.jar
-     3. Se crea un archivo .log por cada archivo .php.
-     4. El archivo  pruebas\esperado.txt  indica qué se cambió en cada prueba
-        y qué error debe aparecer.
+  Forma 2: ejecutar todas las pruebas automáticas (recomendado).
+     La carpeta "pruebas" tiene 112 casos de prueba:
+       - pruebas\casos       los archivos .php, cada uno con un error puesto a
+                             propósito (algunos no tienen errores, para
+                             comprobar que no se marcan errores falsos)
+       - pruebas\esperados   el .log EXACTO que debe generar cada caso
+       - pruebas\esperado.txt  tabla con lo que se cambió en cada caso y el
+                             error que debe aparecer
+     Para ejecutarlas: hacer doble clic en
+            pruebas\ejecutar-pruebas.bat
+     El script ejecuta el programa con todos los casos, compara cada .log con
+     el esperado byte por byte y al final muestra:
+            Pruebas correctas: 112   Fallidas: 0
 
 
 6. CÓMO COMPILARLO EN NETBEANS
 -------------------------------------------------------------------------------
-
-  1. Abrir NetBeans.
-  2. Menú File > Open Project y elegir la carpeta del proyecto.
-  3. Hacer clic derecho sobre el proyecto y elegir "Clean and Build"
-     (o presionar Shift + F11). Al terminar debe decir BUILD SUCCESSFUL.
-  4. IMPORTANTE: "Clean and Build" borra todo lo que hay en la carpeta
-     "dist" y crea de nuevo el archivo .jar. Por eso, después de compilar,
-     hay que copiar otra vez el archivo PHP:
-         copiar  recursos\CodigoProyecto.php  a la carpeta  dist
+  1. Abrir NetBeans 24 o superior.
+  2. Menú File > Open Project y elegir la carpeta del proyecto
+     (se llama ProyectoCompiladores2; es un proyecto "Java with Ant").
+  3. Clic derecho sobre el proyecto y elegir "Clean and Build"
+     (o Shift + F11). Al terminar debe decir BUILD SUCCESSFUL.
+  4. "Clean and Build" borra la carpeta "dist", vuelve a crear el .jar y
+     copia automáticamente el PHP de ejemplo (recursos\CodigoProyecto.php)
+     a "dist", junto al .jar (lo hace el archivo build.xml).
   5. Ejecutar como se explica en la sección 3.
 
 
-7. LISTA DE ERRORES QUE DETECTA
+7. CORRECCIONES DEL PROYECTO 1
 -------------------------------------------------------------------------------
-  Sobre el archivo (se muestran en la ventana de comandos)
+Estas son las observaciones de la retroalimentación del Proyecto 1, cómo se
+corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
+
+  a) Archivo de errores: "si el archivo combina formatos distintos de salto
+     de línea, el reporte los unifica".
+       Corrección: el programa guarda el salto de línea de CADA línea (CRLF
+       de Windows, LF de Linux o CR) y el .log repite exactamente el mismo.
+       Además, si el .php termina sin salto de línea, el .log tampoco lo
+       agrega (antes agregaba uno al final).
+       Pruebas: P24 (mezcla los tres tipos), P25 (solo LF), P26.
+
+  b) Manejo de errores en el .log: "cuando falta la apertura o el cierre,
+     coloca el aviso al final sin indicar una línea".
+       Corrección: ya no existen errores "sueltos". El 303 (falta <?php) va
+       debajo de la línea 0001 y el 305 (falta ?>) debajo de la última línea,
+       y el mensaje indica esa línea. Todo el archivo usa la misma opción
+       (errores debajo de su línea), como pide el enunciado.
+       Pruebas: P10, P27 (sin apertura), P28 (archivo vacío), P29.
+
+  c) Analizador léxico: "la revisión de variables se aplica también a
+     nombres después del signo igual; el proyecto pide revisar únicamente la
+     variable que recibe el valor".
+       Corrección: los errores 201 a 205 solo se revisan en la variable que
+       recibe el valor (a la izquierda de "=" o de "+=", ".=", etc.).
+       Prueba: P32 ($copia = $1abc . $-d; ya no da error).
+
+  d) Identificadores: "cuando el nombre y el signo igual están en líneas
+     distintas puede omitir una palabra reservada o un nombre sin $".
+       Corrección: el análisis ya no compara líneas; mira el token anterior
+       al "=" saltando saltos de línea y comentarios.
+       Pruebas: P30 ($if en una línea y "= 10;" en la siguiente), P31.
+
+  e) Comentarios: "una sola barra al comienzo de una línea se interpreta
+     como comentario incorrecto, aunque podría ser parte de una división".
+       Corrección: si la línea anterior quedó a mitad de una operación
+       (terminó en una variable, un número, ")" o "]"), la "/" es una
+       división; si empieza una instrucción nueva, sigue siendo el Error 401.
+       Pruebas: P33, P35 (divisiones en dos líneas), P16 (sigue dando 401).
+
+  f) INFORME: "no deja constancia explícita de una comprobación en otra
+     computadora".
+       Corrección: la sección 14 registra la prueba en otro equipo.
+
+  Problemas que encontramos nosotros y también se corrigieron:
+     - "echo PHP_EOL;" daba el Error 402 (texto suelto). Ahora el 402 solo
+       aplica a palabras sueltas al inicio de una instrucción (prueba P34).
+     - El informe entregado no incluía los prompts principales usados con la
+       IA; ahora están en la sección 15.
+     - Si el .php se guardaba como "ANSI" (Windows-1252), el .log se escribía
+       en UTF-8 y las tildes cambiaban: el .log ya no era una copia exacta.
+       Ahora el .log usa la misma codificación del .php y conserva el BOM si
+       lo tiene. Pruebas: P109 (UTF-8 con BOM), P110 (ANSI), P111.
+
+
+8. LISTA DE ERRORES QUE DETECTA
+-------------------------------------------------------------------------------
+  Sobre el archivo (se muestran en la ventana de comandos, no hay .log)
     101  No hay ningún archivo .php en la carpeta
     102  El archivo no termina exactamente en .php (no se revisa)
     103  No se pudo leer el archivo
+    104  No se pudo escribir el .log (por ejemplo, si está abierto en otro programa)
 
-  Sobre los identificadores (nombres de variables)
-    201  Hay un número justo después de $           Ejemplo: $1variable
-    202  Hay un símbolo justo después de $          Ejemplo: $-dato
-    203  Hay un carácter no permitido en el nombre  Ejemplo: $suma@notas
-    204  Se usa una palabra reservada como nombre   Ejemplo: $if = 10;
-    205  Hay un $ sin nombre                        Ejemplo: $ = 5;
-    206  Falta el $ al inicio del nombre            Ejemplo: nombre = "Ana";
+  Identificadores (de la variable que recibe el valor)
+    201  Hay un número justo después de $          $1variable = 10;
+    202  Hay un símbolo justo después de $         $-dato = 5;
+    203  Hay un carácter no permitido en el nombre $suma@notas = 0;
+    204  Se usa una palabra reservada              $if = 10;
+    205  Hay un $ sin nombre                       $ = 5;
+    206  Falta el $ al inicio del nombre           nombre = "Ana";
 
-  Sobre las etiquetas <?php y ?>
-    301  Hay algo antes de <?php (texto, espacios o líneas en blanco)
-    302  La etiqueta de inicio está mal escrita     Ejemplo: <? php
-    303  No existe la etiqueta de inicio <?php
-    304  La etiqueta de cierre está mal escrita     Ejemplo: ? >
-    305  No existe la etiqueta de cierre ?>
+  Etiquetas <?php y ?>
+    301  Hay algo antes de <?php (texto, espacios, líneas en blanco o BOM)
+    302  La etiqueta de inicio está mal escrita     <? php
+    303  No existe la etiqueta de inicio <?php      (se indica en la línea 0001)
+    304  La etiqueta de cierre está mal escrita     ? >
+    305  No existe la etiqueta de cierre ?>         (se indica en la última línea)
     306  Hay código después de ?> en la misma línea
     307  La etiqueta ?> no está en la última línea
     308  Hay espacios o líneas en blanco después de ?>
 
-  Sobre los comentarios
-    401  Comentario con una sola barra              Ejemplo: / texto
+  Comentarios
+    401  Comentario con una sola barra              / texto
     402  Texto suelto que no es código (por ejemplo, un comentario que
          continúa en la línea siguiente sin // ni #)
 
   Generales
-    501  Carácter que no pertenece al lenguaje      Ejemplo: @
-    502  Texto entre comillas sin cerrar            Ejemplo: echo "hola;
+    501  Carácter que no pertenece al lenguaje      @
+    502  Texto entre comillas sin cerrar (fuera de un echo)
+    503  Llave de cierre } sin una llave de apertura
+    504  Estructura de control mal escrita, con sugerencia
+                                                    whlie (...) {  -> ¿quiso decir 'while'?
+    505  Bloque de foreach, function, etc. sin llave de cierre }
+
+  Comando while
+    601  Falta el paréntesis de apertura (          while $x < 10 {
+    602  Falta el paréntesis de cierre )            while ($x < 10 {
+    603  La condición está vacía                    while () {
+    604  Falta la llave de apertura {
+    605  Falta la llave de cierre } (indica la línea donde empezó el while)
+    606  El bloque está vacío (o solo tiene comentarios)
+    607  Indentación incorrecta (dice cuántos espacios se esperaban y cuántos hay)
+    608  Se usó una tabulación para indentar
+    609  La llave de cierre } no está alineada con el while
+    610  La llave de apertura { está en la línea siguiente
+
+  Comando for (la rúbrica menciona los errores "relacionados con While y
+  For", y el código de la cátedra tiene un for)
+    611  Falta el paréntesis de apertura (          for $i = 0; $i < 4; $i++) {
+    612  Falta el paréntesis de cierre )
+    613  La cabecera no tiene sus tres partes separadas por ";"
+                                                    for ($i = 0; $i < 4) {
+    614-620  Los mismos casos del while (604 a 610), para el for
+
+  Comando if y bloque else
+    701-710  Los mismos casos del while, para el if (y el elseif)
+    711  Falta la llave de apertura { después de else      } else
+    712  Falta la llave de cierre } del else
+    713  El bloque del else está vacío
+    714  else sin un if antes
+    715  Indentación incorrecta dentro del else
+    716  Tabulación dentro del else
+    717  La llave de cierre } del else no está alineada
+    718  "}" y "else" en líneas distintas (debe ser "} else {")
+    719  La llave { del else está en la línea siguiente
+
+  Comando echo
+    801  No tiene nada que imprimir                 echo;
+    802  Usa paréntesis para agrupar                echo ("Hola mundo");
+    803  Comilla doble sin cerrar                   echo "Hola mundo;
+    804  Comilla simple sin cerrar                  echo 'Texto;
+    805  Falta el punto y coma                      echo "Hola"
+    806  Expresión inválida: a un operador le falta un valor, o falta un
+         operador entre dos valores                 echo "a" . ;   echo "a" "b";
+
+  Análisis semántico
+    901  Se usa una variable que todavía no ha recibido un valor
+         (sugiere la parecida: $Total -> ¿quiso decir $total?)
+    902  La condición de un while o un if asigna un valor fijo en lugar de
+         compararlo: if ($promedio = 70) siempre da el mismo resultado
+         (para comparar se usa ==)
+    903  División entre cero escrita en el código: $promedio = $suma / 0;
+         (en PHP 8 detiene el programa)
 
 
-8. CÓMO ESTÁ ORGANIZADO EL CÓDIGO
+9. ETAPAS DEL COMPILADOR Y ORGANIZACIÓN DEL CÓDIGO
 -------------------------------------------------------------------------------
-El código está en la carpeta  src\proyectocompiladores2  y se divide en cuatro
-grupos (paquetes). Cada archivo cumple una sola tarea.
+El código está en  src\proyectocompiladores2 . Cada etapa está marcada en el
+código con un comentario "===== ETAPA N =====". Main.java las llama en orden:
 
-  Main.java                          Dirige todo: llama a cada parte en orden.
+  Lectura   io\LectorArchivoPHP.java      Lee el archivo sin cambiarle nada
+                                          (guarda el salto de cada línea).
+  ETAPA 1   lexico\AnalizadorLexico.java  Obtención de tokens: recorre cada
+                                          línea carácter por carácter y la
+                                          corta en lexemas.
+  ETAPA 2   lexico\ClasificadorTokens.java  Clasificación: dice de qué tipo es
+                                          cada token (variable, número, texto,
+                                          palabra reservada, comentario...).
+  ETAPA 3   lexico\Patrones.java          Patrón: las reglas de cada tipo de
+                                          token y las palabras reservadas.
+  ETAPA 4   lexico\ValidadorLexema.java   Validación del lexema: usa las reglas
+                                          de la carpeta "validacion"
+                                          (identificadores, etiquetas,
+                                          comentarios).
+  ETAPA 5   sintactico\AnalizadorSintactico.java  Análisis sintáctico: revisa
+                                          el orden de los tokens según la
+                                          gramática (sección 10) y construye
+                                          el árbol sintáctico.
+              ValidadorEstructuraControl  Parte común de while, if y for:
+                                          "palabra (condición) { ... }"
+              ValidadorWhile, ValidadorIf,
+              ValidadorFor                Heredan de la clase anterior.
+              ValidadorEcho               Revisa la expresión del echo.
+              ValidadorIndentacion        4 espacios por nivel, sin tabulaciones.
+              TipoBloque                  Qué número de error usa cada estructura.
+              arbol\Nodo...               Los nodos del árbol sintáctico.
+  ETAPA 6   semantico\AnalizadorSemantico.java  Análisis semántico: recorre el
+                                          árbol con la tabla de símbolos
+                                          (semantico\TablaSimbolos.java).
+  Archivo   io\EscritorLog.java           Crea el archivo -errores.log.
+  Errores   errores\CodigoError.java      La lista de errores con su número.
+            errores\GestorErrores.java    Guarda los errores de cada línea.
 
-  io (leer y escribir archivos)
-    LocalizadorArchivo.java          Busca los archivos .php junto al programa.
-    LectorArchivoPHP.java            Lee el archivo sin cambiarle nada.
-    ArchivoFuente.java               Guarda las líneas leídas.
-    EscritorLog.java                 Crea el archivo -errores.log.
-
-  lexico (las 4 etapas del análisis léxico)
-    AnalizadorLexico.java            ETAPA 1. Obtención de tokens: recorre cada
-                                     línea letra por letra y la separa en
-                                     pedazos (lexemas).
-    ClasificadorTokens.java          ETAPA 2. Clasificación: dice de qué tipo
-                                     es cada pedazo (variable, número, texto,
-                                     palabra reservada, comentario...).
-    Patrones.java                    ETAPA 3. Patrón: tiene las reglas de cada
-                                     tipo y la lista de palabras reservadas.
-    ValidadorLexema.java             ETAPA 4. Validación: revisa que cada
-                                     pedazo cumpla sus reglas.
-    Token.java, TipoToken.java       Representan un token y sus tipos.
-
-  validacion (las reglas que revisa la etapa 4)
-    ValidadorIdentificadores.java    Reglas de los nombres de variables.
-    ValidadorEtiquetas.java          Reglas de <?php y ?>.
-    ValidadorComentarios.java        Reglas de los comentarios.
-
-  errores
-    CodigoError.java                 La lista de errores con su número.
-    ErrorLexico.java                 Un error encontrado.
-    GestorErrores.java               Guarda los errores de cada línea.
-
-Orden en que trabaja el programa con cada archivo .php:
-    leer  ->  etapa 1  ->  etapa 2  ->  etapa 4 (usa las reglas de la etapa 3)
-          ->  escribir el archivo .log
+Traducción orientada por la sintaxis (tema 5): mientras el análisis
+sintáctico reconoce cada regla de la gramática, construye su parte del árbol
+(un nodo While, If, For, Echo...). El análisis semántico trabaja sobre ese
+árbol.
+Para verlo: java -jar ProyectoCompiladores2.jar -arbol
 
 
-9. DECISIONES TOMADAS
+10. GRAMÁTICA QUE USA EL ANÁLISIS SINTÁCTICO
 -------------------------------------------------------------------------------
-  - Archivos que se revisan: todos los que terminan en ".php" y están junto
-    al programa. Así no depende de un nombre ni de una ruta fija.
-  - Dónde se muestran los errores: debajo de la línea donde ocurren, 
-    porque es más fácil de corregir (o al menos a gusto personal así lo es).
-  - Numeración: 4 dígitos y un espacio. Ejemplo: "0001 <?php"
-  - Mayúsculas y minúsculas en las variables: $total y $Total son dos
-    variables distintas.
-  - Palabras reservadas: no se distinguen mayúsculas, porque en PHP "IF" y
-    "if" son la misma palabra. Por eso $if, $If y $IF son error. (o eso fue lo 
-    que entendi sobre como manejar las mayusculas para el proyecto)
-  - La regla de palabras reservadas se aplica a la variable que está a la
-    izquierda del signo "=". Los signos "==", ">=", "<=" y "!=" son
-    comparaciones, no asignaciones.
-  - Lectura del archivo: se lee completo y no línea por línea, para saber si
-    hay algo antes de <?php o después de ?> (por ejemplo, un Enter al final).
-  - Versión de Java: el programa se compila para Java 8, para que funcione
-    en cualquier computadora, tenga un Java viejo o nuevo. Se probó con
-    Java 8 y con Java 26.
-  - Tildes: en la ventana de comandos se escriben sin tilde; en el archivo
-    .log sí se conservan.
+El análisis sintáctico es "descendente recursivo": cada regla es un método,
+y si una regla contiene a otra, su método llama al de la otra.
+
+    programa   -> '<?php' sentencias '?>'
+    sentencias -> { sentencia }
+    sentencia  -> while | if | for | echo | estructura | simple
+    while      -> 'while' '(' condicion ')' bloque
+    for        -> 'for' '(' inicio ';' condicion ';' incremento ')' bloque
+    if         -> 'if' '(' condicion ')' bloque [ else ]
+    else       -> 'else' bloque | 'else' if | 'elseif' '(' condicion ')' bloque [ else ]
+    bloque     -> '{' sentencia { sentencia } '}'
+    echo       -> 'echo' expresion { ',' expresion } ';'
+    expresion  -> valor { operador valor }
+    valor      -> cadena | número | $variable [ '[' ... ']' ]
+                  | nombre [ '(' argumentos ')' ] | true | false | null
+    estructura -> ('foreach' | 'function' | ...) cabecera bloque
+    simple     -> token { token } ';'
+
+Reglas de formato que se revisan aparte: cada línea dentro de un bloque lleva
+4 espacios más que la línea que lo abre, sin tabulaciones, y la "}" va
+alineada con esa línea.
+
+Cuando encuentra un error, el analizador lo registra y sigue desde el
+siguiente punto seguro (";", "{" o "}") para encontrar todos los errores sin
+inventar errores falsos en cascada ("recuperación en modo pánico").
 
 
-10. LIMITACIONES
+11. DECISIONES TOMADAS
 -------------------------------------------------------------------------------
-  - Solo se revisan comentarios de una línea (// y #), como pide el enunciado.
-    Los comentarios de varias líneas /* */ no se reconocen.
+Del Proyecto 1:
+  - Se revisan todos los archivos que terminan exactamente en ".php" junto
+    al programa; no depende de un nombre ni de una ruta fija.
+  - Los errores van debajo de la línea donde ocurren (Opción 1), en todo el
+    archivo.
+  - Numeración: 4 dígitos y un espacio ("0001 <?php").
+  - Las variables distinguen mayúsculas ($total y $Total son distintas). Las
+    palabras reservadas no (en PHP "IF" e "if" son la misma), por eso $IF
+    también es error.
+  - Solo "=" y las asignaciones compuestas (+=, .=, ...) son asignaciones;
+    "==", ">=", "<=", "!=" son comparaciones.
+
+Del Proyecto 2:
+  - Las llaves van como en los ejemplos del enunciado: "{" en la misma línea
+    del while / if / else / for, y "} else {" en una sola línea.
+  - Un bloque que solo tiene comentarios o líneas en blanco está vacío.
+  - Indentación: 4 espacios por nivel de anidamiento; se revisa la primera
+    línea de cada instrucción y la "}". Los comentarios no se revisan. El
+    código que no está dentro de un while, if, else o for no se revisa,
+    porque el enunciado solo pide la indentación de esos bloques.
+  - Echo: no se permiten paréntesis que agrupen lo que se imprime
+    (echo ("Hola")), pero sí los de una función (echo count($notas);).
+    Si una cadena sin cerrar está dentro de un echo se reporta el error del
+    echo (803/804) en lugar del general 502, para no repetir el mensaje.
+  - El for se valida con las mismas reglas del while (errores 611 a 620),
+    porque la rúbrica habla de los errores "relacionados con While y For" y
+    el código de la cátedra tiene un for. El foreach y function no los pide
+    el enunciado: se reconocen como bloques (sus llaves y lo que tienen
+    adentro), pero no se valida su forma. elseif y "else if" se validan con
+    las reglas del if.
+  - Análisis semántico: se revisa que no se use una variable antes de que
+    reciba un valor (901). Cada variable se reporta una sola vez, y no se
+    reporta si su asignación ya tiene un error léxico parecido (por ejemplo
+    $1nombre = "Ana"), porque ese error ya explica el problema.
+    También se revisa la coherencia de las instrucciones: una condición que
+    asigna un valor fijo (902) y una división entre el número 0 (903).
+    "while ($fila = leer())" no es error: es una forma común en PHP.
+    Se pensó también en avisar de posibles ciclos infinitos, pero se
+    descartó: el enunciado muestra "while ($x < 10) { echo $x; }" como
+    ejemplo permitido y ese aviso lo habría marcado como error.
+  - Los ejemplos del enunciado usan $x sin darle un valor antes; si se
+    copian tal cual a un archivo, dan el Error 901 en $x (es correcto: en
+    PHP real $x no existe). Por eso la prueba P54 agrega "$x = 0;" primero.
+  - Versión de Java: se compila para Java 8, para que funcione en cualquier
+    computadora. Se probó con Java 8 y con Java 21.
+
+
+12. LIMITACIONES
+-------------------------------------------------------------------------------
+  - Solo se reconocen comentarios de una línea (// y #), como pide el
+    enunciado; los comentarios /* */ no.
   - Un texto entre comillas debe empezar y terminar en la misma línea.
-  - Una línea que empieza con una sola barra "/" se toma como un comentario
-    mal escrito.
-  - El contenido de los textos entre comillas no se revisa.
-  - Una resta escrita sin espacios entre una variable y una palabra ($a-total)
-    se toma como un nombre de variable con guion (Error 203).
-  - El programa no revisa la gramática. Por ejemplo, si falta un punto y coma
-    no lo reporta, porque eso no es un error léxico.
+  - El contenido de las condiciones de while e if se asume correcto (así lo
+    indica el enunciado); solo se revisa que exista y que no asigne un
+    valor fijo (902).
+  - Un "else" y un "if" en líneas distintas ("} else" y en la siguiente
+    "if (...) {") se toma como un else sin llaves (Error 711).
+  - El análisis semántico no reconoce variables que reciben valor con
+    list(...) = ... o dentro de funciones por referencia.
+  - Una resta escrita sin espacios entre una variable y una palabra
+    ($a-total) se toma como un nombre de variable con guion (Error 203).
 
 
-11. USO DE INTELIGENCIA ARTIFICIAL
+13. PRUEBAS REALIZADAS
 -------------------------------------------------------------------------------
-Herramienta utilizada: Claude Code (Anthropic), modelo Claude Opus.
+  - 112 casos de prueba automáticos (sección 5, Forma 2): cada .log se
+    compara byte por byte con el esperado. Resultado: 112 de 112, con Java 8
+    y Java 21.
+  - Pruebas de "mutación tipo tutor": un programa cambió el código de
+    ejemplo de 607 formas distintas, como lo haría el tutor (cada error del
+    enunciado en cada lugar posible, variantes válidas de espacios y 400
+    combinaciones de dos errores). En todas aparecieron exactamente los
+    errores esperados y ningún otro.
+  - Comparación con PHP real (versión 8.3): los casos "válidos" son código
+    PHP correcto, y los errores de estructura (paréntesis, llaves, punto y
+    coma, comillas) también los rechaza PHP. Los errores 901 coinciden con
+    los avisos "Undefined variable" de PHP al ejecutar los mismos casos.
+  - Robustez: 8000 archivos con cambios al azar; el programa nunca se
+    detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
+    numeración y los errores queda el .php original byte por byte (R2).
+  - Compilación con Ant (lo mismo que hace "Clean and Build" de NetBeans).
+  - Simulación de otro equipo: el proyecto se empaquetó en .zip, se
+    descomprimió en una carpeta con espacios y tildes ("Mis Documentos\
+    Compiladores Pablo Cortés"), se compiló desde cero y se ejecutó solo con
+    Java 8, desde otra carpeta de trabajo y con la configuración de idioma de
+    Windows en español (Cp1252). Resultado: 112 de 112.
+
+
+14. VERIFICACIÓN EN OTRO EQUIPO
+-------------------------------------------------------------------------------
+Siguiendo solo las instrucciones de este informe, el proyecto se probó en
+un equipo distinto al de desarrollo:
+
+  Fecha:                 ____ de noviembre de 2026
+  Equipo:                ______________________________
+  Sistema operativo:     Windows ____
+  Versión de Java:       ______________ (resultado de "java -version")
+  NetBeans:              versión ____ ("Clean and Build": BUILD SUCCESSFUL)
+  Ejecución (sección 3): java -jar ProyectoCompiladores2.jar
+                         -> se generó CodigoProyecto-errores.log sin errores
+  Pruebas (sección 5):   pruebas\ejecutar-pruebas.bat
+                         -> Pruebas correctas: 112   Fallidas: 0
+  Responsable:           Pablo Cortés
+
+
+15. USO DE INTELIGENCIA ARTIFICIAL
+-------------------------------------------------------------------------------
+Herramienta utilizada: Claude Code (Anthropic).
 
 Se usó como asistente supervisado para:
-  - Leer el enunciado y dividirlo en requisitos, preguntas y tareas.
-  - Proponer cómo organizar el código y las etapas del análisis léxico.
-  - Escribir el código Java de cada tarea, que el estudiante revisó y probó
-    controlado por GitHub con los diferentes PR (Pull Request).
-  - Diseñar y ejecutar las pruebas.
+  - Leer el enunciado, la rúbrica y la retroalimentación del Proyecto 1, y
+    dividir el trabajo en tareas en Trello.
+  - Proponer cómo organizar el código y las decisiones de diseño; las
+    decisiones las tomó el estudiante (preguntas Q1 a Q13 en Trello).
+  - Escribir el código Java de cada tarea. Cada tarea se entregó en un Pull
+    Request de GitHub con la explicación del cambio y las pruebas; el
+    estudiante revisó, probó y aprobó cada uno.
+  - Diseñar y ejecutar las pruebas automáticas y redactar este informe.
 
-Yo Pablo Cortes me encargue de supervisar cada etapa del proceso asi como el código generado, por lo que a su vez asumo haberlo entendido, comprendido y analizado previo a hacer la entrega y asumo la responsabilidad total sobre el funcionamiento
+Cada archivo de código indica en su comentario inicial que se hizo con apoyo
+de IA. El estudiante revisó el código, lo comprende y asume la
+responsabilidad total sobre su funcionamiento.
+
+Prompts principales cuyo resultado se incorporó al proyecto:
+
+  Proyecto 1
+  1. "Vamos a comenzar el desarrollo de un nuevo proyecto para la universidad
+     ... identificar en esta primera etapa los requisitos y estructurar la
+     ruta de trabajo en Trello así como la información que se debe tener
+     clara para el desarrollo" (con el enunciado y el código PHP adjuntos).
+  2. Respuestas a las preguntas de diseño. Por ejemplo: "Personalmente
+     considero más fácil y entendible ver los errores en una línea ... en
+     caso de corregir es más fácil encontrar la línea con error".
+  3. "Vamos a trabajarlo de forma sencilla, absolutamente todo lo vamos a
+     trabajar en el repositorio ... vas a ir avanzando con el proyecto de
+     forma paulatina con lo que definimos en el Trello como orden e igual vas
+     a explicar cada una de las decisiones que tomas".
+  4. "Desarrolla todo de forma fluida ... de la forma más sencilla pero
+     funcional posible, debes hacer múltiples pruebas para estar
+     completamente seguro que todo sirva".
+  5. "Revises minuciosamente las indicaciones que tenemos además de la
+     rúbrica de evaluación para determinar si es un trabajo completo o hay
+     algún aspecto que se nos está escapando".
+
+  Proyecto 2
+  6. "Ahora debemos hacer el proyecto 2 que es una actualización para el
+     proyecto 1 ... vas a leer y analizar detenidamente el repositorio ...
+     las instrucciones del proyecto 1 ... el documento de la
+     retroalimentación con la calificación y los criterios donde nos han
+     quitado puntos ... y plantear la ruta de trabajo y un cronograma
+     ordenado" (con los enunciados, la rúbrica revisada y el código PHP).
+  7. "Solo sería refinar bastante bien el proyecto 1 que es la base
+     principal y agregar los cambios del proyecto 2 ... con un orden lógico
+     y con bastantes pruebas ... debemos tener bastante cautela y hacer
+     bastantes pruebas para realmente verificar que todo funciona bien".
+  8. "De acuerdo con todas tus recomendaciones, tienes permiso, empecemos el
+     proyecto" (aprobación de las decisiones Q7 a Q13 propuestas en Trello).
+  9. "Quiero que trates de estar lo más apegado a las instrucciones posible
+     ... revisa todo con extrema cautela y pruebas para reforzar de forma
+     bastante extensa todo lo que pueda ser como un error ... hacer todas
+     las pruebas incluso en un entorno simulado como si fuera otro
+     dispositivo" (revisión final antes de la entrega).
 
 
-12. FUENTES
+16. FUENTES
 -------------------------------------------------------------------------------
-  - Enunciado "Proyecto 1 - III Cuatrimestre 2026", curso 03307 Compiladores,
-    UNED.
+  - Enunciados "Proyecto 1" y "Proyecto 2", III Cuatrimestre 2026, curso
+    03307 Compiladores, UNED, y la retroalimentación del Proyecto 1.
   - Código PHP de ejemplo entregado por la cátedra (CodigoProyecto.php).
-  - Documentación oficial de Java.
-
+  - Documentación oficial de Java (java.util, java.nio, java.util.regex).
+  - Documentación oficial de PHP (sintaxis de while, if/else, for y echo), y el
+    intérprete de PHP 8.3 para comparar los resultados de las pruebas.

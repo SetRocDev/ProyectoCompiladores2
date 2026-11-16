@@ -10,7 +10,7 @@
 0010 
 0011 // Mostrar información inicial
 0012 echo "Estudiante: $nombre_estudiante;
-Error 502. La cadena de texto "Estudiante: $nombre_estudiante; no tiene la comilla de cierre
+Error 803. La cadena "Estudiante: $nombre_estudiante; del echo no tiene la comilla doble (") de cierre
 0013 echo "Cantidad de notas: $cantidad_notas\n";
 0014 
 0015 // Calcular promedio usando for

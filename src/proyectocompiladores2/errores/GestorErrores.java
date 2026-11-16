@@ -12,18 +12,22 @@ import java.util.TreeMap;
  *
  * Una misma línea puede tener varios errores distintos: se guardan todos y
  * se devuelven ordenados por columna, para escribirlos debajo de su línea
- * en el .log. Los errores globales (por ejemplo, falta la etiqueta de cierre)
- * se guardan aparte y se escriben al final del .log.
+ * en el .log.
+ *
+ * Todo error pertenece a una línea (Opción 1 del enunciado, de forma
+ * consistente en todo el archivo). Incluso los errores que se refieren al
+ * archivo completo se asocian a la línea más lógica: si falta '<?php' va en
+ * la línea 0001 y si falta '?>' en la última línea (corrección del
+ * Proyecto 1, tarea T16; antes se escribían al final sin número de línea).
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
 public class GestorErrores {
 
-    private static final Comparator<ErrorLexico> POR_COLUMNA =
-            Comparator.comparingInt(ErrorLexico::getColumna);
+    private static final Comparator<ErrorCompilacion> POR_COLUMNA =
+            Comparator.comparingInt(ErrorCompilacion::getColumna);
 
-    private final Map<Integer, List<ErrorLexico>> erroresPorLinea = new TreeMap<>();
-    private final List<ErrorLexico> erroresGlobales = new ArrayList<>();
+    private final Map<Integer, List<ErrorCompilacion>> erroresPorLinea = new TreeMap<>();
 
     /**
      * Registra un error en una línea concreta.
@@ -36,53 +40,68 @@ public class GestorErrores {
      * @param datos   valores para completar la descripción
      */
     public void registrar(CodigoError codigo, int linea, int columna, Object... datos) {
-        List<ErrorLexico> lista = erroresPorLinea.computeIfAbsent(linea, k -> new ArrayList<>());
-        for (ErrorLexico existente : lista) {
+        List<ErrorCompilacion> lista = erroresPorLinea.computeIfAbsent(linea, k -> new ArrayList<>());
+        for (ErrorCompilacion existente : lista) {
             if (existente.getCodigo() == codigo && existente.getColumna() == columna) {
                 return;
             }
         }
-        lista.add(new ErrorLexico(codigo, linea, columna, codigo.describir(datos)));
+        lista.add(new ErrorCompilacion(codigo, linea, columna, codigo.describir(datos)));
     }
 
     /**
-     * Registra un error que no pertenece a una línea concreta del archivo.
+     * Quita un error ya registrado. Lo usa una etapa posterior cuando puede
+     * describir el mismo problema de forma más específica (un error, un
+     * mensaje). Por ejemplo, una cadena sin cerrar dentro de un echo se
+     * reporta como Error 803/804 en lugar del 502 general.
      *
-     * @param codigo tipo de error
-     * @param datos  valores para completar la descripción
+     * @return true si el error existía y se quitó
      */
-    public void registrarGlobal(CodigoError codigo, Object... datos) {
-        for (ErrorLexico existente : erroresGlobales) {
-            if (existente.getCodigo() == codigo) {
-                return;
+    public boolean quitar(CodigoError codigo, int linea, int columna) {
+        List<ErrorCompilacion> lista = erroresPorLinea.get(linea);
+        if (lista == null) {
+            return false;
+        }
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getCodigo() == codigo && lista.get(i).getColumna() == columna) {
+                lista.remove(i);
+                return true;
             }
         }
-        erroresGlobales.add(new ErrorLexico(codigo, ErrorLexico.SIN_LINEA, 0, codigo.describir(datos)));
+        return false;
     }
 
     /**
      * @param linea número de línea (desde 1)
      * @return errores de esa línea ordenados por columna (lista vacía si no hay)
      */
-    public List<ErrorLexico> erroresDeLinea(int linea) {
-        List<ErrorLexico> lista = erroresPorLinea.get(linea);
+    public List<ErrorCompilacion> erroresDeLinea(int linea) {
+        List<ErrorCompilacion> lista = erroresPorLinea.get(linea);
         if (lista == null) {
             return Collections.emptyList();
         }
-        List<ErrorLexico> ordenada = new ArrayList<>(lista);
+        List<ErrorCompilacion> ordenada = new ArrayList<>(lista);
         ordenada.sort(POR_COLUMNA); // sort estable: a igual columna respeta el orden de registro
         return Collections.unmodifiableList(ordenada);
     }
 
-    /** @return errores globales en orden de registro. */
-    public List<ErrorLexico> erroresGlobales() {
-        return Collections.unmodifiableList(erroresGlobales);
+    /** @return cantidad de errores de una etapa ("Léxico", "Sintáctico" o "Semántico"). */
+    public int total(String etapa) {
+        int total = 0;
+        for (List<ErrorCompilacion> lista : erroresPorLinea.values()) {
+            for (ErrorCompilacion error : lista) {
+                if (error.getCodigo().getEtapa().equals(etapa)) {
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 
-    /** @return total de errores (por línea + globales). */
+    /** @return total de errores del archivo. */
     public int total() {
-        int total = erroresGlobales.size();
-        for (List<ErrorLexico> lista : erroresPorLinea.values()) {
+        int total = 0;
+        for (List<ErrorCompilacion> lista : erroresPorLinea.values()) {
             total += lista.size();
         }
         return total;
