@@ -28,7 +28,8 @@ import proyectocompiladores2.sintactico.arbol.NodoPrograma;
  * sintáctico y semántico.
  *
  * Uso:  java -jar ProyectoCompiladores2.jar           analiza los .php de la carpeta del .jar
- *       java -jar ProyectoCompiladores2.jar -tokens   además muestra la tabla de tokens
+ *       java -jar ProyectoCompiladores2.jar -tokens   además muestra los tokens y las tablas de símbolos
+ *       java -jar ProyectoCompiladores2.jar -arbol    además muestra el árbol sintáctico
  *
  * Flujo para cada archivo .php:
  *   Lectura         -> LectorArchivoPHP     (R1)
@@ -46,11 +47,12 @@ import proyectocompiladores2.sintactico.arbol.NodoPrograma;
 public class Main {
 
     public static void main(String[] args) {
-        boolean mostrarTokens = args.length > 0 && args[0].equalsIgnoreCase("-tokens");
+        boolean mostrarTokens = tieneOpcion(args, "-tokens");
+        boolean mostrarArbol = tieneOpcion(args, "-arbol");
 
         LocalizadorArchivo localizador = new LocalizadorArchivo();
         Path carpeta = localizador.obtenerCarpetaDeEjecucion();
-        imprimir("=== Analizador lexico PHP ===");
+        imprimir("=== Analizador de PHP: lexico, sintactico y semantico ===");
         imprimir("Carpeta: " + carpeta);
 
         List<Path> archivos;
@@ -71,58 +73,98 @@ public class Main {
         }
 
         for (Path ruta : archivos) {
-            analizarArchivo(ruta, mostrarTokens);
+            analizarArchivo(ruta, mostrarTokens, mostrarArbol);
         }
     }
 
-    /** Ejecuta todas las etapas sobre un archivo y genera su log. */
-    private static void analizarArchivo(Path ruta, boolean mostrarTokens) {
+    /** @return true si la opción viene en la línea de comandos (sin importar mayúsculas ni el orden). */
+    private static boolean tieneOpcion(String[] args, String opcion) {
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase(opcion)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Ejecuta las 6 etapas sobre un archivo y genera su log. */
+    private static void analizarArchivo(Path ruta, boolean mostrarTokens, boolean mostrarArbol) {
         imprimir("");
         imprimir("Archivo: " + ruta.getFileName());
+        ArchivoFuente fuente;
         try {
             // Lectura respetando el formato original (R1)
-            ArchivoFuente fuente = new LectorArchivoPHP().leer(ruta);
+            fuente = new LectorArchivoPHP().leer(ruta);
+        } catch (IOException e) {
+            mostrarError(CodigoError.ERROR_LECTURA, ruta.getFileName(), e.getMessage());
+            return;
+        }
 
+        GestorErrores errores = new GestorErrores();
+        List<Token> tokens = null;
+        ValidadorLexema validador = new ValidadorLexema();
+        NodoPrograma arbol = null;
+        AnalizadorSemantico semantico = new AnalizadorSemantico(errores);
+        try {
             // Etapa 1: obtención de tokens
-            List<Token> tokens = new AnalizadorLexico().obtenerTokens(fuente);
+            tokens = new AnalizadorLexico().obtenerTokens(fuente);
 
             // Etapa 2: clasificación (usa los patrones de la etapa 3)
             new ClasificadorTokens().clasificar(tokens);
 
             // Etapa 4: validación de cada lexema según las reglas definidas
-            GestorErrores errores = new GestorErrores();
-            ValidadorLexema validador = new ValidadorLexema();
             FlujoTokens flujo = new FlujoTokens(tokens);
             validador.validar(tokens, flujo, fuente, errores);
 
             // Etapa 5: análisis sintáctico (orden de los tokens según la gramática)
-            NodoPrograma arbol = new AnalizadorSintactico(flujo, fuente, errores).analizar();
+            arbol = new AnalizadorSintactico(flujo, fuente, errores).analizar();
 
-            // Etapa 6: análisis semántico (significado: variables y coherencia)
-            new AnalizadorSemantico(errores).analizar(arbol);
+            // Etapa 6: análisis semántico (significado: uso de las variables)
+            semantico.analizar(arbol);
+        } catch (RuntimeException e) {
+            // Un fallo inesperado no impide escribir el .log con lo encontrado hasta ahí
+            imprimir("  Aviso: el analisis se detuvo antes de terminar (" + e + ")");
+        }
 
+        try {
             // Archivo de errores (R2)
             Path log = new EscritorLog().escribir(fuente, errores);
-
-            if (mostrarTokens) {
-                imprimir("  LINEA:COL TIPO                 LEXEMA");
-                for (Token token : tokens) {
-                    imprimir("  " + token);
-                }
-                imprimir("  Tabla de simbolos (distingue mayusculas):");
-                for (Map.Entry<String, Integer> simbolo : validador.getTablaDeSimbolos().entrySet()) {
-                    imprimir("    " + simbolo.getKey() + "  (linea " + simbolo.getValue() + ")");
+            if (mostrarTokens && tokens != null) {
+                mostrarTokens(tokens, validador, semantico);
+            }
+            if (mostrarArbol && arbol != null) {
+                StringBuilder salida = new StringBuilder();
+                arbol.imprimir(salida, 1);
+                imprimir("  Arbol sintactico (traduccion orientada por la sintaxis):");
+                for (String linea : salida.toString().split("\\R")) {
+                    imprimir("  " + linea);
                 }
             }
             imprimir("  Lineas: " + fuente.getCantidadLineas()
-                    + " | Tokens: " + tokens.size()
-                    + " | Errores: " + errores.total());
+                    + " | Tokens: " + (tokens == null ? 0 : tokens.size()));
+            imprimir("  Errores: " + errores.total()
+                    + " (lexicos: " + errores.total("Léxico")
+                    + ", sintacticos: " + errores.total("Sintáctico")
+                    + ", semanticos: " + errores.total("Semántico") + ")");
             imprimir("  Log generado: " + log.getFileName());
         } catch (IOException e) {
-            mostrarError(CodigoError.ERROR_LECTURA, ruta.getFileName(), e.getMessage());
-        } catch (RuntimeException e) {
-            // Un fallo inesperado en un archivo no detiene el análisis de los demás
-            imprimir("  Error inesperado al analizar " + ruta.getFileName() + ": " + e);
+            mostrarError(CodigoError.ERROR_ESCRITURA, ruta.getFileName(), e.getMessage());
+        }
+    }
+
+    /** Opción -tokens: la tabla de tokens y las tablas de símbolos. */
+    private static void mostrarTokens(List<Token> tokens, ValidadorLexema validador, AnalizadorSemantico semantico) {
+        imprimir("  LINEA:COL TIPO                 LEXEMA");
+        for (Token token : tokens) {
+            imprimir("  " + token);
+        }
+        imprimir("  Identificadores encontrados (distingue mayusculas):");
+        for (Map.Entry<String, Integer> simbolo : validador.getTablaDeSimbolos().entrySet()) {
+            imprimir("    " + simbolo.getKey() + "  (linea " + simbolo.getValue() + ")");
+        }
+        imprimir("  Tabla de simbolos del analisis semantico (variable: linea donde recibe su valor):");
+        for (Map.Entry<String, Integer> simbolo : semantico.getTablaSimbolos().getAsignadas().entrySet()) {
+            imprimir("    " + simbolo.getKey() + "  (linea " + simbolo.getValue() + ")");
         }
     }
 

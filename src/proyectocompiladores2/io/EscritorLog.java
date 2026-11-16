@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import proyectocompiladores2.errores.ErrorLexico;
+import proyectocompiladores2.errores.ErrorCompilacion;
 import proyectocompiladores2.errores.GestorErrores;
 
 /**
@@ -76,7 +76,7 @@ public class EscritorLog {
             String salto = fuente.getSaltoDeLinea(numero);
             renglones.add(numerar(numero, fuente.getLinea(numero)));
             saltos.add(salto);
-            for (ErrorLexico error : errores.erroresDeLinea(numero)) {
+            for (ErrorCompilacion error : errores.erroresDeLinea(numero)) {
                 renglones.add(error.toString());
                 saltos.add(salto);
             }

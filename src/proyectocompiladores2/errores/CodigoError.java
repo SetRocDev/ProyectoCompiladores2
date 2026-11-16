@@ -27,6 +27,7 @@ public enum CodigoError {
     ARCHIVO_NO_ENCONTRADO(101, "No se encontró ningún archivo con extensión .php en la carpeta '%s'"),
     EXTENSION_INVALIDA(102, "El archivo '%s' no tiene la extensión exacta .php"),
     ERROR_LECTURA(103, "No se pudo leer el archivo '%s': %s"),
+    ERROR_ESCRITURA(104, "No se pudo escribir el archivo de errores de '%s' (revise que no esté abierto en otro programa): %s"),
 
     // ===== 2xx: Identificadores (R3) =====
     ID_INICIA_CON_DIGITO(201, "El identificador '%s' no puede iniciar con un dígito después de '$'"),
@@ -108,6 +109,20 @@ public enum CodigoError {
     CodigoError(int numero, String plantilla) {
         this.numero = numero;
         this.plantilla = plantilla;
+    }
+
+    /** @return etapa que detecta el error, según su número (para el resumen en consola). */
+    public String getEtapa() {
+        if (numero < 200) {
+            return "Archivo";
+        }
+        if (numero < 503) {
+            return "Léxico";
+        }
+        if (numero < 900) {
+            return "Sintáctico";
+        }
+        return "Semántico";
     }
 
     /** @return número del error, por ejemplo 201. */

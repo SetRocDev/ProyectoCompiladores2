@@ -48,7 +48,7 @@ public class AnalizadorSemantico {
     private final GestorErrores errores;
     private final TablaSimbolos tabla = new TablaSimbolos();
     private final Set<String> yaReportadas = new HashSet<>();
-    private final List<String> asignacionesConErrorLexico = new ArrayList<>();
+    private final List<String> asignacionesConErrorCompilacion = new ArrayList<>();
 
     public AnalizadorSemantico(GestorErrores errores) {
         this.errores = errores;
@@ -242,7 +242,7 @@ public class AnalizadorSemantico {
                     || token.es(TipoToken.PALABRA_RESERVADA);
             if (esNombre && !esVariable(token) && Patrones.esOperadorDeAsignacion(siguienteSinIndices(tokens, i))) {
                 String nombre = token.getLexema().startsWith("$") ? token.getLexema() : "$" + token.getLexema();
-                asignacionesConErrorLexico.add(nombre);
+                asignacionesConErrorCompilacion.add(nombre);
             }
         }
         for (Nodo hijo : nodo.getHijos()) {
@@ -252,7 +252,7 @@ public class AnalizadorSemantico {
 
     /** @return true si la variable se parece a una asignación con error léxico (la explica la etapa 4). */
     private boolean tieneAsignacionConError(String variable) {
-        for (String conError : asignacionesConErrorLexico) {
+        for (String conError : asignacionesConErrorCompilacion) {
             // Una sola letra de diferencia: $1nombre / $nombre, $-dato / $dato, $suma@notas / $suma_notas
             if (Patrones.distanciaDeEdicion(conError, variable) <= 1) {
                 return true;
