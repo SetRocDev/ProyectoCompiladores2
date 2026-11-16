@@ -56,7 +56,8 @@ public abstract class ValidadorEstructuraControl {
         boolean tieneCierre = false;
         while (!analizador.fin()) {
             Token token = analizador.actual();
-            if (profundidad == 0 && terminaCabecera(token)) {
+            // También con paréntesis internos sin cerrar: la '{' no es parte de la condición
+            if (terminaCabecera(token)) {
                 break;
             }
             if (AnalizadorSintactico.es(token, "(")) {

@@ -101,6 +101,7 @@ public class ValidadorEcho {
                 } else if (!esSigno(token)) {
                     analizador.registrar(CodigoError.ECHO_EXPRESION_INVALIDA, token,
                             "se esperaba un valor y se encontró '" + token.getLexema() + "'");
+                    return recuperar(analizador, nodo, ultimo);
                 }
             } else {
                 if (OPERADORES.contains(token.getLexema()) || AnalizadorSintactico.es(token, ",")) {
@@ -115,6 +116,7 @@ public class ValidadorEcho {
                 } else {
                     analizador.registrar(CodigoError.ECHO_EXPRESION_INVALIDA, token,
                             "falta un operador entre '" + ultimo.getLexema() + "' y '" + token.getLexema() + "'");
+                    return recuperar(analizador, nodo, ultimo);
                 }
             }
             nodo.agregarToken(token);
@@ -122,6 +124,35 @@ public class ValidadorEcho {
             analizador.avanzar();
         }
         return terminar(analizador, nodo, palabraEcho, esperoValor, ultimo, false);
+    }
+
+    /**
+     * Recuperación después de un error en la expresión (modo pánico): el
+     * resto de la sentencia ya no se revisa token por token, para no repetir
+     * el mismo problema. Solo se busca el ';' y, si en ese resto hay una
+     * cadena sin cerrar, se reporta como error del echo (803/804).
+     */
+    private NodoEcho recuperar(AnalizadorSintactico analizador, NodoEcho nodo, Token ultimo) {
+        while (!analizador.fin()) {
+            Token token = analizador.actual();
+            if (AnalizadorSintactico.es(token, ";")) {
+                analizador.avanzar();
+                return nodo;
+            }
+            if (AnalizadorSintactico.es(token, "{") || AnalizadorSintactico.es(token, "}")
+                    || token.es(TipoToken.ETIQUETA_CIERRE) || token.getLinea() != ultimo.getLinea()) {
+                break;
+            }
+            nodo.agregarToken(token);
+            analizador.avanzar();
+            if (token.es(TipoToken.CADENA) && !Patrones.CADENA.matcher(token.getLexema()).matches()) {
+                reportarComillaAbierta(analizador, token);
+                return nodo;
+            }
+            ultimo = token;
+        }
+        analizador.registrar(CodigoError.ECHO_SIN_PUNTO_Y_COMA, ultimo);
+        return nodo;
     }
 
     /** Revisa cómo terminó la expresión: vacía (801), con un operador colgando (806) o sin ';' (805). */
