@@ -42,6 +42,15 @@ P26_lf_cierre_misma_linea.php        306                 Todo con LF y la L53 si
 P27_apertura_falta.php               303                 Se borra L1 (<?php). El 303 va debajo de la linea 0001 (correccion P1, T16)
 P28_archivo_vacio.php                303 305             Archivo vacio (0 bytes): ambos errores debajo de la linea 0001
 P29_sin_etiquetas.php                303 305             Sin <?php ni ?>: 303 debajo de la 0001 y 305 debajo de la ultima linea
+P30_reservada_multilinea.php         204 204             Despues de L46: '$if' y en la linea siguiente '= 10;'; '$else // comentario' y '= 20;'
+                                                         (variable y = en lineas distintas, correccion P1, T17)
+P31_sin_dolar_multilinea.php         206                 Despues de L46: 'nombre_curso' y en la linea siguiente '= "Compiladores";' (T17)
+P32_solo_lado_izquierdo.php          201                 Despues de L46: '$copia = $1abc . $-d;' (a la derecha: sin error, T18) y '$1suma += 5;'
+P33_division_multilinea.php          -                   L22 partida: '$promedio = $suma_notas' y '    / $cantidad_notas;' (division, no comentario, T19)
+P34_constantes_validas.php           -                   Despues de L46: 'echo PHP_EOL;' y '$maximo = PHP_INT_MAX;' (constantes, no texto suelto, T19)
+P35_division_tras_comentario.php     -                   Como P33 pero con un comentario al final de la primera linea (T19)
+P36_casos_de_revision.php            201 204 402 401     Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
+                                                         '$nota_extra = 10 // ...' sin ';' seguido de 'continua aqui', y 'if (...)' seguido de '/ comentario'
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
