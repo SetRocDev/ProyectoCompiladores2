@@ -1,7 +1,6 @@
 package proyectocompiladores2.validacion;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import proyectocompiladores2.errores.CodigoError;
@@ -44,13 +43,16 @@ public class ValidadorIdentificadores {
     /** Tabla de símbolos: identificador exacto -> línea donde aparece por primera vez. */
     private final Map<String, Integer> tablaDeSimbolos = new LinkedHashMap<>();
 
-    public void validar(List<Token> tokens, GestorErrores errores) {
-        for (Token token : tokens) {
+    /**
+     * @param flujo   tokens del archivo sin comentarios
+     * @param errores donde se registran los errores encontrados
+     */
+    public void validar(FlujoTokens flujo, GestorErrores errores) {
+        for (Token token : flujo.getTokens()) {
             if (token.es(TipoToken.IDENTIFICADOR)) {
                 tablaDeSimbolos.putIfAbsent(token.getLexema(), token.getLinea());
             }
         }
-        FlujoTokens flujo = new FlujoTokens(tokens);
         for (int i = 0; i < flujo.tamano(); i++) {
             if (Patrones.esOperadorDeAsignacion(flujo.get(i).getLexema())) {
                 validarLadoIzquierdo(flujo, i, errores);

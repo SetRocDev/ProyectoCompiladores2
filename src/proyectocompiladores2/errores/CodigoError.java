@@ -13,7 +13,11 @@ package proyectocompiladores2.errores;
  *   2xx  Identificadores (R3)
  *   3xx  Etiquetas de apertura y cierre (R4)
  *   4xx  Comentarios (R5)
- *   5xx  Errores léxicos generales
+ *   5xx  Errores generales: léxicos (501, 502) y de estructura del código (503-505)
+ *   6xx  Comando while (Proyecto 2)
+ *   7xx  Comando if / else (Proyecto 2)
+ *   8xx  Comando echo (Proyecto 2)
+ *   9xx  Análisis semántico (Proyecto 2)
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -48,7 +52,11 @@ public enum CodigoError {
 
     // ===== 5xx: Errores léxicos generales =====
     CARACTER_NO_RECONOCIDO(501, "Carácter no reconocido '%s'"),
-    CADENA_SIN_CERRAR(502, "La cadena de texto %s no tiene la comilla de cierre");
+    CADENA_SIN_CERRAR(502, "La cadena de texto %s no tiene la comilla de cierre"),
+    // 503 a 505: estructura general del código (análisis sintáctico, etapa 5)
+    LLAVE_SIN_APERTURA(503, "Llave de cierre '}' sin una llave de apertura '{' que le corresponda"),
+    ESTRUCTURA_DESCONOCIDA(504, "'%s' no es una estructura de control válida%s"),
+    BLOQUE_SIN_CIERRE(505, "El bloque de '%s' que inicia en la línea %s no tiene llave de cierre '}'");
 
     private final int numero;
     private final String plantilla;

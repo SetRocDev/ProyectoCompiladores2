@@ -5,6 +5,7 @@ import java.util.Map;
 import proyectocompiladores2.errores.CodigoError;
 import proyectocompiladores2.errores.GestorErrores;
 import proyectocompiladores2.io.ArchivoFuente;
+import proyectocompiladores2.sintactico.FlujoTokens;
 import proyectocompiladores2.validacion.ValidadorComentarios;
 import proyectocompiladores2.validacion.ValidadorEtiquetas;
 import proyectocompiladores2.validacion.ValidadorIdentificadores;
@@ -28,15 +29,16 @@ public class ValidadorLexema {
     private final ValidadorComentarios comentarios = new ValidadorComentarios();
 
     /**
-     * @param tokens  tokens ya clasificados (etapa 2)
+     * @param tokens  tokens ya clasificados (etapa 2), incluidos los comentarios
+     * @param flujo   los mismos tokens sin comentarios
      * @param fuente  archivo original (las reglas de etiquetas miran líneas completas)
      * @param errores donde se registran los errores encontrados
      */
-    public void validar(List<Token> tokens, ArchivoFuente fuente, GestorErrores errores) {
+    public void validar(List<Token> tokens, FlujoTokens flujo, ArchivoFuente fuente, GestorErrores errores) {
         validarReglasGenerales(tokens, errores);
-        identificadores.validar(tokens, errores);       // R3
-        etiquetas.validar(tokens, fuente, errores);     // R4
-        comentarios.validar(tokens, errores);           // R5
+        identificadores.validar(flujo, errores);            // R3
+        etiquetas.validar(tokens, fuente, errores);         // R4
+        comentarios.validar(tokens, flujo, errores);        // R5
     }
 
     /** Cadenas sin cerrar (502) y caracteres que no pertenecen al lenguaje (501). */

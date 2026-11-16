@@ -27,9 +27,14 @@ import proyectocompiladores2.sintactico.FlujoTokens;
  */
 public class ValidadorComentarios {
 
-    public void validar(List<Token> tokens, GestorErrores errores) {
+    /**
+     * @param tokens  todos los tokens, incluidos los comentarios (para el Error 401)
+     * @param flujo   los mismos tokens sin comentarios (para el Error 402)
+     * @param errores donde se registran los errores encontrados
+     */
+    public void validar(List<Token> tokens, FlujoTokens flujo, GestorErrores errores) {
         validarFormaDeComentarios(tokens, errores);
-        validarTextoSuelto(tokens, errores);
+        validarTextoSuelto(flujo, errores);
     }
 
     /** Error 401: el comentario debe iniciar exactamente con "//" o "#". */
@@ -46,8 +51,7 @@ public class ValidadorComentarios {
      * Error 402: texto suelto que no es código PHP. Las palabras seguidas de
      * la misma línea se reportan juntas en un solo error.
      */
-    private void validarTextoSuelto(List<Token> tokens, GestorErrores errores) {
-        FlujoTokens flujo = new FlujoTokens(tokens);
+    private void validarTextoSuelto(FlujoTokens flujo, GestorErrores errores) {
         int i = 0;
         while (i < flujo.tamano()) {
             if (!iniciaTextoSuelto(flujo, i)) {
