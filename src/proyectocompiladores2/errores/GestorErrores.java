@@ -24,10 +24,10 @@ import java.util.TreeMap;
  */
 public class GestorErrores {
 
-    private static final Comparator<ErrorLexico> POR_COLUMNA =
-            Comparator.comparingInt(ErrorLexico::getColumna);
+    private static final Comparator<ErrorCompilacion> POR_COLUMNA =
+            Comparator.comparingInt(ErrorCompilacion::getColumna);
 
-    private final Map<Integer, List<ErrorLexico>> erroresPorLinea = new TreeMap<>();
+    private final Map<Integer, List<ErrorCompilacion>> erroresPorLinea = new TreeMap<>();
 
     /**
      * Registra un error en una línea concreta.
@@ -40,13 +40,13 @@ public class GestorErrores {
      * @param datos   valores para completar la descripción
      */
     public void registrar(CodigoError codigo, int linea, int columna, Object... datos) {
-        List<ErrorLexico> lista = erroresPorLinea.computeIfAbsent(linea, k -> new ArrayList<>());
-        for (ErrorLexico existente : lista) {
+        List<ErrorCompilacion> lista = erroresPorLinea.computeIfAbsent(linea, k -> new ArrayList<>());
+        for (ErrorCompilacion existente : lista) {
             if (existente.getCodigo() == codigo && existente.getColumna() == columna) {
                 return;
             }
         }
-        lista.add(new ErrorLexico(codigo, linea, columna, codigo.describir(datos)));
+        lista.add(new ErrorCompilacion(codigo, linea, columna, codigo.describir(datos)));
     }
 
     /**
@@ -58,7 +58,7 @@ public class GestorErrores {
      * @return true si el error existía y se quitó
      */
     public boolean quitar(CodigoError codigo, int linea, int columna) {
-        List<ErrorLexico> lista = erroresPorLinea.get(linea);
+        List<ErrorCompilacion> lista = erroresPorLinea.get(linea);
         if (lista == null) {
             return false;
         }
@@ -75,20 +75,33 @@ public class GestorErrores {
      * @param linea número de línea (desde 1)
      * @return errores de esa línea ordenados por columna (lista vacía si no hay)
      */
-    public List<ErrorLexico> erroresDeLinea(int linea) {
-        List<ErrorLexico> lista = erroresPorLinea.get(linea);
+    public List<ErrorCompilacion> erroresDeLinea(int linea) {
+        List<ErrorCompilacion> lista = erroresPorLinea.get(linea);
         if (lista == null) {
             return Collections.emptyList();
         }
-        List<ErrorLexico> ordenada = new ArrayList<>(lista);
+        List<ErrorCompilacion> ordenada = new ArrayList<>(lista);
         ordenada.sort(POR_COLUMNA); // sort estable: a igual columna respeta el orden de registro
         return Collections.unmodifiableList(ordenada);
+    }
+
+    /** @return cantidad de errores de una etapa ("Léxico", "Sintáctico" o "Semántico"). */
+    public int total(String etapa) {
+        int total = 0;
+        for (List<ErrorCompilacion> lista : erroresPorLinea.values()) {
+            for (ErrorCompilacion error : lista) {
+                if (error.getCodigo().getEtapa().equals(etapa)) {
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 
     /** @return total de errores del archivo. */
     public int total() {
         int total = 0;
-        for (List<ErrorLexico> lista : erroresPorLinea.values()) {
+        for (List<ErrorCompilacion> lista : erroresPorLinea.values()) {
             total += lista.size();
         }
         return total;
