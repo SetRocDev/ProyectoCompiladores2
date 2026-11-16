@@ -23,13 +23,17 @@ import java.util.List;
  *
  * Codificación: se intenta UTF-8 estricto; si el archivo tiene bytes que no
  * son UTF-8 válido (por ejemplo, si se guardó como "ANSI" en el Bloc de
- * notas), se lee como Windows-1252 para no perder las tildes.
+ * notas), se lee como Windows-1252 para no perder las tildes. Si tampoco es
+ * Windows-1252 válido (tiene alguno de los 5 bytes que esa codificación no
+ * define), se lee como ISO-8859-1, que acepta cualquier byte. El .log se
+ * escribe con la misma codificación, para que sea una copia exacta (R2).
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
 public class LectorArchivoPHP {
 
     private static final byte[] BOM_UTF8 = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
+    private static final Charset WINDOWS_1252 = Charset.forName("windows-1252");
 
     /**
      * @param ruta archivo a leer (debe tener extensión .php)
@@ -42,17 +46,24 @@ public class LectorArchivoPHP {
         boolean tieneBom = iniciaConBom(bytes);
         int inicio = tieneBom ? BOM_UTF8.length : 0;
 
+        Charset codificacion = StandardCharsets.UTF_8;
         String texto;
         try {
-            texto = decodificarEstricto(bytes, inicio, StandardCharsets.UTF_8);
-        } catch (CharacterCodingException e) {
-            texto = new String(bytes, inicio, bytes.length - inicio, Charset.forName("windows-1252"));
+            texto = decodificarEstricto(bytes, inicio, codificacion);
+        } catch (CharacterCodingException noEsUtf8) {
+            try {
+                codificacion = WINDOWS_1252;
+                texto = decodificarEstricto(bytes, inicio, codificacion);
+            } catch (CharacterCodingException noEsWindows) {
+                codificacion = StandardCharsets.ISO_8859_1;
+                texto = new String(bytes, inicio, bytes.length - inicio, codificacion);
+            }
         }
 
         List<String> lineas = new ArrayList<>();
         List<String> saltos = new ArrayList<>();
         separarLineas(texto, lineas, saltos);
-        return new ArchivoFuente(ruta, lineas, saltos, tieneBom);
+        return new ArchivoFuente(ruta, lineas, saltos, tieneBom, codificacion);
     }
 
     /**

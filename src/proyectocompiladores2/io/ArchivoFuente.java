@@ -1,5 +1,6 @@
 package proyectocompiladores2.io;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,8 @@ import java.util.List;
  * no tiene), porque un mismo archivo puede mezclar formatos y el .log debe
  * reproducirlos exactamente (R2; corrección del Proyecto 1 en la tarea T15).
  *
- * También se registra si el archivo tiene BOM UTF-8 (R4: nada antes de '<?php').
+ * También se registra si el archivo tiene BOM UTF-8 (R4: nada antes de '<?php')
+ * y con qué codificación se leyó, para escribir el .log con la misma (R2).
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -27,14 +29,17 @@ public final class ArchivoFuente {
     private final List<String> lineas;
     private final List<String> saltos;
     private final boolean tieneBom;
+    private final Charset codificacion;
 
     /**
-     * @param ruta     archivo leído
-     * @param lineas   texto de cada línea, sin su salto de línea
-     * @param saltos   salto de línea original de cada línea (misma cantidad que lineas)
-     * @param tieneBom true si el archivo inicia con la marca BOM de UTF-8
+     * @param ruta         archivo leído
+     * @param lineas       texto de cada línea, sin su salto de línea
+     * @param saltos       salto de línea original de cada línea (misma cantidad que lineas)
+     * @param tieneBom     true si el archivo inicia con la marca BOM de UTF-8
+     * @param codificacion codificación con la que se leyó (UTF-8 o la de Windows)
      */
-    public ArchivoFuente(Path ruta, List<String> lineas, List<String> saltos, boolean tieneBom) {
+    public ArchivoFuente(Path ruta, List<String> lineas, List<String> saltos, boolean tieneBom,
+            Charset codificacion) {
         if (lineas.size() != saltos.size()) {
             throw new IllegalArgumentException("Cada línea debe tener su salto de línea");
         }
@@ -42,6 +47,7 @@ public final class ArchivoFuente {
         this.lineas = Collections.unmodifiableList(new ArrayList<>(lineas));
         this.saltos = Collections.unmodifiableList(new ArrayList<>(saltos));
         this.tieneBom = tieneBom;
+        this.codificacion = codificacion;
     }
 
     /** @return ruta completa del archivo leído. */
@@ -53,11 +59,6 @@ public final class ArchivoFuente {
     public String getNombreBase() {
         String nombre = ruta.getFileName().toString();
         return nombre.substring(0, nombre.length() - LocalizadorArchivo.EXTENSION.length());
-    }
-
-    /** @return líneas del archivo, sin el salto de línea, en orden. */
-    public List<String> getLineas() {
-        return lineas;
     }
 
     /** @return cantidad de líneas. */
@@ -90,6 +91,11 @@ public final class ArchivoFuente {
     /** @return true si el archivo inicia con la marca BOM de UTF-8 (EF BB BF). */
     public boolean tieneBom() {
         return tieneBom;
+    }
+
+    /** @return la codificación con la que se leyó el archivo. */
+    public Charset getCodificacion() {
+        return codificacion;
     }
 
     /**

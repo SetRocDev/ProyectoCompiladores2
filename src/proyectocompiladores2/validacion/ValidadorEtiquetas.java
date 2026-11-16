@@ -52,7 +52,7 @@ public class ValidadorEtiquetas {
         previo.append(fuente.getLinea(apertura.getLinea()), 0, apertura.getColumna() - 1);
 
         if (fuente.tieneBom()) {
-            errores.registrar(CodigoError.APERTURA_CONTENIDO_PREVIO, 1, 0, "la marca BOM (bytes EF BB BF)");
+            errores.registrar(CodigoError.APERTURA_CONTENIDO_PREVIO, 1, 0, "la marca invisible BOM de 'UTF-8 con BOM' (bytes EF BB BF; guarde el archivo como 'UTF-8' sin BOM)");
         } else if (previo.length() > 0) {
             errores.registrar(CodigoError.APERTURA_CONTENIDO_PREVIO, 1, 0, describirContenido(previo.toString()));
         }

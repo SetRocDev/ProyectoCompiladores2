@@ -2,7 +2,10 @@ package proyectocompiladores2.io;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,8 +24,10 @@ import proyectocompiladores2.errores.GestorErrores;
  *   - No hay errores "sueltos" al final: todo error tiene su línea, de forma
  *     consistente en todo el archivo (corrección del Proyecto 1, tarea T16).
  *
- * El .log se guarda en la misma carpeta del .php, en UTF-8, con el salto de
- * línea original de cada línea (ver generarContenido). Si ya existe se reemplaza.
+ * El .log se guarda en la misma carpeta del .php, con la misma codificación
+ * (UTF-8, con su BOM si el .php lo tiene, o la de Windows si se guardó como
+ * "ANSI") y con el salto de línea original de cada línea (ver
+ * generarContenido), para que sea una copia exacta. Si ya existe se reemplaza.
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -30,6 +35,8 @@ public class EscritorLog {
 
     /** Sufijo que se agrega al nombre del archivo original. */
     public static final String SUFIJO = "-errores.log";
+
+    private static final byte[] BOM_UTF8 = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
 
     /**
      * @param fuente  archivo .php leído
@@ -49,8 +56,17 @@ public class EscritorLog {
      */
     public Path escribir(ArchivoFuente fuente, GestorErrores errores) throws IOException {
         Path destino = rutaDelLog(fuente);
-        try (BufferedWriter out = Files.newBufferedWriter(destino, StandardCharsets.UTF_8)) {
-            out.write(generarContenido(fuente, errores));
+        // Un carácter que no exista en la codificación del .php se escribe como '?'
+        CharsetEncoder codificador = fuente.getCodificacion().newEncoder()
+                .onUnmappableCharacter(CodingErrorAction.REPLACE)
+                .onMalformedInput(CodingErrorAction.REPLACE);
+        try (OutputStream bytes = Files.newOutputStream(destino)) {
+            if (fuente.tieneBom()) {
+                bytes.write(BOM_UTF8);
+            }
+            try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(bytes, codificador))) {
+                out.write(generarContenido(fuente, errores));
+            }
         }
         return destino;
     }
