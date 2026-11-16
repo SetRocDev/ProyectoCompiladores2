@@ -89,7 +89,15 @@ public enum CodigoError {
     ELSE_TABULACION(716, "Se usó una tabulación para indentar dentro del else; solo se permiten espacios (4 por nivel)"),
     ELSE_CIERRE_DESALINEADO(717, "La llave de cierre '}' del else no está alineada con el if: se esperaban %s espacios y hay %s"),
     ELSE_EN_OTRA_LINEA(718, "'%s' debe ir en la misma línea que la llave de cierre '}' del if: '} else {'"),
-    ELSE_LLAVE_EN_OTRA_LINEA(719, "La llave de apertura '{' del else debe estar en la misma línea que 'else': '} else {'");
+    ELSE_LLAVE_EN_OTRA_LINEA(719, "La llave de apertura '{' del else debe estar en la misma línea que 'else': '} else {'"),
+
+    // ===== 8xx: Comando echo (R5 del Proyecto 2) =====
+    ECHO_SIN_EXPRESION(801, "La sentencia echo no tiene una expresión o cadena para imprimir"),
+    ECHO_CON_PARENTESIS(802, "La sentencia echo no debe usar paréntesis para agrupar lo que imprime; la forma correcta es 'echo \"texto\";'"),
+    ECHO_COMILLA_DOBLE_ABIERTA(803, "La cadena %s del echo no tiene la comilla doble (\") de cierre"),
+    ECHO_COMILLA_SIMPLE_ABIERTA(804, "La cadena %s del echo no tiene la comilla simple (') de cierre"),
+    ECHO_SIN_PUNTO_Y_COMA(805, "Falta el punto y coma ';' al final de la sentencia echo"),
+    ECHO_EXPRESION_INVALIDA(806, "Expresión inválida en el echo: %s");
 
     private final int numero;
     private final String plantilla;
