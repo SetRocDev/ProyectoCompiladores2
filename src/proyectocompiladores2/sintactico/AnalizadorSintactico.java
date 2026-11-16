@@ -415,7 +415,50 @@ public class AnalizadorSintactico {
             return true;
         }
         int ancho = indentacion.anchoDe(flujo.get(indice).getLinea());
+        if (ancho == actual.anchoCabecera && hayEstructuraSinLlaveAntes(indice, ancho)) {
+            return true;
+        }
         return ancho != actual.anchoCabecera && esAnchoDeBloqueExterior(ancho);
+    }
+
+    /**
+     * Entre la posición actual y la '}' libre, ¿hay una estructura alineada
+     * con esa '}' que no abrió su '{'? Por ejemplo "while (...)" sin '{' y
+     * su '}' más abajo: esa '}' es del while, no del bloque actual (al que le
+     * falta su propia '}').
+     */
+    private boolean hayEstructuraSinLlaveAntes(int indiceLlave, int ancho) {
+        for (int i = posicion; i < indiceLlave; i++) {
+            Token token = flujo.get(i);
+            boolean esEstructura = esPalabra(token, "while") || esPalabra(token, "for")
+                    || esPalabra(token, "if") || esPalabra(token, "elseif") || esPalabra(token, "foreach")
+                    || esPalabra(token, "else");
+            if (esEstructura && indentacion.esPrimeroDeSuLinea(token)
+                    && indentacion.anchoDe(token.getLinea()) == ancho && !abreSuLlave(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** @return true si a la palabra de la posición indicada le sigue su '{' (después de la cabecera). */
+    private boolean abreSuLlave(int indicePalabra) {
+        int i = indicePalabra + 1;
+        if (i < flujo.tamano() && es(flujo.get(i), "(")) {
+            int profundidad = 0;
+            for (; i < flujo.tamano(); i++) {
+                Token token = flujo.get(i);
+                if (es(token, "(")) {
+                    profundidad++;
+                } else if (es(token, ")") && --profundidad == 0) {
+                    i++;
+                    break;
+                } else if (es(token, "{") || es(token, "}") || es(token, ";")) {
+                    break;
+                }
+            }
+        }
+        return i < flujo.tamano() && (es(flujo.get(i), "{") || esPalabra(flujo.get(i), "if"));
     }
 
     /**
@@ -539,6 +582,11 @@ public class AnalizadorSintactico {
     /** @return el token que sigue al actual, o null si no hay. */
     public Token siguiente() {
         return flujo.siguiente(posicion);
+    }
+
+    /** @return el token que está n posiciones después del actual, o null si no hay. */
+    public Token adelante(int n) {
+        return posicion + n < flujo.tamano() ? flujo.get(posicion + n) : null;
     }
 
     /** @return el token anterior al actual, o null si no hay. */

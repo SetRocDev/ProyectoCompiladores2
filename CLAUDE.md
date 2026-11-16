@@ -24,7 +24,7 @@ Analizador de PHP en Java: etapas léxicas del Proyecto 1 + análisis sintáctic
 - Contraste con PHP real: `php -l archivo.php`.
 
 ## Flujo de trabajo
-- Planificación en Trello (tablero "Proyecto Compiladores 2"): una tarjeta por tarea (T14–T29), decisiones Q1–Q13 en la lista Questions/Done.
+- Planificación en Trello (tablero "Proyecto Compiladores 2"): una tarjeta por tarea (T14–T30), decisiones Q1–Q13 en la lista Questions/Done.
 - Una rama por tarea (`fix/T15-...`, `feature/T20-...`) y un PR por tarea. Las ramas van encadenadas: cada PR apunta a la rama anterior y se fusionan en orden.
 - Si una revisión pide un cambio sobre una tarea ya fusionada, se corrige hacia adelante en la rama actual.
 - Plantilla del PR: Tarjeta, Qué cambia, Requerimiento cubierto, Cómo se probó (resultado de la batería n/n), Para la defensa, Uso de IA.

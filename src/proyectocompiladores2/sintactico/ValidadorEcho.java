@@ -15,7 +15,8 @@ import proyectocompiladores2.sintactico.arbol.NodoEcho;
  *     expresion → operando { operador operando }
  *     operando  → CADENA | NUMERO | $variable [ '[' ... ']' ]
  *               | nombre [ '(' argumentos ')' ] | true | false | null
- *     operador  → '.' | '+' | '-' | '*' | '/' | '%' | comparación | '&&' | '||' | '?' ':'
+ *     operador  → '.' | '+' | '-' | '*' | '/' | '%' | '**' | comparación | lógico | '?' ':'
+ *               | '->' | '::' (acceso a un objeto o a una clase)
  *
  * Los tres aspectos del enunciado:
  *   1. Estructura: inicia con echo, sin paréntesis que agrupen lo que se
@@ -38,10 +39,18 @@ public class ValidadorEcho {
 
     /**
      * Operadores que unen dos valores en la expresión de un echo: aritméticos,
-     * concatenación, comparaciones, lógicos y el operador ternario (? :).
+     * concatenación, comparaciones, lógicos, desplazamientos, el operador
+     * ternario (? :) y el acceso a un objeto o a una clase ($o->n, Clase::X).
+     * Los lógicos escritos con palabras (and, or, xor, instanceof) se comparan
+     * sin distinguir mayúsculas, como en PHP.
      */
-    private static final Set<String> OPERADORES = Patrones.conjunto(".", "+", "-", "*", "/", "%",
-            "==", "===", "!=", "!==", "<>", "<", ">", "<=", ">=", "&&", "||", "?", ":", "??");
+    private static final Set<String> OPERADORES = Patrones.conjunto(".", "+", "-", "*", "/", "%", "**",
+            "==", "===", "!=", "!==", "<>", "<", ">", "<=", ">=", "<=>", "<<", ">>",
+            "&&", "||", "?", ":", "??", "and", "or", "xor", "instanceof", "->", "::");
+
+    /** Tipos que se pueden escribir entre paréntesis para convertir un valor: (int) $x. */
+    private static final Set<String> CONVERSIONES = Patrones.conjunto("int", "integer", "float", "double",
+            "string", "bool", "boolean", "array", "object");
 
     /** Palabras reservadas que son valores. */
     private static final Set<String> VALORES_RESERVADOS = Patrones.conjunto("true", "false", "null");
@@ -64,12 +73,17 @@ public class ValidadorEcho {
             Token token = analizador.actual();
             if (AnalizadorSintactico.es(token, ";")) {
                 analizador.avanzar();
-                return terminar(analizador, nodo, palabraEcho, esperoValor, ultimo, true);
+                return terminar(analizador, nodo, palabraEcho, esperoValor, ultimo, true, profundidad);
             }
             if (terminaSinPuntoYComa(token, ultimo, esperoValor, profundidad)) {
                 break;
             }
             if (esperoValor) {
+                if (esConversion(analizador, token)) {
+                    // (int) $x: el paréntesis convierte el valor, no agrupa
+                    ultimo = consumirConversion(analizador, nodo);
+                    continue;
+                }
                 if (AnalizadorSintactico.es(token, "(")) {
                     // Paréntesis que agrupan (no son de una llamada a función)
                     if (!parentesisReportado) {
@@ -85,7 +99,7 @@ public class ValidadorEcho {
                         return nodo;
                     }
                     esperoValor = false;
-                } else if (esValor(token) || esLlamadaAFuncion(analizador, token)) {
+                } else if (esValor(token) || esLlamadaAFuncion(analizador, token) || esMiembro(ultimo, token)) {
                     esperoValor = false;
                     if (sigueGrupo(analizador, token)) {
                         nodo.agregarToken(token);
@@ -98,14 +112,18 @@ public class ValidadorEcho {
                     analizador.registrar(CodigoError.ECHO_EXPRESION_INVALIDA, token,
                             "los paréntesis no tienen ningún valor adentro");
                     profundidad--;
+                } else if (AnalizadorSintactico.es(token, ":") && AnalizadorSintactico.es(ultimo, "?")) {
+                    // "?:" (ternario corto): después sigue el valor alternativo
                 } else if (!esSigno(token)) {
                     analizador.registrar(CodigoError.ECHO_EXPRESION_INVALIDA, token,
                             "se esperaba un valor y se encontró '" + token.getLexema() + "'");
                     return recuperar(analizador, nodo, ultimo);
                 }
             } else {
-                if (OPERADORES.contains(token.getLexema()) || AnalizadorSintactico.es(token, ",")) {
+                if (esOperador(token) || AnalizadorSintactico.es(token, ",")) {
                     esperoValor = true;
+                } else if (AnalizadorSintactico.es(token, "++") || AnalizadorSintactico.es(token, "--")) {
+                    // $i++: incremento después del valor; sigue esperando un operador
                 } else if (AnalizadorSintactico.es(token, ")") && profundidad > 0) {
                     profundidad--;
                 } else if (AnalizadorSintactico.es(token, "[")) {
@@ -123,7 +141,7 @@ public class ValidadorEcho {
             ultimo = token;
             analizador.avanzar();
         }
-        return terminar(analizador, nodo, palabraEcho, esperoValor, ultimo, false);
+        return terminar(analizador, nodo, palabraEcho, esperoValor, ultimo, false, profundidad);
     }
 
     /**
@@ -155,14 +173,20 @@ public class ValidadorEcho {
         return nodo;
     }
 
-    /** Revisa cómo terminó la expresión: vacía (801), con un operador colgando (806) o sin ';' (805). */
+    /**
+     * Revisa cómo terminó la expresión: vacía (801), con un operador colgando
+     * o un paréntesis sin cerrar (806) o sin ';' (805).
+     */
     private NodoEcho terminar(AnalizadorSintactico analizador, NodoEcho nodo, Token palabraEcho,
-                              boolean esperoValor, Token ultimo, boolean tienePuntoYComa) {
+                              boolean esperoValor, Token ultimo, boolean tienePuntoYComa, int profundidad) {
         if (nodo.getTokens().isEmpty()) {
             analizador.registrar(CodigoError.ECHO_SIN_EXPRESION, palabraEcho);
         } else if (esperoValor) {
             analizador.registrar(CodigoError.ECHO_EXPRESION_INVALIDA, ultimo,
                     "el operador '" + ultimo.getLexema() + "' no tiene un valor a la derecha");
+        } else if (profundidad > 0) {
+            analizador.registrar(CodigoError.ECHO_EXPRESION_INVALIDA, ultimo,
+                    "falta el paréntesis de cierre ')'");
         }
         if (!tienePuntoYComa) {
             analizador.registrar(CodigoError.ECHO_SIN_PUNTO_Y_COMA, ultimo);
@@ -181,7 +205,7 @@ public class ValidadorEcho {
         }
         boolean lineaNueva = token.getLinea() != ultimo.getLinea();
         boolean continuaLaExpresion = esperoValor || profundidad > 0
-                || OPERADORES.contains(token.getLexema()) || AnalizadorSintactico.es(token, ",");
+                || esOperador(token) || AnalizadorSintactico.es(token, ",");
         return lineaNueva && !continuaLaExpresion;
     }
 
@@ -208,17 +232,52 @@ public class ValidadorEcho {
         return token.es(TipoToken.PALABRA_RESERVADA) && AnalizadorSintactico.es(analizador.siguiente(), "(");
     }
 
-    /** Signo delante de un valor: -5, !$activo. */
+    /** Signo delante de un valor: -5, !$activo, ++$i. */
     private boolean esSigno(Token token) {
         return AnalizadorSintactico.es(token, "-") || AnalizadorSintactico.es(token, "+")
-                || AnalizadorSintactico.es(token, "!");
+                || AnalizadorSintactico.es(token, "!") || AnalizadorSintactico.es(token, "++")
+                || AnalizadorSintactico.es(token, "--");
+    }
+
+    /** @return true si el token une dos valores (and, or... sin distinguir mayúsculas). */
+    private boolean esOperador(Token token) {
+        return OPERADORES.contains(token.getLexema().toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Después de "->" o "::" va el nombre de la propiedad, el método o la
+     * constante, aunque sea una palabra reservada ($pedido->print).
+     */
+    private boolean esMiembro(Token anterior, Token token) {
+        return (AnalizadorSintactico.es(anterior, "->") || AnalizadorSintactico.es(anterior, "::"))
+                && (token.es(TipoToken.PALABRA) || token.es(TipoToken.PALABRA_RESERVADA));
+    }
+
+    /** "(int)", "(string)"...: un '(' seguido de un tipo y de ')'. */
+    private boolean esConversion(AnalizadorSintactico analizador, Token token) {
+        Token tipo = analizador.adelante(1);
+        return AnalizadorSintactico.es(token, "(") && tipo != null
+                && CONVERSIONES.contains(tipo.getLexema().toLowerCase(Locale.ROOT))
+                && AnalizadorSintactico.es(analizador.adelante(2), ")");
+    }
+
+    /** Toma "( tipo )" de una conversión. @return el ')' */
+    private Token consumirConversion(AnalizadorSintactico analizador, NodoEcho nodo) {
+        Token ultimo = null;
+        for (int i = 0; i < 3; i++) {
+            ultimo = analizador.actual();
+            nodo.agregarToken(ultimo);
+            analizador.avanzar();
+        }
+        return ultimo;
     }
 
     /** @return true si al valor le sigue '(' (llamada a función) o '[' (posición de un arreglo). */
     private boolean sigueGrupo(AnalizadorSintactico analizador, Token valor) {
         Token siguiente = analizador.siguiente();
-        return ((valor.es(TipoToken.PALABRA) || valor.es(TipoToken.PALABRA_RESERVADA))
-                && AnalizadorSintactico.es(siguiente, "("))
+        // $funcion($x) también es una llamada: el nombre de la función está en una variable
+        return ((valor.es(TipoToken.PALABRA) || valor.es(TipoToken.PALABRA_RESERVADA)
+                        || valor.es(TipoToken.IDENTIFICADOR)) && AnalizadorSintactico.es(siguiente, "("))
                 || (valor.es(TipoToken.IDENTIFICADOR) && AnalizadorSintactico.es(siguiente, "["));
     }
 

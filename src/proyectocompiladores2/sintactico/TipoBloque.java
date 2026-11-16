@@ -5,7 +5,7 @@ import proyectocompiladores2.errores.CodigoError;
 /**
  * Tipos de bloque { } que reconoce el análisis sintáctico y el código de
  * error que corresponde a cada regla en cada tipo (incluidas las de la
- * cabecera "palabra (condición)" del while y del if).
+ * cabecera "palabra (condición)" del while, del if y del for).
  *
  * Así las reglas comunes a todos los bloques (llaves, bloque vacío,
  * indentación) se programan una sola vez en el AnalizadorSintactico y en el
