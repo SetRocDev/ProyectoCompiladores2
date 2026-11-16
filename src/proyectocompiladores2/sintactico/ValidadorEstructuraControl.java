@@ -47,7 +47,7 @@ public abstract class ValidadorEstructuraControl {
             ultimoDeCabecera = analizador.actual();
             analizador.avanzar();
         } else {
-            analizador.registrar(reglas.getFaltaParentesisApertura(), palabraClave);
+            analizador.registrar(reglas.getFaltaParentesisApertura(), palabraClave, palabraClave.getLexema());
         }
 
         // La condición: hasta el ')' que cierra (contando paréntesis internos)
@@ -76,10 +76,10 @@ public abstract class ValidadorEstructuraControl {
         }
 
         if (!tieneCierre) {
-            analizador.registrar(reglas.getFaltaParentesisCierre(), ultimoDeCabecera);
+            analizador.registrar(reglas.getFaltaParentesisCierre(), ultimoDeCabecera, palabraClave.getLexema());
         }
         if (condicion.getTokens().isEmpty()) {
-            analizador.registrar(reglas.getCondicionVacia(), palabraClave);
+            analizador.registrar(reglas.getCondicionVacia(), palabraClave, palabraClave.getLexema());
         }
         return condicion;
     }
@@ -91,20 +91,22 @@ public abstract class ValidadorEstructuraControl {
      * (decisión Q7), y analiza el bloque con las reglas comunes (cierre,
      * bloque vacío, indentación).
      *
-     * @param cabecera primer token de la línea que abre el bloque (la palabra clave)
+     * @param cabecera        token donde se ubican los errores del bloque (la palabra clave)
+     * @param anchoReferencia espacios de la línea que abre la estructura; el
+     *                        contenido lleva 4 más y la '}' los mismos
      * @return el bloque
      */
     protected NodoBloque analizarCuerpo(AnalizadorSintactico analizador, TipoBloque reglas,
-                                       String palabraClave, Token cabecera) {
+                                       String palabraClave, Token cabecera, int anchoReferencia) {
         if (!analizador.fin() && AnalizadorSintactico.es(analizador.actual(), "{")) {
             Token llave = analizador.actual();
             if (llave.getLinea() != ultimoDeCabecera.getLinea()) {
-                analizador.registrar(reglas.getAperturaEnOtraLinea(), llave);
+                analizador.registrar(reglas.getAperturaEnOtraLinea(), llave, palabraClave);
             }
-            return analizador.bloque(reglas, palabraClave, cabecera);
+            return analizador.bloque(reglas, palabraClave, cabecera, anchoReferencia);
         }
-        analizador.registrar(reglas.getFaltaApertura(), ultimoDeCabecera);
-        return analizador.cuerpoSinLlave(reglas, palabraClave, cabecera);
+        analizador.registrar(reglas.getFaltaApertura(), ultimoDeCabecera, palabraClave);
+        return analizador.cuerpoSinLlave(reglas, palabraClave, cabecera, anchoReferencia);
     }
 
     /** @return el último token de la cabecera analizada (para ubicar errores). */

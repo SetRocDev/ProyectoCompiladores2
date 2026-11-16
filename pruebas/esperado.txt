@@ -49,7 +49,7 @@ P32_solo_lado_izquierdo.php          201                 Despues de L46: '$copia
 P33_division_multilinea.php          -                   L22 partida: '$promedio = $suma_notas' y '    / $cantidad_notas;' (division, no comentario, T19)
 P34_constantes_validas.php           -                   Despues de L46: 'echo PHP_EOL;' y '$maximo = PHP_INT_MAX;' (constantes, no texto suelto, T19)
 P35_division_tras_comentario.php     -                   Como P33 pero con un comentario al final de la primera linea (T19)
-P36_casos_de_revision.php            201 204 402 401     Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
+P36_casos_de_revision.php            201 204 402 704 401 Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
                                                          '$nota_extra = 10 // ...' sin ';' seguido de 'continua aqui', y 'if (...)' seguido de '/ comentario'
 P37_llave_sobrante.php               503                 Despues de L46 se agrega una linea con '}' que no cierra nada (sintactico, T20)
 P38_estructura_mal_escrita.php       504                 L37: 'whlie (...) {' en vez de 'while' (sugiere 'while')
@@ -69,6 +69,24 @@ P51_while_cierre_desalineado.php     609                 L40: '  }' (la llave de
 P52_while_anidado_valido.php         -                   while dentro del if (8 espacios) e if dentro del while: todo valido
 P53_while_anidado_mal_indentado.php  607                 while dentro del if con su contenido a 4 espacios en vez de 8
 P54_while_ejemplos_pdf.php           601 602 603 606 602 606 607 607Los ejemplos del enunciado (permitido y con error) uno tras otro
+P55_if_sin_parentesis.php            701 702             L28: if $promedio >= 70 {
+P56_if_condicion_vacia.php           703                 L28: if () {
+P57_if_sin_parentesis_cierre.php     702                 L28: if ($promedio >= 70 {
+P58_if_sin_llave_apertura.php        704                 L28 sin la '{'
+P59_if_sin_llave_cierre.php          705                 L30: 'else {' (se borro la '}' del if)
+P60_if_llave_otra_linea.php          710                 La '{' del if en la linea siguiente (decision Q7)
+P61_if_bloque_vacio.php              706                 Se borra la unica linea del bloque del if
+P62_if_indentacion.php               707                 L29 con 2 espacios
+P63_if_tabulacion.php                708                 L29 indentada con tabulacion
+P64_if_cierre_desalineado.php        709                 L30: '  } else {' (la '}' del if con 2 espacios)
+P65_else_bloque_vacio.php            713                 Se borra la unica linea del bloque del else
+P66_else_sin_llave_apertura.php      711                 L30: '} else' sin '{' (la '}' final sigue)
+P67_else_en_otra_linea.php           718                 '}' y 'else {' en lineas distintas (decision Q7)
+P68_else_indentacion.php             715                 L31 con 6 espacios
+P69_else_sin_if.php                  714                 Despues de L46: un 'else { ... }' sin if
+P70_elseif_valido.php                -                   if / elseif / else if / else bien escritos (decision Q12)
+P71_elseif_errores.php               701 702 707         elseif sin parentesis y contenido del 'else if' con 6 espacios
+P72_if_ejemplos_pdf.php              701 702 703 702 713 707 707 711Los ejemplos del enunciado (permitidos y con error) uno tras otro
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola

@@ -52,6 +52,7 @@ Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser a
 0050 continua aqui
 Error 402. Texto 'continua aqui' fuera de un comentario: no es código PHP válido; si es parte de un comentario, cada línea debe iniciar con '//' o '#'
 0051 if ($nota_extra > 5)
+Error 704. Falta la llave de apertura '{' del bloque del if
 0052 / comentario mal escrito
 Error 401. Comentario mal formado '/ comentario mal escrito'; un comentario de línea debe iniciar con '//' o '#'
 0053 $total = 100;

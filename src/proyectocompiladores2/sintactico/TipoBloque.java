@@ -27,6 +27,19 @@ public enum TipoBloque {
             CodigoError.WHILE_FALTA_LLAVE_CIERRE, CodigoError.WHILE_BLOQUE_VACIO,
             CodigoError.WHILE_INDENTACION, CodigoError.WHILE_TABULACION, CodigoError.WHILE_CIERRE_DESALINEADO),
 
+    /** Bloque del if y del elseif (R4): errores 701-710. */
+    IF(CodigoError.IF_FALTA_PARENTESIS_APERTURA, CodigoError.IF_FALTA_PARENTESIS_CIERRE,
+            CodigoError.IF_CONDICION_VACIA,
+            CodigoError.IF_FALTA_LLAVE_APERTURA, CodigoError.IF_LLAVE_EN_OTRA_LINEA,
+            CodigoError.IF_FALTA_LLAVE_CIERRE, CodigoError.IF_BLOQUE_VACIO,
+            CodigoError.IF_INDENTACION, CodigoError.IF_TABULACION, CodigoError.IF_CIERRE_DESALINEADO),
+
+    /** Bloque del else (R4): errores 711-719. El else no tiene condición. */
+    ELSE(null, null, null,
+            CodigoError.ELSE_FALTA_LLAVE_APERTURA, CodigoError.ELSE_LLAVE_EN_OTRA_LINEA,
+            CodigoError.ELSE_FALTA_LLAVE_CIERRE, CodigoError.ELSE_BLOQUE_VACIO,
+            CodigoError.ELSE_INDENTACION, CodigoError.ELSE_TABULACION, CodigoError.ELSE_CIERRE_DESALINEADO),
+
     /** for, foreach, function, switch, class... y bloques { } sueltos. */
     GENERICO(null, null, null, null, null, CodigoError.BLOQUE_SIN_CIERRE, null, null, null, null);
 
