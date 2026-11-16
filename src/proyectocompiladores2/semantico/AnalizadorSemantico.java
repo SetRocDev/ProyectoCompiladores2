@@ -182,7 +182,7 @@ public class AnalizadorSemantico {
             return;
         }
         List<Token> condicion = estructura.getHijos().get(0).getTokens();
-        String nombre = estructura instanceof NodoWhile ? "while" : "if";
+        String nombre = estructura instanceof NodoWhile ? "while" : ((NodoIf) estructura).getPalabraClave();
         for (int i = 1; i + 1 < condicion.size(); i++) {
             Token igual = condicion.get(i);
             Token valor = condicion.get(i + 1);
@@ -190,17 +190,44 @@ public class AnalizadorSemantico {
                     || FIN_DE_CONDICION.contains(condicion.get(i + 2).getLexema().toLowerCase(Locale.ROOT));
             if (igual.es(TipoToken.ASIGNACION) && esValorFijo(valor) && valorTermina) {
                 errores.registrar(CodigoError.ASIGNACION_EN_CONDICION, igual.getLinea(), igual.getColumna(),
-                        nombre, condicion.get(i - 1).getLexema(), valor.getLexema());
+                        nombre, ladoIzquierdo(condicion, i), valor.getLexema());
             }
         }
     }
 
-    /** 903: "/ 0", "% 0" o "/= 0" con el número 0 escrito en el código. */
+    /**
+     * @param igual posición del '='
+     * @return lo que está a la izquierda del '=': la variable con sus índices
+     *         ("$notas[0]"), para mostrarla completa en el mensaje
+     */
+    private String ladoIzquierdo(List<Token> tokens, int igual) {
+        int inicio = igual - 1;
+        while (inicio > 0 && tokens.get(inicio).getLexema().equals("]")) {
+            int profundidad = 0;
+            do {
+                String lexema = tokens.get(inicio).getLexema();
+                if (lexema.equals("]")) {
+                    profundidad++;
+                } else if (lexema.equals("[")) {
+                    profundidad--;
+                }
+                inicio--;
+            } while (inicio > 0 && profundidad > 0);
+        }
+        StringBuilder texto = new StringBuilder();
+        for (int i = inicio; i < igual; i++) {
+            texto.append(tokens.get(i).getLexema());
+        }
+        return texto.toString();
+    }
+
+    /** 903: "/ 0", "% 0", "/= 0" o "%= 0" con el número 0 escrito en el código. */
     private void revisarDivisionEntreCero(List<Token> tokens) {
         for (int i = 0; i + 1 < tokens.size(); i++) {
             String operador = tokens.get(i).getLexema();
             Token divisor = tokens.get(i + 1);
-            boolean esDivision = operador.equals("/") || operador.equals("%") || operador.equals("/=");
+            boolean esDivision = operador.equals("/") || operador.equals("%") || operador.equals("/=")
+                    || operador.equals("%=");
             if (esDivision && divisor.es(TipoToken.NUMERO) && esCero(divisor.getLexema())) {
                 errores.registrar(CodigoError.DIVISION_ENTRE_CERO, tokens.get(i).getLinea(),
                         tokens.get(i).getColumna(), operador);
@@ -270,10 +297,14 @@ public class AnalizadorSemantico {
         return tokens.size() - 1;
     }
 
-    /** "$suma += 5": $suma recibe un valor pero también se usa el que tenía. */
+    /**
+     * "$suma += 5": $suma recibe un valor pero también se usa el que tenía.
+     * "$x ??= 5" no lo usa: solo le da el valor si todavía no tiene uno.
+     */
     private boolean esAsignacionCompuesta(List<Token> tokens, int i) {
         String siguiente = siguienteSinIndices(tokens, i);
-        return Patrones.ASIGNACIONES_COMPUESTAS.contains(siguiente) || siguiente.equals("++")
+        return (Patrones.ASIGNACIONES_COMPUESTAS.contains(siguiente) && !siguiente.equals("??="))
+                || siguiente.equals("++")
                 || siguiente.equals("--") || (i > 0 && (tokens.get(i - 1).getLexema().equals("++")
                 || tokens.get(i - 1).getLexema().equals("--")));
     }
