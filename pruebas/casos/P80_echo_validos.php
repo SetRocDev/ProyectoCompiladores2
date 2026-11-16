@@ -44,6 +44,10 @@ $mensaje_final = "Proceso finalizado correctamente";
 echo $mensaje_final;
 
 // Diferenciación de identificadores
+$total = 100;
+$Total = 200;
+
+$resultado = $total + $Total;
 echo count($notas);
 echo $total, $Total;
 echo "Notas: "
@@ -52,10 +56,6 @@ echo PHP_EOL;
 echo 'Texto literal';
 echo -5 + $notas[0];
 echo trim(" hola ") . strtoupper("x");
-$total = 100;
-$Total = 200;
-
-$resultado = $total + $Total;
 echo "\nResultado final: $resultado\n";
 
 ?>

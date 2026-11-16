@@ -15,8 +15,10 @@ import proyectocompiladores2.lexico.AnalizadorLexico;
 import proyectocompiladores2.lexico.ClasificadorTokens;
 import proyectocompiladores2.lexico.Token;
 import proyectocompiladores2.lexico.ValidadorLexema;
+import proyectocompiladores2.semantico.AnalizadorSemantico;
 import proyectocompiladores2.sintactico.AnalizadorSintactico;
 import proyectocompiladores2.sintactico.FlujoTokens;
+import proyectocompiladores2.sintactico.arbol.NodoPrograma;
 
 /**
  * Punto de entrada del analizador léxico de PHP.
@@ -35,6 +37,7 @@ import proyectocompiladores2.sintactico.FlujoTokens;
  *   Etapa 3         -> Patrones             patrón de cada tipo (lo usan las etapas 2 y 4)
  *   Etapa 4         -> ValidadorLexema      validación del lexema (R3, R4, R5 del Proyecto 1)
  *   Etapa 5         -> AnalizadorSintactico análisis sintáctico: while, if, echo (Proyecto 2)
+ *   Etapa 6         -> AnalizadorSemantico  análisis semántico: uso de variables y coherencia (Proyecto 2)
  *   Archivo de log  -> EscritorLog          nombreArchivo-errores.log (R2)
  *
  * Uso de IA: la estructura de esta clase fue generada con apoyo de
@@ -93,7 +96,10 @@ public class Main {
             validador.validar(tokens, flujo, fuente, errores);
 
             // Etapa 5: análisis sintáctico (orden de los tokens según la gramática)
-            new AnalizadorSintactico(flujo, fuente, errores).analizar();
+            NodoPrograma arbol = new AnalizadorSintactico(flujo, fuente, errores).analizar();
+
+            // Etapa 6: análisis semántico (significado: variables y coherencia)
+            new AnalizadorSemantico(errores).analizar(arbol);
 
             // Archivo de errores (R2)
             Path log = new EscritorLog().escribir(fuente, errores);

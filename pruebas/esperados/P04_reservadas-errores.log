@@ -36,6 +36,7 @@
 Error 204. El identificador '$while' usa la palabra reservada 'while' y no puede ser asignado
 0036 
 0037 while ($contador_revision < $cantidad_notas) {
+Error 901. La variable '$contador_revision' se usa pero no se le asignó un valor antes
 0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 0039     $contador_revision = $contador_revision + 1;
 0040 }
@@ -44,6 +45,7 @@ Error 204. El identificador '$while' usa la palabra reservada 'while' y no puede
 0043 $ECHO = "Proceso finalizado correctamente";
 Error 204. El identificador '$ECHO' usa la palabra reservada 'echo' y no puede ser asignado
 0044 echo $mensaje_final;
+Error 901. La variable '$mensaje_final' se usa pero no se le asignó un valor antes
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

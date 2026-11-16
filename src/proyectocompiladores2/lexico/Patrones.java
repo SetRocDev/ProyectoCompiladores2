@@ -116,4 +116,27 @@ public final class Patrones {
     public static boolean esOtraPalabraClave(String palabra) {
         return OTRAS_PALABRAS_CLAVE_PHP.contains(palabra.toLowerCase(Locale.ROOT));
     }
+
+    /**
+     * Distancia de edición (Levenshtein): cuántas letras hay que cambiar,
+     * agregar o quitar para convertir una palabra en la otra.
+     */
+    public static int distanciaDeEdicion(String a, String b) {
+        int[] anterior = new int[b.length() + 1];
+        int[] actual = new int[b.length() + 1];
+        for (int j = 0; j <= b.length(); j++) {
+            anterior[j] = j;
+        }
+        for (int i = 1; i <= a.length(); i++) {
+            actual[0] = i;
+            for (int j = 1; j <= b.length(); j++) {
+                int cambio = a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1;
+                actual[j] = Math.min(Math.min(actual[j - 1] + 1, anterior[j] + 1), anterior[j - 1] + cambio);
+            }
+            int[] temporal = anterior;
+            anterior = actual;
+            actual = temporal;
+        }
+        return anterior[b.length()];
+    }
 }
