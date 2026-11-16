@@ -56,7 +56,19 @@ public enum CodigoError {
     // 503 a 505: estructura general del código (análisis sintáctico, etapa 5)
     LLAVE_SIN_APERTURA(503, "Llave de cierre '}' sin una llave de apertura '{' que le corresponda"),
     ESTRUCTURA_DESCONOCIDA(504, "'%s' no es una estructura de control válida%s"),
-    BLOQUE_SIN_CIERRE(505, "El bloque de '%s' que inicia en la línea %s no tiene llave de cierre '}'");
+    BLOQUE_SIN_CIERRE(505, "El bloque de '%s' que inicia en la línea %s no tiene llave de cierre '}'"),
+
+    // ===== 6xx: Comando while (R3 del Proyecto 2) =====
+    WHILE_FALTA_PARENTESIS_APERTURA(601, "Falta el paréntesis de apertura '(' después de 'while'; la forma correcta es 'while (condición) {'"),
+    WHILE_FALTA_PARENTESIS_CIERRE(602, "Falta el paréntesis de cierre ')' de la condición del while"),
+    WHILE_CONDICION_VACIA(603, "La condición del while está vacía; debe haber una condición entre los paréntesis"),
+    WHILE_FALTA_LLAVE_APERTURA(604, "Falta la llave de apertura '{' del bloque del while"),
+    WHILE_FALTA_LLAVE_CIERRE(605, "El bloque del while que inicia en la línea %2$s no tiene llave de cierre '}'"),
+    WHILE_BLOQUE_VACIO(606, "El bloque del while está vacío; debe contener al menos una línea de código"),
+    WHILE_INDENTACION(607, "Indentación incorrecta dentro del while: se esperaban %s espacios y hay %s"),
+    WHILE_TABULACION(608, "Se usó una tabulación para indentar dentro del while; solo se permiten espacios (4 por nivel)"),
+    WHILE_CIERRE_DESALINEADO(609, "La llave de cierre '}' del while no está alineada con 'while': se esperaban %s espacios y hay %s"),
+    WHILE_LLAVE_EN_OTRA_LINEA(610, "La llave de apertura '{' del while debe estar en la misma línea que su condición: 'while (condición) {'");
 
     private final int numero;
     private final String plantilla;

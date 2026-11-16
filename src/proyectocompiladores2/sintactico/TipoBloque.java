@@ -4,7 +4,8 @@ import proyectocompiladores2.errores.CodigoError;
 
 /**
  * Tipos de bloque { } que reconoce el análisis sintáctico y el código de
- * error que corresponde a cada regla en cada tipo.
+ * error que corresponde a cada regla en cada tipo (incluidas las de la
+ * cabecera "palabra (condición)" del while y del if).
  *
  * Así las reglas comunes a todos los bloques (llaves, bloque vacío,
  * indentación) se programan una sola vez en el AnalizadorSintactico y en el
@@ -19,8 +20,19 @@ import proyectocompiladores2.errores.CodigoError;
  */
 public enum TipoBloque {
 
+    /** Bloque del while (R3): errores 6xx. */
+    WHILE(CodigoError.WHILE_FALTA_PARENTESIS_APERTURA, CodigoError.WHILE_FALTA_PARENTESIS_CIERRE,
+            CodigoError.WHILE_CONDICION_VACIA,
+            CodigoError.WHILE_FALTA_LLAVE_APERTURA, CodigoError.WHILE_LLAVE_EN_OTRA_LINEA,
+            CodigoError.WHILE_FALTA_LLAVE_CIERRE, CodigoError.WHILE_BLOQUE_VACIO,
+            CodigoError.WHILE_INDENTACION, CodigoError.WHILE_TABULACION, CodigoError.WHILE_CIERRE_DESALINEADO),
+
     /** for, foreach, function, switch, class... y bloques { } sueltos. */
-    GENERICO(null, null, CodigoError.BLOQUE_SIN_CIERRE, null, null, null, null);
+    GENERICO(null, null, null, null, null, CodigoError.BLOQUE_SIN_CIERRE, null, null, null, null);
+
+    private final CodigoError faltaParentesisApertura;
+    private final CodigoError faltaParentesisCierre;
+    private final CodigoError condicionVacia;
 
     private final CodigoError faltaApertura;
     private final CodigoError aperturaEnOtraLinea;
@@ -30,9 +42,14 @@ public enum TipoBloque {
     private final CodigoError tabulacion;
     private final CodigoError cierreDesalineado;
 
-    TipoBloque(CodigoError faltaApertura, CodigoError aperturaEnOtraLinea, CodigoError faltaCierre,
+    TipoBloque(CodigoError faltaParentesisApertura, CodigoError faltaParentesisCierre,
+               CodigoError condicionVacia,
+               CodigoError faltaApertura, CodigoError aperturaEnOtraLinea, CodigoError faltaCierre,
                CodigoError bloqueVacio, CodigoError indentacion, CodigoError tabulacion,
                CodigoError cierreDesalineado) {
+        this.faltaParentesisApertura = faltaParentesisApertura;
+        this.faltaParentesisCierre = faltaParentesisCierre;
+        this.condicionVacia = condicionVacia;
         this.faltaApertura = faltaApertura;
         this.aperturaEnOtraLinea = aperturaEnOtraLinea;
         this.faltaCierre = faltaCierre;
@@ -40,6 +57,21 @@ public enum TipoBloque {
         this.indentacion = indentacion;
         this.tabulacion = tabulacion;
         this.cierreDesalineado = cierreDesalineado;
+    }
+
+    /** Error cuando falta el '(' después de la palabra clave (while, if). */
+    public CodigoError getFaltaParentesisApertura() {
+        return faltaParentesisApertura;
+    }
+
+    /** Error cuando falta el ')' que cierra la condición. */
+    public CodigoError getFaltaParentesisCierre() {
+        return faltaParentesisCierre;
+    }
+
+    /** Error cuando no hay nada entre los paréntesis. */
+    public CodigoError getCondicionVacia() {
+        return condicionVacia;
     }
 
     /** Error cuando no hay '{' después de la cabecera. */
