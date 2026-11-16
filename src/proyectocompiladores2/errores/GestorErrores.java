@@ -12,8 +12,13 @@ import java.util.TreeMap;
  *
  * Una misma línea puede tener varios errores distintos: se guardan todos y
  * se devuelven ordenados por columna, para escribirlos debajo de su línea
- * en el .log. Los errores globales (por ejemplo, falta la etiqueta de cierre)
- * se guardan aparte y se escriben al final del .log.
+ * en el .log.
+ *
+ * Todo error pertenece a una línea (Opción 1 del enunciado, de forma
+ * consistente en todo el archivo). Incluso los errores que se refieren al
+ * archivo completo se asocian a la línea más lógica: si falta '<?php' va en
+ * la línea 0001 y si falta '?>' en la última línea (corrección del
+ * Proyecto 1, tarea T16; antes se escribían al final sin número de línea).
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -23,7 +28,6 @@ public class GestorErrores {
             Comparator.comparingInt(ErrorLexico::getColumna);
 
     private final Map<Integer, List<ErrorLexico>> erroresPorLinea = new TreeMap<>();
-    private final List<ErrorLexico> erroresGlobales = new ArrayList<>();
 
     /**
      * Registra un error en una línea concreta.
@@ -46,21 +50,6 @@ public class GestorErrores {
     }
 
     /**
-     * Registra un error que no pertenece a una línea concreta del archivo.
-     *
-     * @param codigo tipo de error
-     * @param datos  valores para completar la descripción
-     */
-    public void registrarGlobal(CodigoError codigo, Object... datos) {
-        for (ErrorLexico existente : erroresGlobales) {
-            if (existente.getCodigo() == codigo) {
-                return;
-            }
-        }
-        erroresGlobales.add(new ErrorLexico(codigo, ErrorLexico.SIN_LINEA, 0, codigo.describir(datos)));
-    }
-
-    /**
      * @param linea número de línea (desde 1)
      * @return errores de esa línea ordenados por columna (lista vacía si no hay)
      */
@@ -74,14 +63,9 @@ public class GestorErrores {
         return Collections.unmodifiableList(ordenada);
     }
 
-    /** @return errores globales en orden de registro. */
-    public List<ErrorLexico> erroresGlobales() {
-        return Collections.unmodifiableList(erroresGlobales);
-    }
-
-    /** @return total de errores (por línea + globales). */
+    /** @return total de errores del archivo. */
     public int total() {
-        int total = erroresGlobales.size();
+        int total = 0;
         for (List<ErrorLexico> lista : erroresPorLinea.values()) {
             total += lista.size();
         }

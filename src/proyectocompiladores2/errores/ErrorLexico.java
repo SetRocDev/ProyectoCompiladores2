@@ -10,9 +10,6 @@ package proyectocompiladores2.errores;
  */
 public final class ErrorLexico {
 
-    /** Valor de línea usado para errores que no pertenecen a una línea concreta. */
-    public static final int SIN_LINEA = 0;
-
     private final CodigoError codigo;
     private final int linea;
     private final int columna;
@@ -20,7 +17,7 @@ public final class ErrorLexico {
 
     /**
      * @param codigo      tipo de error según el catálogo
-     * @param linea       número de línea (desde 1), o {@link #SIN_LINEA} si es global
+     * @param linea       número de línea (desde 1)
      * @param columna     columna donde inicia el problema (desde 1), 0 si no aplica
      * @param descripcion descripción específica del error
      */

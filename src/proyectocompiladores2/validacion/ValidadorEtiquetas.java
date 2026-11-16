@@ -13,9 +13,9 @@ import proyectocompiladores2.lexico.Token;
  *
  * Aspecto 1 (apertura): debe escribirse exactamente "<?php" (302) y ser lo
  *   primero del archivo, sin texto, espacios, líneas en blanco ni BOM antes (301).
- *   Si no existe: 303.
- * Aspecto 2 (cierre obligatorio): debe existir (305) y escribirse
- *   exactamente "?>" (304).
+ *   Si no existe: 303, que se escribe debajo de la línea 0001.
+ * Aspecto 2 (cierre obligatorio): debe existir (305, que se escribe debajo de
+ *   la última línea) y escribirse exactamente "?>" (304).
  * Aspecto 3 (posición del cierre): debe estar en la última línea, sin nada
  *   después: ni código en la misma línea (306), ni más líneas con código
  *   (307), ni espacios o saltos de línea (308).
@@ -35,7 +35,8 @@ public class ValidadorEtiquetas {
     private void validarApertura(List<Token> tokens, ArchivoFuente fuente, GestorErrores errores) {
         Token apertura = primero(tokens, TipoToken.ETIQUETA_APERTURA);
         if (apertura == null) {
-            errores.registrarGlobal(CodigoError.APERTURA_FALTANTE);
+            // Falta la apertura: el error se asocia a la línea 0001, donde debía estar
+            errores.registrar(CodigoError.APERTURA_FALTANTE, 1, 0);
             return;
         }
         if (!apertura.getLexema().equals(Patrones.ETIQUETA_APERTURA)) {
@@ -60,7 +61,10 @@ public class ValidadorEtiquetas {
     private void validarCierre(List<Token> tokens, ArchivoFuente fuente, GestorErrores errores) {
         Token cierre = primero(tokens, TipoToken.ETIQUETA_CIERRE);
         if (cierre == null) {
-            errores.registrarGlobal(CodigoError.CIERRE_FALTANTE);
+            // Falta el cierre: el error se asocia a la última línea, donde debía estar
+            int ultima = fuente.getCantidadLineas();
+            errores.registrar(CodigoError.CIERRE_FALTANTE, ultima, fuente.getLinea(ultima).length() + 1,
+                    String.format("%04d", ultima));
             return;
         }
         int linea = cierre.getLinea();

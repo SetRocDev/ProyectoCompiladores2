@@ -18,8 +18,8 @@ import proyectocompiladores2.errores.GestorErrores;
  *     de 4 dígitos y un espacio: "0001 <?php".
  *   - Los errores de una línea se escriben justo debajo de ella, uno por
  *     renglón: "Error 201. Descripción" (Opción 1 del enunciado).
- *   - Los errores globales (que no pertenecen a una línea, por ejemplo
- *     "falta la etiqueta de cierre") se escriben al final.
+ *   - No hay errores "sueltos" al final: todo error tiene su línea, de forma
+ *     consistente en todo el archivo (corrección del Proyecto 1, tarea T16).
  *
  * El .log se guarda en la misma carpeta del .php, en UTF-8, con el salto de
  * línea original de cada línea (ver generarContenido). Si ya existe se reemplaza.
@@ -80,10 +80,6 @@ public class EscritorLog {
                 renglones.add(error.toString());
                 saltos.add(salto);
             }
-        }
-        for (ErrorLexico error : errores.erroresGlobales()) {
-            renglones.add(error.toString());
-            saltos.add(fuente.getSaltoDeLinea(ultima));
         }
 
         StringBuilder contenido = new StringBuilder();

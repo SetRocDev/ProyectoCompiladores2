@@ -20,7 +20,7 @@ P06_multiples_misma_linea.php        201 204             L6:  $1cantidad = 4; $i
 P07_apertura_texto_previo.php        301                 Nueva primera linea: echo "";   antes de <?php
 P08_apertura_espacio.php             301                 L1:  " <?php"  (un espacio antes)
 P09_apertura_mal_escrita.php         302                 L1:  <? php
-P10_cierre_falta.php                 305                 Se borra L53 (?>)
+P10_cierre_falta.php                 305                 Se borra L53 (?>). El 305 va debajo de la ultima linea (0051)
 P11_cierre_mal_escrito.php           304                 L53: ? >
 P12_cierre_linea_siguiente.php       307                 Despues de ?> se agrega la linea: echo "hola";
 P13_cierre_salto_final.php           308                 Un salto de linea (Enter) despues de ?>
@@ -39,6 +39,9 @@ P24_saltos_mixtos.php                201 204             Lineas 1-17 con CRLF, 1
                                                          El .log debe conservar el salto de cada linea (correccion P1, T15)
 P25_solo_lf.php                      201                 Todo el archivo con saltos LF (Linux).  L6: $1cantidad_notas = 4;
 P26_lf_cierre_misma_linea.php        306                 Todo con LF y la L53 sin salto: ?> echo "hola";  (el error va separado con LF)
+P27_apertura_falta.php               303                 Se borra L1 (<?php). El 303 va debajo de la linea 0001 (correccion P1, T16)
+P28_archivo_vacio.php                303 305             Archivo vacio (0 bytes): ambos errores debajo de la linea 0001
+P29_sin_etiquetas.php                303 305             Sin <?php ni ?>: 303 debajo de la 0001 y 305 debajo de la ultima linea
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
