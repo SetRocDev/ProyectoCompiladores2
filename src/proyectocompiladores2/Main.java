@@ -21,7 +21,7 @@ import proyectocompiladores2.sintactico.FlujoTokens;
 import proyectocompiladores2.sintactico.arbol.NodoPrograma;
 
 /**
- * Punto de entrada del analizador léxico de PHP.
+ * Punto de entrada del analizador de PHP (léxico, sintáctico y semántico).
  *
  * Curso: 03307 Compiladores - UNED, III Cuatrimestre 2026.
  * Proyecto 2: continuación del Proyecto 1 (análisis léxico) con análisis
@@ -37,7 +37,7 @@ import proyectocompiladores2.sintactico.arbol.NodoPrograma;
  *   Etapa 2         -> ClasificadorTokens   clasificación de tokens
  *   Etapa 3         -> Patrones             patrón de cada tipo (lo usan las etapas 2 y 4)
  *   Etapa 4         -> ValidadorLexema      validación del lexema (R3, R4, R5 del Proyecto 1)
- *   Etapa 5         -> AnalizadorSintactico análisis sintáctico: while, if, echo (Proyecto 2)
+ *   Etapa 5         -> AnalizadorSintactico análisis sintáctico: while, if/else, for, echo (Proyecto 2)
  *   Etapa 6         -> AnalizadorSemantico  análisis semántico: uso de variables y coherencia (Proyecto 2)
  *   Archivo de log  -> EscritorLog          nombreArchivo-errores.log (R2)
  *

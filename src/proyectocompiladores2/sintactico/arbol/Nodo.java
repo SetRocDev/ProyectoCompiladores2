@@ -41,10 +41,6 @@ public abstract class Nodo {
         tokens.add(token);
     }
 
-    public void agregarTokens(List<Token> nuevos) {
-        tokens.addAll(nuevos);
-    }
-
     public void agregarHijo(Nodo hijo) {
         if (hijo != null) {
             hijos.add(hijo);

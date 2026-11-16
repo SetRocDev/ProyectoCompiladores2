@@ -6,15 +6,15 @@ import proyectocompiladores2.sintactico.arbol.NodoBloque;
 import proyectocompiladores2.sintactico.arbol.NodoCondicion;
 
 /**
- * Parte común de las estructuras de control con condición: while e if.
+ * Parte común de las estructuras de control: while, if y for.
  * Las dos tienen la misma forma:
  *
  *     palabraClave '(' condicion ')' '{' sentencias '}'
  *
- * Esta clase revisa esa forma una sola vez (POO: herencia). ValidadorWhile y
- * ValidadorIf solo agregan lo propio de cada una (el if agrega el else). Los
- * números de error salen del TipoBloque de cada estructura (6xx el while,
- * 7xx el if).
+ * Esta clase revisa esa forma una sola vez (POO: herencia). ValidadorWhile,
+ * ValidadorIf y ValidadorFor solo agregan lo propio de cada una (el if agrega
+ * el else; el for tiene tres partes en su cabecera). Los números de error
+ * salen del TipoBloque de cada estructura (6xx el while y el for, 7xx el if).
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -110,9 +110,12 @@ public abstract class ValidadorEstructuraControl {
         return analizador.cuerpoSinLlave(reglas, palabraClave, cabecera, anchoReferencia);
     }
 
-    /** @return el último token de la cabecera analizada (para ubicar errores). */
-    protected Token getUltimoDeCabecera() {
-        return ultimoDeCabecera;
+    /**
+     * Para las estructuras con una cabecera distinta (el for): indica cuál fue
+     * el último token de su cabecera antes de analizar el cuerpo.
+     */
+    protected void setUltimoDeCabecera(Token token) {
+        ultimoDeCabecera = token;
     }
 
     /** La condición termina, si falta el ')', antes de la '{', un ';', una '}' o el cierre '?>'. */

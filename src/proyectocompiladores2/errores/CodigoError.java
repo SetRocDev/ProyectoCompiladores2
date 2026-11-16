@@ -1,7 +1,8 @@
 package proyectocompiladores2.errores;
 
 /**
- * Catálogo de errores del analizador léxico.
+ * Catálogo de errores del analizador (todas las etapas: archivo, léxico,
+ * sintáctico y semántico).
  *
  * Cada constante define un número de error y una plantilla de descripción
  * (formato de {@link String#format}) que se completa con el lexema o dato
@@ -14,7 +15,7 @@ package proyectocompiladores2.errores;
  *   3xx  Etiquetas de apertura y cierre (R4)
  *   4xx  Comentarios (R5)
  *   5xx  Errores generales: léxicos (501, 502) y de estructura del código (503-505)
- *   6xx  Comando while (Proyecto 2)
+ *   6xx  Ciclos (Proyecto 2): while (601-610) y for (611-620)
  *   7xx  Comando if / else (Proyecto 2)
  *   8xx  Comando echo (Proyecto 2)
  *   9xx  Análisis semántico (Proyecto 2)
@@ -70,6 +71,16 @@ public enum CodigoError {
     WHILE_TABULACION(608, "Se usó una tabulación para indentar dentro del while; solo se permiten espacios (4 por nivel)"),
     WHILE_CIERRE_DESALINEADO(609, "La llave de cierre '}' del while no está alineada con 'while': se esperaban %s espacios y hay %s"),
     WHILE_LLAVE_EN_OTRA_LINEA(610, "La llave de apertura '{' del while debe estar en la misma línea que su condición: 'while (condición) {'"),
+    FOR_FALTA_PARENTESIS_APERTURA(611, "Falta el paréntesis de apertura '(' después de 'for'; la forma correcta es 'for (inicio; condición; incremento) {'"),
+    FOR_FALTA_PARENTESIS_CIERRE(612, "Falta el paréntesis de cierre ')' de la cabecera del for"),
+    FOR_CABECERA_INCOMPLETA(613, "La cabecera del for debe tener tres partes separadas por ';' (inicio; condición; incremento) y tiene %s"),
+    FOR_FALTA_LLAVE_APERTURA(614, "Falta la llave de apertura '{' del bloque del for"),
+    FOR_FALTA_LLAVE_CIERRE(615, "El bloque del for que inicia en la línea %2$s no tiene llave de cierre '}'"),
+    FOR_BLOQUE_VACIO(616, "El bloque del for está vacío; debe contener al menos una línea de código"),
+    FOR_INDENTACION(617, "Indentación incorrecta dentro del for: se esperaban %s espacios y hay %s"),
+    FOR_TABULACION(618, "Se usó una tabulación para indentar dentro del for; solo se permiten espacios (4 por nivel)"),
+    FOR_CIERRE_DESALINEADO(619, "La llave de cierre '}' del for no está alineada con 'for': se esperaban %s espacios y hay %s"),
+    FOR_LLAVE_EN_OTRA_LINEA(620, "La llave de apertura '{' del for debe estar en la misma línea que su cabecera: 'for (inicio; condición; incremento) {'"),
 
     // ===== 7xx: Comando if y bloque else (R4 del Proyecto 2) =====
     IF_FALTA_PARENTESIS_APERTURA(701, "Falta el paréntesis de apertura '(' después de '%s'; la forma correcta es 'if (condición) {'"),
@@ -101,7 +112,9 @@ public enum CodigoError {
     ECHO_EXPRESION_INVALIDA(806, "Expresión inválida en el echo: %s"),
 
     // ===== 9xx: Análisis semántico (R6 del Proyecto 2) =====
-    VARIABLE_NO_ASIGNADA(901, "La variable '%s' se usa pero no se le asignó un valor antes%s");
+    VARIABLE_NO_ASIGNADA(901, "La variable '%s' se usa pero no se le asignó un valor antes%s"),
+    ASIGNACION_EN_CONDICION(902, "La condición del %s asigna un valor fijo ('%s = %s') en lugar de compararlo; para comparar se usa '=='"),
+    DIVISION_ENTRE_CERO(903, "División entre cero ('%s 0'): en PHP 8 detiene el programa con DivisionByZeroError");
 
     private final int numero;
     private final String plantilla;

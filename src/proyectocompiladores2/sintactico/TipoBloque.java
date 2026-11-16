@@ -13,8 +13,8 @@ import proyectocompiladores2.errores.CodigoError;
  * error (6xx el while, 7xx el if...).
  *
  * Un código null significa que esa regla no se valida para ese tipo de
- * bloque. Por ejemplo, el enunciado no pide validar el for (decisión Q12):
- * su bloque es GENERICO, solo se exige que cierre su llave.
+ * bloque. Por ejemplo, el enunciado no pide validar foreach ni function
+ * (decisión Q12): su bloque es GENERICO, solo se exige que cierre su llave.
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -26,6 +26,12 @@ public enum TipoBloque {
             CodigoError.WHILE_FALTA_LLAVE_APERTURA, CodigoError.WHILE_LLAVE_EN_OTRA_LINEA,
             CodigoError.WHILE_FALTA_LLAVE_CIERRE, CodigoError.WHILE_BLOQUE_VACIO,
             CodigoError.WHILE_INDENTACION, CodigoError.WHILE_TABULACION, CodigoError.WHILE_CIERRE_DESALINEADO),
+
+    /** Bloque del for: errores 611-620 (la rúbrica menciona los errores del for). */
+    FOR(CodigoError.FOR_FALTA_PARENTESIS_APERTURA, CodigoError.FOR_FALTA_PARENTESIS_CIERRE, null,
+            CodigoError.FOR_FALTA_LLAVE_APERTURA, CodigoError.FOR_LLAVE_EN_OTRA_LINEA,
+            CodigoError.FOR_FALTA_LLAVE_CIERRE, CodigoError.FOR_BLOQUE_VACIO,
+            CodigoError.FOR_INDENTACION, CodigoError.FOR_TABULACION, CodigoError.FOR_CIERRE_DESALINEADO),
 
     /** Bloque del if y del elseif (R4): errores 701-710. */
     IF(CodigoError.IF_FALTA_PARENTESIS_APERTURA, CodigoError.IF_FALTA_PARENTESIS_CIERRE,
@@ -40,7 +46,7 @@ public enum TipoBloque {
             CodigoError.ELSE_FALTA_LLAVE_CIERRE, CodigoError.ELSE_BLOQUE_VACIO,
             CodigoError.ELSE_INDENTACION, CodigoError.ELSE_TABULACION, CodigoError.ELSE_CIERRE_DESALINEADO),
 
-    /** for, foreach, function, switch, class... y bloques { } sueltos. */
+    /** foreach, function, switch, class... y bloques { } sueltos. */
     GENERICO(null, null, null, null, null, CodigoError.BLOQUE_SIN_CIERRE, null, null, null, null);
 
     private final CodigoError faltaParentesisApertura;

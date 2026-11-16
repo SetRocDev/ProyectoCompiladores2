@@ -29,14 +29,14 @@ import proyectocompiladores2.sintactico.arbol.NodoSentencia;
  *
  *   programa    → '<?php' sentencias '?>'                 analizar()
  *   sentencias  → { sentencia }
- *   sentencia   → while | if | echo | estructura | simple  sentencia()
+ *   sentencia   → while | if | for | echo | estructura | simple  sentencia()
  *   bloque      → '{' sentencia { sentencia } '}'         bloque()
- *   estructura  → ('for' | 'foreach' | 'function' ...) cabecera bloque
+ *   estructura  → ('foreach' | 'function' ...) cabecera bloque
  *                                                         estructuraGenerica()
  *   simple      → token { token } ';'                     sentenciaSimple()
  *
- * Las reglas de while, if y echo están en sus propias clases
- * (ValidadorWhile, ValidadorIf, ValidadorEcho), que usan los métodos
+ * Las reglas de while, if, for y echo están en sus propias clases
+ * (ValidadorWhile, ValidadorIf, ValidadorFor, ValidadorEcho), que usan los métodos
  * públicos de esta clase para avanzar por los tokens y analizar sus bloques.
  *
  * RECUPERACIÓN DE ERRORES (modo pánico): cuando algo no cumple la gramática
@@ -50,14 +50,13 @@ public class AnalizadorSintactico {
 
     /** Estructuras que el enunciado no pide validar; solo se respetan sus llaves (decisión Q12). */
     private static final Set<String> ESTRUCTURAS_GENERICAS = Patrones.conjunto(
-            "for", "foreach", "function", "switch", "class", "interface", "trait",
+            "foreach", "function", "switch", "class", "interface", "trait",
             "do", "try", "catch", "finally");
 
     /** Palabras con las que se compara una estructura mal escrita (Error 504). */
     private static final String[] ESTRUCTURAS_CONOCIDAS = {"while", "if", "elseif", "for", "foreach", "switch"};
 
     private final FlujoTokens flujo;
-    private final ArchivoFuente fuente;
     private final GestorErrores errores;
     private final ValidadorIndentacion indentacion;
 
@@ -67,17 +66,13 @@ public class AnalizadorSintactico {
     /** Posición del token actual dentro del flujo. */
     private int posicion;
 
-    /** Datos de un bloque que se está analizando. */
+    /** Un bloque que se está analizando: su tipo y la indentación de la línea que lo abrió. */
     private static final class BloqueAbierto {
         private final TipoBloque tipo;
-        private final String palabraClave;
-        private final int lineaCabecera;
         private final int anchoCabecera;
 
-        private BloqueAbierto(TipoBloque tipo, String palabraClave, int lineaCabecera, int anchoCabecera) {
+        private BloqueAbierto(TipoBloque tipo, int anchoCabecera) {
             this.tipo = tipo;
-            this.palabraClave = palabraClave;
-            this.lineaCabecera = lineaCabecera;
             this.anchoCabecera = anchoCabecera;
         }
     }
@@ -89,7 +84,6 @@ public class AnalizadorSintactico {
      */
     public AnalizadorSintactico(FlujoTokens flujo, ArchivoFuente fuente, GestorErrores errores) {
         this.flujo = flujo;
-        this.fuente = fuente;
         this.errores = errores;
         this.indentacion = new ValidadorIndentacion(fuente, errores);
     }
@@ -123,7 +117,7 @@ public class AnalizadorSintactico {
     }
 
     /**
-     * sentencia → while | if | echo | estructura | simple
+     * sentencia → while | if | for | echo | estructura | simple
      * Decide qué regla aplicar según el primer token.
      *
      * @return el nodo de la sentencia reconocida
@@ -137,6 +131,9 @@ public class AnalizadorSintactico {
         if (palabra.equals("while") && token.es(TipoToken.PALABRA_RESERVADA)) {
             // Una instancia por while: los while anidados se analizan en forma recursiva
             return new ValidadorWhile().analizar(this);
+        }
+        if (palabra.equals("for") && token.es(TipoToken.PALABRA_RESERVADA)) {
+            return new ValidadorFor().analizar(this);
         }
         if (palabra.equals("echo") && token.es(TipoToken.PALABRA_RESERVADA)) {
             return new ValidadorEcho().analizar(this);
@@ -199,7 +196,7 @@ public class AnalizadorSintactico {
     /**
      * estructura → palabraClave cabecera ( bloque | ';' | sentencia )
      *
-     * Estructuras que no pide el enunciado (for, foreach, function...): se
+     * Estructuras que no pide el enunciado (foreach, function...): se
      * toma la cabecera hasta la '{' y se analiza el bloque, para respetar sus
      * llaves y la indentación de lo que tiene dentro (decisión Q12).
      */
@@ -297,7 +294,7 @@ public class AnalizadorSintactico {
             // su cuerpo, es código que sigue después (el cuerpo queda vacío)
             return bloque;
         } else {
-            abiertos.push(new BloqueAbierto(tipo, palabraClave, cabecera.getLinea(), anchoReferencia));
+            abiertos.push(new BloqueAbierto(tipo, anchoReferencia));
             validarIndentacionDeSentencia(actual());
             bloque.agregarHijo(sentencia());
             abiertos.pop();
@@ -308,7 +305,7 @@ public class AnalizadorSintactico {
     /** Analiza las sentencias de un bloque hasta su '}' y aplica las reglas comunes. */
     private void contenidoDeBloque(NodoBloque bloque, TipoBloque tipo, String palabraClave, Token cabecera,
                                    int anchoReferencia) {
-        BloqueAbierto abierto = new BloqueAbierto(tipo, palabraClave, cabecera.getLinea(), anchoReferencia);
+        BloqueAbierto abierto = new BloqueAbierto(tipo, anchoReferencia);
         abiertos.push(abierto);
         boolean cerrado = false;
         while (!fin() && !esEtiquetaDeCierre(actual())) {
@@ -398,8 +395,9 @@ public class AnalizadorSintactico {
      *   - una línea mal indentada que sigue dentro del bloque (el bloque
      *     todavía tiene su '}' más abajo): se reporta la indentación;
      *   - código que ya está fuera del bloque porque a este le falta su '}':
-     *     no queda ninguna '}' libre que le corresponda, o la que queda está
-     *     alineada con un bloque de afuera.
+     *     no queda ninguna '}' libre que le corresponda, la que queda está
+     *     alineada con un bloque de afuera, o es la de un "} else", que solo
+     *     puede cerrar un if.
      * En el segundo caso el bloque termina aquí, para no reportar como mal
      * indentado todo el código que sigue (error en cascada).
      */
@@ -407,35 +405,40 @@ public class AnalizadorSintactico {
         if (!indentacion.esPrimeroDeSuLinea(token) || indentacion.anchoDe(token.getLinea()) > actual.anchoCabecera) {
             return false;
         }
-        Token libre = siguienteLlaveLibre();
-        if (libre == null) {
+        int indice = indiceDeLlaveLibre();
+        if (indice < 0) {
             return true;
         }
-        int ancho = indentacion.anchoDe(libre.getLinea());
+        if (actual.tipo != TipoBloque.IF && indice + 1 < flujo.tamano()
+                && (esPalabra(flujo.get(indice + 1), "else") || esPalabra(flujo.get(indice + 1), "elseif"))) {
+            return true;
+        }
+        int ancho = indentacion.anchoDe(flujo.get(indice).getLinea());
         return ancho != actual.anchoCabecera && esAnchoDeBloqueExterior(ancho);
     }
 
     /**
-     * @return la siguiente '}' que no cierra ningún bloque abierto más
-     *         adelante (contando las llaves desde la posición actual), o null
+     * @return la posición de la siguiente '}' que no cierra ningún bloque
+     *         abierto más adelante (contando las llaves desde la posición
+     *         actual), o -1 si no hay
      */
-    private Token siguienteLlaveLibre() {
+    private int indiceDeLlaveLibre() {
         int profundidad = 0;
         for (int i = posicion; i < flujo.tamano(); i++) {
             Token token = flujo.get(i);
             if (esEtiquetaDeCierre(token)) {
-                return null;
+                return -1;
             }
             if (es(token, "{")) {
                 profundidad++;
             } else if (es(token, "}")) {
                 if (profundidad == 0) {
-                    return token;
+                    return i;
                 }
                 profundidad--;
             }
         }
-        return null;
+        return -1;
     }
 
     /** @return true si algún bloque abierto, aparte del actual, tiene esa indentación. */
@@ -474,6 +477,7 @@ public class AnalizadorSintactico {
         }
         String palabra = token.getLexema().toLowerCase(Locale.ROOT);
         boolean esEstructura = ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("while")
+                || palabra.equals("for")
                 || palabra.equals("if") || palabra.equals("else") || palabra.equals("elseif")
                 || palabra.equals("echo");
         return esEstructura && (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA))
@@ -576,9 +580,5 @@ public class AnalizadorSintactico {
 
     public ValidadorIndentacion getIndentacion() {
         return indentacion;
-    }
-
-    public ArchivoFuente getFuente() {
-        return fuente;
     }
 }
