@@ -34,6 +34,14 @@ P20_id_sin_dolar.php                 206                 L5:  nombre_estudiante 
 P21_id_guion_medio.php               203                 L6:  $cantidad-notas = 4;   (guion en medio del nombre)
 P22_apertura_sin_interrogacion.php   302                 L1:  <php   (falta el signo ?)
 P23_comentario_sin_marca.php         402                 L4:  Datos del estudiante   (se quito el # del comentario)
+P24_saltos_mixtos.php                201 204             Lineas 1-17 con CRLF, 18-35 con LF, 36-52 con CR y la 53 sin salto.
+                                                         L22: $1promedio = ...;  (linea LF)   L43: $if = ...;  (linea CR)
+                                                         El .log debe conservar el salto de cada linea (correccion P1, T15)
+P25_solo_lf.php                      201                 Todo el archivo con saltos LF (Linux).  L6: $1cantidad_notas = 4;
+P26_lf_cierre_misma_linea.php        306                 Todo con LF y la L53 sin salto: ?> echo "hola";  (el error va separado con LF)
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
+
+Nota (T15): todos los .log terminan igual que su .php: si el original termina en '?>' sin salto de
+linea, el .log tampoco termina en salto de linea; y cada linea conserva su salto original (CRLF, LF o CR).
