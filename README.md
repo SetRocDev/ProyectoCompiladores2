@@ -65,7 +65,7 @@ Cada tarea tiene una tarjeta en Trello y un *Pull Request* en GitHub, donde se e
 | T25 | Integración, resumen por etapa y opción `-arbol` | [#26](../../pull/26) |
 | T26 | Control de calidad final | [#27](../../pull/27) |
 | T27 | INFORME y documentación | [#28](../../pull/28) |
-| T29 | Revisión final: comando for, semántico 902/903, codificación del `.log` y simulación en otro equipo | Pull Request de la revisión final |
+| T29 | Revisión final: comando for, semántico 902/903, codificación del `.log` y simulación en otro equipo | [#29](../../pull/29) |
 
 - Todos los Pull Requests: [lista completa](../../pulls?q=is%3Apr)
 - Historial de cambios: [commits](../../commits/main)
