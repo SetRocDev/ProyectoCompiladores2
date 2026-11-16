@@ -5,8 +5,8 @@ Estudiante: Pablo Cortés
 
 El programa revisa un archivo de código PHP como lo haría la primera parte de un compilador, en seis etapas:
 - **Análisis léxico** (Proyecto 1): identificadores, etiquetas `<?php`/`?>` y comentarios.
-- **Análisis sintáctico** (Proyecto 2): estructuras `while`, `if`/`else` y `echo`, con paréntesis, llaves, `;`, comillas, bloques vacíos e indentación.
-- **Análisis semántico** (Proyecto 2): variables usadas sin haber recibido un valor.
+- **Análisis sintáctico** (Proyecto 2): estructuras `while`, `if`/`else`, `for` y `echo`, con paréntesis, llaves, `;`, comillas, bloques vacíos e indentación.
+- **Análisis semántico** (Proyecto 2): variables usadas sin haber recibido un valor, condiciones que asignan un valor fijo (`if ($x = 5)`) y divisiones entre cero.
 
 Al terminar crea `nombreArchivo-errores.log`: una copia exacta del `.php`, con cada línea numerada y los errores debajo de la línea donde ocurren.
 
@@ -31,7 +31,7 @@ Las instrucciones completas, en lenguaje sencillo, están en **[INFORME.txt](INF
 | [`INFORME.txt`](INFORME.txt) | Instrucciones, correcciones del Proyecto 1, lista de errores, etapas, gramática, decisiones, pruebas y uso de IA |
 | [`dist/`](dist) | El programa listo para usar (`.jar`) y el archivo PHP de ejemplo |
 | [`src/`](src/proyectocompiladores2) | El código fuente en Java |
-| [`pruebas/`](pruebas) | 89 casos (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt) y los scripts `ejecutar-pruebas.bat` / `.sh` que los comparan automáticamente |
+| [`pruebas/`](pruebas) | 112 casos (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt) y los scripts `ejecutar-pruebas.bat` / `.sh` que los comparan automáticamente |
 | [`recursos/`](recursos) | Copia del código PHP original de la cátedra |
 | `nbproject/`, `build.xml`, `manifest.mf`, `test/` | Archivos del proyecto NetBeans (*Java with Ant*) |
 
@@ -42,8 +42,8 @@ Las instrucciones completas, en lenguaje sencillo, están en **[INFORME.txt](INF
 | 2. Clasificación | [ClasificadorTokens.java](src/proyectocompiladores2/lexico/ClasificadorTokens.java) | Dice de qué tipo es cada token |
 | 3. Patrón | [Patrones.java](src/proyectocompiladores2/lexico/Patrones.java) | Reglas de cada tipo y palabras reservadas |
 | 4. Validación del lexema | [ValidadorLexema.java](src/proyectocompiladores2/lexico/ValidadorLexema.java) | Identificadores, etiquetas y comentarios ([validacion/](src/proyectocompiladores2/validacion)) |
-| 5. Análisis sintáctico | [AnalizadorSintactico.java](src/proyectocompiladores2/sintactico/AnalizadorSintactico.java) | Descenso recursivo y árbol sintáctico; [ValidadorWhile](src/proyectocompiladores2/sintactico/ValidadorWhile.java), [ValidadorIf](src/proyectocompiladores2/sintactico/ValidadorIf.java), [ValidadorEcho](src/proyectocompiladores2/sintactico/ValidadorEcho.java) |
-| 6. Análisis semántico | [AnalizadorSemantico.java](src/proyectocompiladores2/semantico/AnalizadorSemantico.java) | Tabla de símbolos y uso de variables |
+| 5. Análisis sintáctico | [AnalizadorSintactico.java](src/proyectocompiladores2/sintactico/AnalizadorSintactico.java) | Descenso recursivo y árbol sintáctico; [ValidadorWhile](src/proyectocompiladores2/sintactico/ValidadorWhile.java), [ValidadorIf](src/proyectocompiladores2/sintactico/ValidadorIf.java), [ValidadorFor](src/proyectocompiladores2/sintactico/ValidadorFor.java), [ValidadorEcho](src/proyectocompiladores2/sintactico/ValidadorEcho.java) |
+| 6. Análisis semántico | [AnalizadorSemantico.java](src/proyectocompiladores2/semantico/AnalizadorSemantico.java) | Tabla de símbolos, uso de variables, asignación en condiciones y división entre cero |
 
 Lista de errores: [CodigoError.java](src/proyectocompiladores2/errores/CodigoError.java) · Punto de inicio: [Main.java](src/proyectocompiladores2/Main.java)
 
@@ -65,6 +65,7 @@ Cada tarea tiene una tarjeta en Trello y un *Pull Request* en GitHub, donde se e
 | T25 | Integración, resumen por etapa y opción `-arbol` | [#26](../../pull/26) |
 | T26 | Control de calidad final | [#27](../../pull/27) |
 | T27 | INFORME y documentación | [#28](../../pull/28) |
+| T29 | Revisión final: comando for, semántico 902/903, codificación del `.log` y simulación en otro equipo | Pull Request de la revisión final |
 
 - Todos los Pull Requests: [lista completa](../../pulls?q=is%3Apr)
 - Historial de cambios: [commits](../../commits/main)

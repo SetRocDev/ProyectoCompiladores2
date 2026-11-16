@@ -36,10 +36,12 @@ un compilador, en seis etapas:
     qué tipo es cada uno y revisa que estén bien escritos: nombres de
     variables, etiquetas <?php y ?>, y comentarios // y #.
   - Análisis sintáctico (Proyecto 2): revisa que los tokens estén en el orden
-    correcto en las estructuras while, if/else y echo: paréntesis, llaves,
-    punto y coma, comillas, bloques vacíos e indentación.
-  - Análisis semántico (Proyecto 2): revisa que el código tenga sentido, por
-    ejemplo que no se use una variable que nunca recibió un valor.
+    correcto en las estructuras while, if/else, for y echo: paréntesis,
+    llaves, punto y coma, comillas, bloques vacíos e indentación.
+  - Análisis semántico (Proyecto 2): revisa que el código tenga sentido:
+    que no se use una variable que nunca recibió un valor, que una condición
+    no asigne un valor fijo en lugar de compararlo (if ($x = 5)) y que no se
+    divida entre cero.
 
 Al terminar crea un archivo nuevo con el mismo nombre, terminado en
 "-errores.log". Ese archivo es una copia exacta del .php con cada línea
@@ -101,7 +103,7 @@ nombre:
           tabla de símbolos (cada variable y la línea donde recibe su valor).
       java -jar ProyectoCompiladores2.jar -arbol
           Muestra el árbol sintáctico: cómo entendió el programa la
-          estructura del código (qué hay dentro de cada while, if y else).
+          estructura del código (qué hay dentro de cada while, if, else y for).
 
 
 4. CÓMO LEER EL RESULTADO
@@ -123,8 +125,10 @@ Ejemplo de una línea con dos errores:
     Error 602. Falta el paréntesis de cierre ')' de la condición del while
     0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 
-El .log conserva todo el formato del original: espacios, líneas en blanco y
-también el tipo de salto de línea de cada línea (Windows, Linux o Mac).
+El .log conserva todo el formato del original: espacios, líneas en blanco,
+el tipo de salto de línea de cada línea (Windows, Linux o Mac) y la
+codificación con que se guardó el .php (UTF-8, o "ANSI" del Bloc de notas),
+para que las tildes queden exactamente iguales.
 
 
 5. CÓMO PROBAR QUE DETECTA ERRORES
@@ -138,7 +142,7 @@ también el tipo de salto de línea de cada línea (Windows, Linux o Mac).
      4. Abrir el .log: debajo de esa línea aparece el error.
 
   Forma 2: ejecutar todas las pruebas automáticas (recomendado).
-     La carpeta "pruebas" tiene 89 casos de prueba:
+     La carpeta "pruebas" tiene 112 casos de prueba:
        - pruebas\casos       los archivos .php, cada uno con un error puesto a
                              propósito (algunos no tienen errores, para
                              comprobar que no se marcan errores falsos)
@@ -149,7 +153,7 @@ también el tipo de salto de línea de cada línea (Windows, Linux o Mac).
             pruebas\ejecutar-pruebas.bat
      El script ejecuta el programa con todos los casos, compara cada .log con
      el esperado byte por byte y al final muestra:
-            Pruebas correctas: 89   Fallidas: 0
+            Pruebas correctas: 112   Fallidas: 0
 
 
 6. CÓMO COMPILARLO EN NETBEANS
@@ -159,9 +163,9 @@ también el tipo de salto de línea de cada línea (Windows, Linux o Mac).
      (se llama ProyectoCompiladores2; es un proyecto "Java with Ant").
   3. Clic derecho sobre el proyecto y elegir "Clean and Build"
      (o Shift + F11). Al terminar debe decir BUILD SUCCESSFUL.
-  4. IMPORTANTE: "Clean and Build" borra la carpeta "dist" y vuelve a crear
-     el .jar. Después de compilar hay que copiar otra vez el archivo PHP:
-         copiar  recursos\CodigoProyecto.php  a la carpeta  dist
+  4. "Clean and Build" borra la carpeta "dist", vuelve a crear el .jar y
+     copia automáticamente el PHP de ejemplo (recursos\CodigoProyecto.php)
+     a "dist", junto al .jar (lo hace el archivo build.xml).
   5. Ejecutar como se explica en la sección 3.
 
 
@@ -215,6 +219,10 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
        aplica a palabras sueltas al inicio de una instrucción (prueba P34).
      - El informe entregado no incluía los prompts principales usados con la
        IA; ahora están en la sección 15.
+     - Si el .php se guardaba como "ANSI" (Windows-1252), el .log se escribía
+       en UTF-8 y las tildes cambiaban: el .log ya no era una copia exacta.
+       Ahora el .log usa la misma codificación del .php y conserva el BOM si
+       lo tiene. Pruebas: P109 (UTF-8 con BOM), P110 (ANSI), P111.
 
 
 8. LISTA DE ERRORES QUE DETECTA
@@ -254,7 +262,7 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
     503  Llave de cierre } sin una llave de apertura
     504  Estructura de control mal escrita, con sugerencia
                                                     whlie (...) {  -> ¿quiso decir 'while'?
-    505  Bloque de for, function, etc. sin llave de cierre }
+    505  Bloque de foreach, function, etc. sin llave de cierre }
 
   Comando while
     601  Falta el paréntesis de apertura (          while $x < 10 {
@@ -267,6 +275,14 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
     608  Se usó una tabulación para indentar
     609  La llave de cierre } no está alineada con el while
     610  La llave de apertura { está en la línea siguiente
+
+  Comando for (la rúbrica menciona los errores "relacionados con While y
+  For", y el código de la cátedra tiene un for)
+    611  Falta el paréntesis de apertura (          for $i = 0; $i < 4; $i++) {
+    612  Falta el paréntesis de cierre )
+    613  La cabecera no tiene sus tres partes separadas por ";"
+                                                    for ($i = 0; $i < 4) {
+    614-620  Los mismos casos del while (604 a 610), para el for
 
   Comando if y bloque else
     701-710  Los mismos casos del while, para el if (y el elseif)
@@ -292,6 +308,11 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
   Análisis semántico
     901  Se usa una variable que todavía no ha recibido un valor
          (sugiere la parecida: $Total -> ¿quiso decir $total?)
+    902  La condición de un while o un if asigna un valor fijo en lugar de
+         compararlo: if ($promedio = 70) siempre da el mismo resultado
+         (para comparar se usa ==)
+    903  División entre cero escrita en el código: $promedio = $suma / 0;
+         (en PHP 8 detiene el programa)
 
 
 9. ETAPAS DEL COMPILADOR Y ORGANIZACIÓN DEL CÓDIGO
@@ -317,9 +338,10 @@ código con un comentario "===== ETAPA N =====". Main.java las llama en orden:
                                           el orden de los tokens según la
                                           gramática (sección 10) y construye
                                           el árbol sintáctico.
-              ValidadorEstructuraControl  Parte común de while e if:
+              ValidadorEstructuraControl  Parte común de while, if y for:
                                           "palabra (condición) { ... }"
-              ValidadorWhile, ValidadorIf Heredan de la clase anterior.
+              ValidadorWhile, ValidadorIf,
+              ValidadorFor                Heredan de la clase anterior.
               ValidadorEcho               Revisa la expresión del echo.
               ValidadorIndentacion        4 espacios por nivel, sin tabulaciones.
               TipoBloque                  Qué número de error usa cada estructura.
@@ -333,7 +355,8 @@ código con un comentario "===== ETAPA N =====". Main.java las llama en orden:
 
 Traducción orientada por la sintaxis (tema 5): mientras el análisis
 sintáctico reconoce cada regla de la gramática, construye su parte del árbol
-(un nodo While, If, Echo...). El análisis semántico trabaja sobre ese árbol.
+(un nodo While, If, For, Echo...). El análisis semántico trabaja sobre ese
+árbol.
 Para verlo: java -jar ProyectoCompiladores2.jar -arbol
 
 
@@ -344,8 +367,9 @@ y si una regla contiene a otra, su método llama al de la otra.
 
     programa   -> '<?php' sentencias '?>'
     sentencias -> { sentencia }
-    sentencia  -> while | if | echo | estructura | simple
+    sentencia  -> while | if | for | echo | estructura | simple
     while      -> 'while' '(' condicion ')' bloque
+    for        -> 'for' '(' inicio ';' condicion ';' incremento ')' bloque
     if         -> 'if' '(' condicion ')' bloque [ else ]
     else       -> 'else' bloque | 'else' if | 'elseif' '(' condicion ')' bloque [ else ]
     bloque     -> '{' sentencia { sentencia } '}'
@@ -353,7 +377,7 @@ y si una regla contiene a otra, su método llama al de la otra.
     expresion  -> valor { operador valor }
     valor      -> cadena | número | $variable [ '[' ... ']' ]
                   | nombre [ '(' argumentos ')' ] | true | false | null
-    estructura -> ('for' | 'foreach' | 'function' | ...) cabecera bloque
+    estructura -> ('foreach' | 'function' | ...) cabecera bloque
     simple     -> token { token } ';'
 
 Reglas de formato que se revisan aparte: cada línea dentro de un bloque lleva
@@ -381,26 +405,35 @@ Del Proyecto 1:
 
 Del Proyecto 2:
   - Las llaves van como en los ejemplos del enunciado: "{" en la misma línea
-    del while / if / else, y "} else {" en una sola línea.
+    del while / if / else / for, y "} else {" en una sola línea.
   - Un bloque que solo tiene comentarios o líneas en blanco está vacío.
   - Indentación: 4 espacios por nivel de anidamiento; se revisa la primera
     línea de cada instrucción y la "}". Los comentarios no se revisan. El
-    código que no está dentro de un while, if o else no se revisa, porque el
-    enunciado solo pide la indentación de esos bloques.
+    código que no está dentro de un while, if, else o for no se revisa,
+    porque el enunciado solo pide la indentación de esos bloques.
   - Echo: no se permiten paréntesis que agrupen lo que se imprime
     (echo ("Hola")), pero sí los de una función (echo count($notas);).
     Si una cadena sin cerrar está dentro de un echo se reporta el error del
     echo (803/804) en lugar del general 502, para no repetir el mensaje.
-  - El for, foreach y function no los pide el enunciado: se reconocen como
-    bloques (sus llaves y lo que tienen adentro), pero no se valida su forma.
-    elseif y "else if" se validan con las reglas del if.
+  - El for se valida con las mismas reglas del while (errores 611 a 620),
+    porque la rúbrica habla de los errores "relacionados con While y For" y
+    el código de la cátedra tiene un for. El foreach y function no los pide
+    el enunciado: se reconocen como bloques (sus llaves y lo que tienen
+    adentro), pero no se valida su forma. elseif y "else if" se validan con
+    las reglas del if.
   - Análisis semántico: se revisa que no se use una variable antes de que
     reciba un valor (901). Cada variable se reporta una sola vez, y no se
     reporta si su asignación ya tiene un error léxico parecido (por ejemplo
     $1nombre = "Ana"), porque ese error ya explica el problema.
+    También se revisa la coherencia de las instrucciones: una condición que
+    asigna un valor fijo (902) y una división entre el número 0 (903).
+    "while ($fila = leer())" no es error: es una forma común en PHP.
     Se pensó también en avisar de posibles ciclos infinitos, pero se
     descartó: el enunciado muestra "while ($x < 10) { echo $x; }" como
     ejemplo permitido y ese aviso lo habría marcado como error.
+  - Los ejemplos del enunciado usan $x sin darle un valor antes; si se
+    copian tal cual a un archivo, dan el Error 901 en $x (es correcto: en
+    PHP real $x no existe). Por eso la prueba P54 agrega "$x = 0;" primero.
   - Versión de Java: se compila para Java 8, para que funcione en cualquier
     computadora. Se probó con Java 8 y con Java 21.
 
@@ -411,7 +444,8 @@ Del Proyecto 2:
     enunciado; los comentarios /* */ no.
   - Un texto entre comillas debe empezar y terminar en la misma línea.
   - El contenido de las condiciones de while e if se asume correcto (así lo
-    indica el enunciado); solo se revisa que exista.
+    indica el enunciado); solo se revisa que exista y que no asigne un
+    valor fijo (902).
   - Un "else" y un "if" en líneas distintas ("} else" y en la siguiente
     "if (...) {") se toma como un else sin llaves (Error 711).
   - El análisis semántico no reconoce variables que reciben valor con
@@ -422,19 +456,27 @@ Del Proyecto 2:
 
 13. PRUEBAS REALIZADAS
 -------------------------------------------------------------------------------
-  - 89 casos de prueba automáticos (sección 5, Forma 2): cada .log se compara
-    byte por byte con el esperado. Resultado: 89 de 89, con Java 8 y Java 21.
+  - 112 casos de prueba automáticos (sección 5, Forma 2): cada .log se
+    compara byte por byte con el esperado. Resultado: 112 de 112, con Java 8
+    y Java 21.
   - Pruebas de "mutación tipo tutor": un programa cambió el código de
-    ejemplo de 582 formas distintas, como lo haría el tutor (cada error del
-    enunciado en cada lugar posible y 400 combinaciones de dos errores). En
-    todas aparecieron exactamente los errores esperados y ningún otro.
+    ejemplo de 607 formas distintas, como lo haría el tutor (cada error del
+    enunciado en cada lugar posible, variantes válidas de espacios y 400
+    combinaciones de dos errores). En todas aparecieron exactamente los
+    errores esperados y ningún otro.
   - Comparación con PHP real (versión 8.3): los casos "válidos" son código
     PHP correcto, y los errores de estructura (paréntesis, llaves, punto y
     coma, comillas) también los rechaza PHP. Los errores 901 coinciden con
     los avisos "Undefined variable" de PHP al ejecutar los mismos casos.
-  - Robustez: más de 4000 archivos con cambios al azar; el programa nunca
-    se detuvo y siempre generó el .log.
+  - Robustez: 8000 archivos con cambios al azar; el programa nunca se
+    detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
+    numeración y los errores queda el .php original byte por byte (R2).
   - Compilación con Ant (lo mismo que hace "Clean and Build" de NetBeans).
+  - Simulación de otro equipo: el proyecto se empaquetó en .zip, se
+    descomprimió en una carpeta con espacios y tildes ("Mis Documentos\
+    Compiladores Pablo Cortés"), se compiló desde cero y se ejecutó solo con
+    Java 8, desde otra carpeta de trabajo y con la configuración de idioma de
+    Windows en español (Cp1252). Resultado: 112 de 112.
 
 
 14. VERIFICACIÓN EN OTRO EQUIPO
@@ -450,7 +492,7 @@ un equipo distinto al de desarrollo:
   Ejecución (sección 3): java -jar ProyectoCompiladores2.jar
                          -> se generó CodigoProyecto-errores.log sin errores
   Pruebas (sección 5):   pruebas\ejecutar-pruebas.bat
-                         -> Pruebas correctas: 89   Fallidas: 0
+                         -> Pruebas correctas: 112   Fallidas: 0
   Responsable:           Pablo Cortés
 
 
@@ -506,6 +548,11 @@ Prompts principales cuyo resultado se incorporó al proyecto:
      bastantes pruebas para realmente verificar que todo funciona bien".
   8. "De acuerdo con todas tus recomendaciones, tienes permiso, empecemos el
      proyecto" (aprobación de las decisiones Q7 a Q13 propuestas en Trello).
+  9. "Quiero que trates de estar lo más apegado a las instrucciones posible
+     ... revisa todo con extrema cautela y pruebas para reforzar de forma
+     bastante extensa todo lo que pueda ser como un error ... hacer todas
+     las pruebas incluso en un entorno simulado como si fuera otro
+     dispositivo" (revisión final antes de la entrega).
 
 
 16. FUENTES
@@ -514,5 +561,5 @@ Prompts principales cuyo resultado se incorporó al proyecto:
     03307 Compiladores, UNED, y la retroalimentación del Proyecto 1.
   - Código PHP de ejemplo entregado por la cátedra (CodigoProyecto.php).
   - Documentación oficial de Java (java.util, java.nio, java.util.regex).
-  - Documentación oficial de PHP (sintaxis de while, if/else y echo), y el
+  - Documentación oficial de PHP (sintaxis de while, if/else, for y echo), y el
     intérprete de PHP 8.3 para comparar los resultados de las pruebas.
