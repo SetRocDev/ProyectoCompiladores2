@@ -9,17 +9,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Lee un archivo .php respetando su formato original en su totalidad (R1).
  *
  * Se lee el archivo completo como bytes, en lugar de usar readLine(), porque
- * readLine() pierde información que el analizador necesita: si el archivo
- * termina con un salto de línea, cuál separador usa (CRLF o LF) y si tiene
- * BOM. Esa información es clave para validar que no exista nada después de
- * la etiqueta '?>' (R4).
+ * readLine() pierde información que el analizador necesita: el salto de
+ * línea exacto de cada línea (CRLF, LF o CR, que pueden venir mezclados), si
+ * el archivo termina con un salto de línea y si tiene BOM. Esa información
+ * permite que el .log sea una copia exacta (R2) y validar que no exista nada
+ * después de la etiqueta '?>' (R4).
  *
  * Codificación: se intenta UTF-8 estricto; si el archivo tiene bytes que no
  * son UTF-8 válido (por ejemplo, si se guardó como "ANSI" en el Bloc de
@@ -49,38 +49,45 @@ public class LectorArchivoPHP {
             texto = new String(bytes, inicio, bytes.length - inicio, Charset.forName("windows-1252"));
         }
 
-        return new ArchivoFuente(ruta, separarLineas(texto), terminaConSalto(texto),
-                tieneBom, detectarSeparador(texto));
+        List<String> lineas = new ArrayList<>();
+        List<String> saltos = new ArrayList<>();
+        separarLineas(texto, lineas, saltos);
+        return new ArchivoFuente(ruta, lineas, saltos, tieneBom);
     }
 
     /**
-     * Divide el texto en líneas aceptando CRLF, LF o CR. Se usa el límite -1
-     * para no descartar líneas vacías. Si el archivo termina en salto de
-     * línea, el último elemento vacío no es una línea real y se quita; ese
-     * dato queda guardado en terminaConSaltoDeLinea.
+     * Divide el texto en líneas y guarda el salto de línea REAL de cada una
+     * (CRLF de Windows, LF de Linux o CR de Mac antiguo). Un mismo archivo
+     * puede mezclarlos, y el .log debe reproducirlos tal cual (corrección del
+     * Proyecto 1, tarea T15).
+     *
+     * Si el archivo termina en salto de línea no se agrega una línea vacía
+     * extra: ese dato queda en el salto de la última línea. Un archivo vacío
+     * tiene una sola línea vacía sin salto.
      */
-    private List<String> separarLineas(String texto) {
-        List<String> lineas = new ArrayList<>(Arrays.asList(texto.split("\r\n|\n|\r", -1)));
-        if (terminaConSalto(texto)) {
-            lineas.remove(lineas.size() - 1);
+    private void separarLineas(String texto, List<String> lineas, List<String> saltos) {
+        int inicioLinea = 0;
+        int i = 0;
+        while (i < texto.length()) {
+            char c = texto.charAt(i);
+            if (c != '\r' && c != '\n') {
+                i++;
+                continue;
+            }
+            lineas.add(texto.substring(inicioLinea, i));
+            if (c == '\r' && i + 1 < texto.length() && texto.charAt(i + 1) == '\n') {
+                saltos.add("\r\n");
+                i += 2;
+            } else {
+                saltos.add(String.valueOf(c));
+                i++;
+            }
+            inicioLinea = i;
         }
-        return lineas;
-    }
-
-    private boolean terminaConSalto(String texto) {
-        return texto.endsWith("\n") || texto.endsWith("\r");
-    }
-
-    /** @return el primer separador encontrado; si no hay ninguno, CRLF (Windows). */
-    private String detectarSeparador(String texto) {
-        int pos = texto.indexOf('\n');
-        if (pos > 0 && texto.charAt(pos - 1) == '\r') {
-            return "\r\n";
+        if (inicioLinea < texto.length() || lineas.isEmpty()) {
+            lineas.add(texto.substring(inicioLinea));
+            saltos.add("");
         }
-        if (pos >= 0) {
-            return "\n";
-        }
-        return "\r\n";
     }
 
     private boolean iniciaConBom(byte[] bytes) {
