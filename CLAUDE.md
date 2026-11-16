@@ -10,7 +10,7 @@ Analizador de PHP en Java: etapas léxicas del Proyecto 1 + análisis sintáctic
 - Formato del `.log`: copia exacta del `.php` (incluidos los saltos de línea originales) con `0001 ` al inicio de cada línea y los errores **debajo de su línea** (Opción 1), de forma consistente en todo el archivo: `Error NNN. Descripción específica`.
 
 ## Estructura
-- `src/proyectocompiladores2/`: `io/` (lectura y log), `errores/` (catálogo `CodigoError` 1xx–9xx), `lexico/` (etapas 1–4), `validacion/` (reglas léxicas R3–R5 del P1), y desde T20 `sintactico/` (etapa 5) y `semantico/` (etapa 6).
+- `src/proyectocompiladores2/`: `io/` (lectura y log), `errores/` (catálogo `CodigoError` 1xx–9xx), `lexico/` (etapas 1–4), `validacion/` (reglas léxicas R3–R5 del P1), `sintactico/` (etapa 5) y `semantico/` (etapa 6).
 - Cada clase indica en su comentario inicial que se hizo con apoyo de IA (lo exige el enunciado).
 - `pruebas/casos/`: entradas `.php` (byte por byte, no editarlas a mano con un editor que cambie los saltos de línea).
 - `pruebas/esperados/`: el `-errores.log` exacto que debe generar cada caso.
@@ -36,6 +36,6 @@ Analizador de PHP en Java: etapas léxicas del Proyecto 1 + análisis sintáctic
 - Q8: un bloque con solo comentarios o líneas en blanco está vacío.
 - Q9: indentación de 4 espacios × nivel de anidamiento (cuenta también el for), sin tabulaciones; se revisa la primera línea de cada sentencia y la `}`; comentarios y nivel 0 no se revisan.
 - Q10: echo sin paréntesis de agrupación (las llamadas a función sí se permiten).
-- Q11: semántico = 901 variable usada sin asignar y 902 posible ciclo infinito.
+- Q11: semántico = 901 variable usada sin asignar (el 902, posible ciclo infinito, se retiró: el PDF muestra como permitido un while que no cambia su variable).
 - Q12: for/foreach/function son bloques genéricos; elseif/else if se validan como if; 504 para palabras de control mal escritas.
 - Q13: 201–205 solo a la izquierda del `=`; 303 en la línea 0001 y 305 en la última línea.
