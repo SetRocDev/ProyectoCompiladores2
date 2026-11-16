@@ -134,8 +134,12 @@ public class AnalizadorSintactico {
         if (es(token, "{")) {
             return bloqueSuelto();
         }
+        if (palabra.equals("while") && token.es(TipoToken.PALABRA_RESERVADA)) {
+            // Una instancia por while: los while anidados se analizan en forma recursiva
+            return new ValidadorWhile().analizar(this);
+        }
         if (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA)) {
-            if (ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("while") || palabra.equals("if")) {
+            if (ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("if")) {
                 return estructuraGenerica();
             }
             if (token.es(TipoToken.PALABRA) && pareceEstructuraMalEscrita()) {
@@ -292,6 +296,9 @@ public class AnalizadorSintactico {
                 avanzar();
                 continue;
             }
+            if (terminoElBloqueSinLlave(token, abierto)) {
+                break;
+            }
             validarIndentacionDeSentencia(token);
             bloque.agregarHijo(sentencia());
         }
@@ -353,9 +360,56 @@ public class AnalizadorSintactico {
             return false;
         }
         int ancho = indentacion.anchoDe(llave.getLinea());
-        if (ancho >= actual.anchoCabecera) {
+        return ancho < actual.anchoCabecera && esAnchoDeBloqueExterior(ancho);
+    }
+
+    /**
+     * Una sentencia que vuelve al nivel de la cabecera (o menos) puede ser:
+     *   - una línea mal indentada que sigue dentro del bloque (el bloque
+     *     todavía tiene su '}' más abajo): se reporta la indentación;
+     *   - código que ya está fuera del bloque porque a este le falta su '}':
+     *     no queda ninguna '}' libre que le corresponda, o la que queda está
+     *     alineada con un bloque de afuera.
+     * En el segundo caso el bloque termina aquí, para no reportar como mal
+     * indentado todo el código que sigue (error en cascada).
+     */
+    private boolean terminoElBloqueSinLlave(Token token, BloqueAbierto actual) {
+        if (!indentacion.esPrimeroDeSuLinea(token) || indentacion.anchoDe(token.getLinea()) > actual.anchoCabecera) {
             return false;
         }
+        Token libre = siguienteLlaveLibre();
+        if (libre == null) {
+            return true;
+        }
+        int ancho = indentacion.anchoDe(libre.getLinea());
+        return ancho != actual.anchoCabecera && esAnchoDeBloqueExterior(ancho);
+    }
+
+    /**
+     * @return la siguiente '}' que no cierra ningún bloque abierto más
+     *         adelante (contando las llaves desde la posición actual), o null
+     */
+    private Token siguienteLlaveLibre() {
+        int profundidad = 0;
+        for (int i = posicion; i < flujo.tamano(); i++) {
+            Token token = flujo.get(i);
+            if (esEtiquetaDeCierre(token)) {
+                return null;
+            }
+            if (es(token, "{")) {
+                profundidad++;
+            } else if (es(token, "}")) {
+                if (profundidad == 0) {
+                    return token;
+                }
+                profundidad--;
+            }
+        }
+        return null;
+    }
+
+    /** @return true si algún bloque abierto, aparte del actual, tiene esa indentación. */
+    private boolean esAnchoDeBloqueExterior(int ancho) {
         Iterator<BloqueAbierto> externos = abiertos.iterator();
         externos.next(); // el actual
         while (externos.hasNext()) {
