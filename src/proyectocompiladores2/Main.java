@@ -15,6 +15,8 @@ import proyectocompiladores2.lexico.AnalizadorLexico;
 import proyectocompiladores2.lexico.ClasificadorTokens;
 import proyectocompiladores2.lexico.Token;
 import proyectocompiladores2.lexico.ValidadorLexema;
+import proyectocompiladores2.sintactico.AnalizadorSintactico;
+import proyectocompiladores2.sintactico.FlujoTokens;
 
 /**
  * Punto de entrada del analizador léxico de PHP.
@@ -31,7 +33,8 @@ import proyectocompiladores2.lexico.ValidadorLexema;
  *   Etapa 1         -> AnalizadorLexico     obtención de tokens
  *   Etapa 2         -> ClasificadorTokens   clasificación de tokens
  *   Etapa 3         -> Patrones             patrón de cada tipo (lo usan las etapas 2 y 4)
- *   Etapa 4         -> ValidadorLexema      validación del lexema (R3, R4, R5)
+ *   Etapa 4         -> ValidadorLexema      validación del lexema (R3, R4, R5 del Proyecto 1)
+ *   Etapa 5         -> AnalizadorSintactico análisis sintáctico: while, if, echo (Proyecto 2)
  *   Archivo de log  -> EscritorLog          nombreArchivo-errores.log (R2)
  *
  * Uso de IA: la estructura de esta clase fue generada con apoyo de
@@ -86,7 +89,11 @@ public class Main {
             // Etapa 4: validación de cada lexema según las reglas definidas
             GestorErrores errores = new GestorErrores();
             ValidadorLexema validador = new ValidadorLexema();
-            validador.validar(tokens, fuente, errores);
+            FlujoTokens flujo = new FlujoTokens(tokens);
+            validador.validar(tokens, flujo, fuente, errores);
+
+            // Etapa 5: análisis sintáctico (orden de los tokens según la gramática)
+            new AnalizadorSintactico(flujo, fuente, errores).analizar();
 
             // Archivo de errores (R2)
             Path log = new EscritorLog().escribir(fuente, errores);

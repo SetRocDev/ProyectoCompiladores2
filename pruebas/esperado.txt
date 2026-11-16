@@ -51,6 +51,9 @@ P34_constantes_validas.php           -                   Despues de L46: 'echo P
 P35_division_tras_comentario.php     -                   Como P33 pero con un comentario al final de la primera linea (T19)
 P36_casos_de_revision.php            201 204 402 401     Despues de L46: '$1extra[0] = 85;' y '$if[1][2] = 2;' (arreglo a la izquierda del =),
                                                          '$nota_extra = 10 // ...' sin ';' seguido de 'continua aqui', y 'if (...)' seguido de '/ comentario'
+P37_llave_sobrante.php               503                 Despues de L46 se agrega una linea con '}' que no cierra nada (sintactico, T20)
+P38_estructura_mal_escrita.php       504                 L37: 'whlie (...) {' en vez de 'while' (sugiere 'while')
+P39_for_sin_cierre.php               505                 Se borra la '}' del for (L20): el bloque del for no cierra
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
