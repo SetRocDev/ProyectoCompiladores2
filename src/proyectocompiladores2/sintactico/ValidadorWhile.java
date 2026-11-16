@@ -31,7 +31,8 @@ public class ValidadorWhile extends ValidadorEstructuraControl {
         Token palabraWhile = analizador.actual();
         NodoWhile nodo = new NodoWhile(palabraWhile.getLinea());
         nodo.agregarHijo(analizarCabecera(analizador, TipoBloque.WHILE));
-        nodo.agregarHijo(analizarCuerpo(analizador, TipoBloque.WHILE, "while", palabraWhile));
+        nodo.agregarHijo(analizarCuerpo(analizador, TipoBloque.WHILE, "while", palabraWhile,
+                analizador.getIndentacion().anchoDe(palabraWhile.getLinea())));
         return nodo;
     }
 }

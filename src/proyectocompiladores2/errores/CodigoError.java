@@ -68,7 +68,28 @@ public enum CodigoError {
     WHILE_INDENTACION(607, "Indentación incorrecta dentro del while: se esperaban %s espacios y hay %s"),
     WHILE_TABULACION(608, "Se usó una tabulación para indentar dentro del while; solo se permiten espacios (4 por nivel)"),
     WHILE_CIERRE_DESALINEADO(609, "La llave de cierre '}' del while no está alineada con 'while': se esperaban %s espacios y hay %s"),
-    WHILE_LLAVE_EN_OTRA_LINEA(610, "La llave de apertura '{' del while debe estar en la misma línea que su condición: 'while (condición) {'");
+    WHILE_LLAVE_EN_OTRA_LINEA(610, "La llave de apertura '{' del while debe estar en la misma línea que su condición: 'while (condición) {'"),
+
+    // ===== 7xx: Comando if y bloque else (R4 del Proyecto 2) =====
+    IF_FALTA_PARENTESIS_APERTURA(701, "Falta el paréntesis de apertura '(' después de '%s'; la forma correcta es 'if (condición) {'"),
+    IF_FALTA_PARENTESIS_CIERRE(702, "Falta el paréntesis de cierre ')' de la condición del %s"),
+    IF_CONDICION_VACIA(703, "La condición del %s está vacía; debe haber una condición entre los paréntesis"),
+    IF_FALTA_LLAVE_APERTURA(704, "Falta la llave de apertura '{' del bloque del %s"),
+    IF_FALTA_LLAVE_CIERRE(705, "El bloque del %s que inicia en la línea %s no tiene llave de cierre '}'"),
+    IF_BLOQUE_VACIO(706, "El bloque del if está vacío; debe contener al menos una línea de código"),
+    IF_INDENTACION(707, "Indentación incorrecta dentro del if: se esperaban %s espacios y hay %s"),
+    IF_TABULACION(708, "Se usó una tabulación para indentar dentro del if; solo se permiten espacios (4 por nivel)"),
+    IF_CIERRE_DESALINEADO(709, "La llave de cierre '}' del if no está alineada con 'if': se esperaban %s espacios y hay %s"),
+    IF_LLAVE_EN_OTRA_LINEA(710, "La llave de apertura '{' del %s debe estar en la misma línea que su condición: 'if (condición) {'"),
+    ELSE_FALTA_LLAVE_APERTURA(711, "Falta la llave de apertura '{' después de 'else'; la forma correcta es '} else {'"),
+    ELSE_FALTA_LLAVE_CIERRE(712, "El bloque del else que inicia en la línea %2$s no tiene llave de cierre '}'"),
+    ELSE_BLOQUE_VACIO(713, "El bloque del else está vacío; debe contener al menos una línea de código"),
+    ELSE_SIN_IF(714, "'%s' sin un 'if' previo: debe ir justo después de la llave de cierre '}' de un if"),
+    ELSE_INDENTACION(715, "Indentación incorrecta dentro del else: se esperaban %s espacios y hay %s"),
+    ELSE_TABULACION(716, "Se usó una tabulación para indentar dentro del else; solo se permiten espacios (4 por nivel)"),
+    ELSE_CIERRE_DESALINEADO(717, "La llave de cierre '}' del else no está alineada con el if: se esperaban %s espacios y hay %s"),
+    ELSE_EN_OTRA_LINEA(718, "'%s' debe ir en la misma línea que la llave de cierre '}' del if: '} else {'"),
+    ELSE_LLAVE_EN_OTRA_LINEA(719, "La llave de apertura '{' del else debe estar en la misma línea que 'else': '} else {'");
 
     private final int numero;
     private final String plantilla;

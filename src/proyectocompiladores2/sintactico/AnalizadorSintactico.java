@@ -51,7 +51,7 @@ public class AnalizadorSintactico {
     /** Estructuras que el enunciado no pide validar; solo se respetan sus llaves (decisión Q12). */
     private static final Set<String> ESTRUCTURAS_GENERICAS = Patrones.conjunto(
             "for", "foreach", "function", "switch", "class", "interface", "trait",
-            "do", "try", "catch", "finally", "else", "elseif");
+            "do", "try", "catch", "finally");
 
     /** Palabras con las que se compara una estructura mal escrita (Error 504). */
     private static final String[] ESTRUCTURAS_CONOCIDAS = {"while", "if", "elseif", "for", "foreach", "switch"};
@@ -138,8 +138,15 @@ public class AnalizadorSintactico {
             // Una instancia por while: los while anidados se analizan en forma recursiva
             return new ValidadorWhile().analizar(this);
         }
+        if (palabra.equals("if") && token.es(TipoToken.PALABRA_RESERVADA)) {
+            return new ValidadorIf().analizar(this);
+        }
+        if (esPalabra(token, "else") || esPalabra(token, "elseif")) {
+            // Un else que no viene justo después del bloque de un if
+            return new ValidadorIf().analizarElseSinIf(this);
+        }
         if (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA)) {
-            if (ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("if")) {
+            if (ESTRUCTURAS_GENERICAS.contains(palabra)) {
                 return estructuraGenerica();
             }
             if (token.es(TipoToken.PALABRA) && pareceEstructuraMalEscrita()) {
@@ -241,9 +248,20 @@ public class AnalizadorSintactico {
      * @return el bloque con sus sentencias
      */
     public NodoBloque bloque(TipoBloque tipo, String palabraClave, Token cabecera) {
+        return bloque(tipo, palabraClave, cabecera, indentacion.anchoDe(cabecera.getLinea()));
+    }
+
+    /**
+     * Igual que bloque(tipo, palabraClave, cabecera), pero con la indentación
+     * de referencia indicada. La usa el else: su bloque se mide desde la línea
+     * del if, aunque la línea "} else {" esté mal indentada.
+     *
+     * @param anchoReferencia espacios de la línea que abre la estructura
+     */
+    public NodoBloque bloque(TipoBloque tipo, String palabraClave, Token cabecera, int anchoReferencia) {
         NodoBloque bloque = new NodoBloque(actual().getLinea());
         avanzar(); // la '{'
-        contenidoDeBloque(bloque, tipo, palabraClave, cabecera);
+        contenidoDeBloque(bloque, tipo, palabraClave, cabecera, anchoReferencia);
         return bloque;
     }
 
@@ -254,20 +272,25 @@ public class AnalizadorSintactico {
      *   - se borró solo la '{' y la '}' sigue más abajo, alineada con la
      *     estructura: se analiza como un bloque normal hasta esa '}';
      *   - la estructura tiene una sola sentencia sin llaves: el cuerpo es
-     *     esa sentencia.
+     *     esa sentencia, si está más indentada que la estructura;
+     *   - si no, la estructura quedó sin cuerpo y lo que sigue ya está afuera.
      *
      * @return el cuerpo como bloque
      */
-    public NodoBloque cuerpoSinLlave(TipoBloque tipo, String palabraClave, Token cabecera) {
+    public NodoBloque cuerpoSinLlave(TipoBloque tipo, String palabraClave, Token cabecera, int anchoReferencia) {
         NodoBloque bloque = new NodoBloque(fin() ? cabecera.getLinea() : actual().getLinea());
         if (fin() || esEtiqueta(actual())) {
             return bloque;
         }
-        if (tieneLlaveDeCierreAlineada(cabecera)) {
-            contenidoDeBloque(bloque, tipo, palabraClave, cabecera);
+        if (tieneLlaveDeCierreAlineada(cabecera, anchoReferencia)) {
+            contenidoDeBloque(bloque, tipo, palabraClave, cabecera, anchoReferencia);
+        } else if (indentacion.esPrimeroDeSuLinea(actual())
+                && indentacion.anchoDe(actual().getLinea()) <= anchoReferencia) {
+            // La línea siguiente no está más adentro que la estructura: no es
+            // su cuerpo, es código que sigue después (el cuerpo queda vacío)
+            return bloque;
         } else {
-            abiertos.push(new BloqueAbierto(tipo, palabraClave, cabecera.getLinea(),
-                    indentacion.anchoDe(cabecera.getLinea())));
+            abiertos.push(new BloqueAbierto(tipo, palabraClave, cabecera.getLinea(), anchoReferencia));
             validarIndentacionDeSentencia(actual());
             bloque.agregarHijo(sentencia());
             abiertos.pop();
@@ -276,9 +299,9 @@ public class AnalizadorSintactico {
     }
 
     /** Analiza las sentencias de un bloque hasta su '}' y aplica las reglas comunes. */
-    private void contenidoDeBloque(NodoBloque bloque, TipoBloque tipo, String palabraClave, Token cabecera) {
-        BloqueAbierto abierto = new BloqueAbierto(tipo, palabraClave, cabecera.getLinea(),
-                indentacion.anchoDe(cabecera.getLinea()));
+    private void contenidoDeBloque(NodoBloque bloque, TipoBloque tipo, String palabraClave, Token cabecera,
+                                   int anchoReferencia) {
+        BloqueAbierto abierto = new BloqueAbierto(tipo, palabraClave, cabecera.getLinea(), anchoReferencia);
         abiertos.push(abierto);
         boolean cerrado = false;
         while (!fin() && !esEtiquetaDeCierre(actual())) {
@@ -426,8 +449,7 @@ public class AnalizadorSintactico {
      *
      * @return true si esa línea empieza con una '}' alineada con la cabecera
      */
-    private boolean tieneLlaveDeCierreAlineada(Token cabecera) {
-        int anchoCabecera = indentacion.anchoDe(cabecera.getLinea());
+    private boolean tieneLlaveDeCierreAlineada(Token cabecera, int anchoCabecera) {
         for (int i = posicion; i < flujo.tamano(); i++) {
             Token token = flujo.get(i);
             if (token.getLinea() > cabecera.getLinea() && indentacion.esPrimeroDeSuLinea(token)
@@ -445,7 +467,8 @@ public class AnalizadorSintactico {
         }
         String palabra = token.getLexema().toLowerCase(Locale.ROOT);
         boolean esEstructura = ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("while")
-                || palabra.equals("if") || palabra.equals("echo");
+                || palabra.equals("if") || palabra.equals("else") || palabra.equals("elseif")
+                || palabra.equals("echo");
         return esEstructura && (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA))
                 && indentacion.esPrimeroDeSuLinea(token);
     }

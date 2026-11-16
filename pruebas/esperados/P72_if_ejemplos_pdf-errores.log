@@ -1,0 +1,42 @@
+0001 <?php
+0002 $x = 1;
+0003 if ($x > 0) {
+0004     echo $x;
+0005 }
+0006 if $x > 0 {
+Error 701. Falta el paréntesis de apertura '(' después de 'if'; la forma correcta es 'if (condición) {'
+Error 702. Falta el paréntesis de cierre ')' de la condición del if
+0007     echo $x;
+0008 }
+0009 if () {
+Error 703. La condición del if está vacía; debe haber una condición entre los paréntesis
+0010     echo $x;
+0011 }
+0012 if ($x > 0 {
+Error 702. Falta el paréntesis de cierre ')' de la condición del if
+0013     echo $x;
+0014 }
+0015 if ($x > 0) {
+0016     echo $x;
+0017 } else {
+0018     echo 0;
+0019 }
+0020 if ($x > 0) {
+0021     echo $x;
+0022 } else {
+Error 713. El bloque del else está vacío; debe contener al menos una línea de código
+0023 }
+0024 if ($x > 0) {
+0025   echo $x;
+Error 707. Indentación incorrecta dentro del if: se esperaban 4 espacios y hay 2
+0026 }
+0027 if ($x > 0) {
+0028       echo $x;
+Error 707. Indentación incorrecta dentro del if: se esperaban 4 espacios y hay 6
+0029 }
+0030 if ($x > 0) {
+0031     echo $x;
+0032 } else
+Error 711. Falta la llave de apertura '{' después de 'else'; la forma correcta es '} else {'
+0033     echo 0;
+0034 ?>
