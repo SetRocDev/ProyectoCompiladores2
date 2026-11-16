@@ -41,8 +41,8 @@ public class AnalizadorLexico {
 
     /** Operadores de dos o tres caracteres, del más largo al más corto. */
     private static final String[] OPERADORES_COMPUESTOS = {
-        "===", "!==", "==", "!=", "<>", "<=", ">=", "++", "--", "+=", "-=",
-        "*=", "/=", ".=", "&&", "||", "->", "=>", "::", "??"};
+        "===", "!==", "<=>", "**=", "??=", "==", "!=", "<>", "<=", ">=", "<<", ">>",
+        "++", "--", "+=", "-=", "*=", "/=", ".=", "%=", "**", "&&", "||", "->", "=>", "::", "??"};
 
     /**
      * @param fuente archivo leído

@@ -73,9 +73,10 @@ public final class Patrones {
 
     /** Operadores (el '=' solo se considera ASIGNACIÓN, decisión Q5). */
     public static final Set<String> OPERADORES = conjunto(
-            "===", "!==", "==", "!=", "<>", "<=", ">=", "<", ">",
-            "+", "-", "*", "/", "%", ".", "!", "?", ":",
-            "++", "--", "+=", "-=", "*=", "/=", ".=", "&&", "||", "->", "=>", "::", "??");
+            "===", "!==", "==", "!=", "<>", "<=", ">=", "<", ">", "<=>", "<<", ">>",
+            "+", "-", "*", "/", "%", "**", ".", "!", "?", ":",
+            "++", "--", "+=", "-=", "*=", "/=", ".=", "%=", "**=", "??=",
+            "&&", "||", "->", "=>", "::", "??");
 
     public static final String ASIGNACION = "=";
 
@@ -83,7 +84,8 @@ public final class Patrones {
      * Asignaciones compuestas: también le dan un valor a la variable de la
      * izquierda ($suma += 5 equivale a $suma = $suma + 5).
      */
-    public static final Set<String> ASIGNACIONES_COMPUESTAS = conjunto("+=", "-=", "*=", "/=", ".=");
+    public static final Set<String> ASIGNACIONES_COMPUESTAS = conjunto(
+            "+=", "-=", "*=", "/=", ".=", "%=", "**=", "??=");
 
     /**
      * @return true si el lexema le asigna un valor a la variable de su
