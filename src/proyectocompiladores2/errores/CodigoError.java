@@ -97,7 +97,10 @@ public enum CodigoError {
     ECHO_COMILLA_DOBLE_ABIERTA(803, "La cadena %s del echo no tiene la comilla doble (\") de cierre"),
     ECHO_COMILLA_SIMPLE_ABIERTA(804, "La cadena %s del echo no tiene la comilla simple (') de cierre"),
     ECHO_SIN_PUNTO_Y_COMA(805, "Falta el punto y coma ';' al final de la sentencia echo"),
-    ECHO_EXPRESION_INVALIDA(806, "Expresión inválida en el echo: %s");
+    ECHO_EXPRESION_INVALIDA(806, "Expresión inválida en el echo: %s"),
+
+    // ===== 9xx: Análisis semántico (R6 del Proyecto 2) =====
+    VARIABLE_NO_ASIGNADA(901, "La variable '%s' se usa pero no se le asignó un valor antes%s");
 
     private final int numero;
     private final String plantilla;

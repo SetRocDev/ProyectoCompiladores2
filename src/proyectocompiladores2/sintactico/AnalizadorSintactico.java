@@ -505,35 +505,13 @@ public class AnalizadorSintactico {
     /** @return "; ¿quiso decir 'while'?" si la palabra se parece a una estructura conocida. */
     private String sugerencia(String palabra) {
         for (String conocida : ESTRUCTURAS_CONOCIDAS) {
-            if (distancia(palabra, conocida) <= 2) {
+            if (Patrones.distanciaDeEdicion(palabra, conocida) <= 2) {
                 return "; ¿quiso decir '" + conocida + "'?";
             }
         }
         return "";
     }
 
-    /**
-     * Distancia de edición (Levenshtein): cuántas letras hay que cambiar,
-     * agregar o quitar para convertir una palabra en la otra.
-     */
-    private static int distancia(String a, String b) {
-        int[] anterior = new int[b.length() + 1];
-        int[] actual = new int[b.length() + 1];
-        for (int j = 0; j <= b.length(); j++) {
-            anterior[j] = j;
-        }
-        for (int i = 1; i <= a.length(); i++) {
-            actual[0] = i;
-            for (int j = 1; j <= b.length(); j++) {
-                int cambio = a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1;
-                actual[j] = Math.min(Math.min(actual[j - 1] + 1, anterior[j] + 1), anterior[j - 1] + cambio);
-            }
-            int[] temporal = anterior;
-            anterior = actual;
-            actual = temporal;
-        }
-        return anterior[b.length()];
-    }
 
     // =====================================================================
     //  Movimiento por los tokens (lo usan también ValidadorWhile, If y Echo)
