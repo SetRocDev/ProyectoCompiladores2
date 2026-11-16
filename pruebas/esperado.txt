@@ -29,7 +29,7 @@ P15_comentario_continua.php          402                 Despues de L8 se agrega
 P16_comentario_mal_formado.php       401                 L8:  / Arreglo de notas   (una sola barra)
 P17_cierre_misma_linea.php           306                 L53: ?> echo "hola";
 P18_cierre_espacios.php              308                 L53: "?>   "  (espacios despues de ?>)
-P19_errores_generales.php            501 502             L12: cadena sin comilla de cierre   L22: caracter @
+P19_errores_generales.php            501 803             L12: cadena sin cierre en un echo (803 en lugar de 502, T23)   L22: caracter @
 P20_id_sin_dolar.php                 206                 L5:  nombre_estudiante = "Carlos";   (sin el simbolo $)
 P21_id_guion_medio.php               203                 L6:  $cantidad-notas = 4;   (guion en medio del nombre)
 P22_apertura_sin_interrogacion.php   302                 L1:  <php   (falta el signo ?)
@@ -87,6 +87,17 @@ P69_else_sin_if.php                  714                 Despues de L46: un 'els
 P70_elseif_valido.php                -                   if / elseif / else if / else bien escritos (decision Q12)
 P71_elseif_errores.php               701 702 707         elseif sin parentesis y contenido del 'else if' con 6 espacios
 P72_if_ejemplos_pdf.php              701 702 703 702 713 707 707 711Los ejemplos del enunciado (permitidos y con error) uno tras otro
+P73_echo_parentesis.php              802                 L44: echo ($mensaje_final);
+P74_echo_sin_expresion.php           801                 L44: echo;
+P75_echo_comilla_doble_abierta.php   803                 L25: echo "Promedio: $promedio\n;   (sin la comilla doble de cierre)
+P76_echo_comilla_simple_abierta.php  804                 L44: echo 'Proceso finalizado;
+P77_echo_sin_punto_y_coma.php        805                 L44: echo $mensaje_final   (sin ;)
+P78_echo_operador_sin_valor.php      806                 L38: echo "Revisando nota: " . ;
+P79_echo_falta_operador.php          806                 L12: echo "Estudiante: " $nombre_estudiante;   (sin el punto)
+P80_echo_validos.php                 -                   echo con funciones (count, trim), coma, constante, signo, indices y en dos lineas
+P81_echo_comillas_mezcladas.php      803                 L44: echo "Hola';   (abre con doble y cierra con simple)
+P82_echo_ejemplos_pdf.php            802 801 803 804 805 Los ejemplos del enunciado (permitidos y con error) uno tras otro
+P83_echo_operadores_validos.php      -                   echo con comparaciones, &&, !=, operador ternario (? :) y ??
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola

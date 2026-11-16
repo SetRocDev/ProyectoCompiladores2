@@ -50,6 +50,28 @@ public class GestorErrores {
     }
 
     /**
+     * Quita un error ya registrado. Lo usa una etapa posterior cuando puede
+     * describir el mismo problema de forma más específica (un error, un
+     * mensaje). Por ejemplo, una cadena sin cerrar dentro de un echo se
+     * reporta como Error 803/804 en lugar del 502 general.
+     *
+     * @return true si el error existía y se quitó
+     */
+    public boolean quitar(CodigoError codigo, int linea, int columna) {
+        List<ErrorLexico> lista = erroresPorLinea.get(linea);
+        if (lista == null) {
+            return false;
+        }
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getCodigo() == codigo && lista.get(i).getColumna() == columna) {
+                lista.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param linea número de línea (desde 1)
      * @return errores de esa línea ordenados por columna (lista vacía si no hay)
      */

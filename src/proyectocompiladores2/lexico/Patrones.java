@@ -75,7 +75,7 @@ public final class Patrones {
     public static final Set<String> OPERADORES = conjunto(
             "===", "!==", "==", "!=", "<>", "<=", ">=", "<", ">",
             "+", "-", "*", "/", "%", ".", "!", "?", ":",
-            "++", "--", "+=", "-=", "*=", "/=", ".=", "&&", "||", "->", "=>", "::");
+            "++", "--", "+=", "-=", "*=", "/=", ".=", "&&", "||", "->", "=>", "::", "??");
 
     public static final String ASIGNACION = "=";
 

@@ -1,0 +1,15 @@
+0001 <?php
+0002 echo "Hola mundo";
+0003 echo ("Hola mundo");
+Error 802. La sentencia echo no debe usar paréntesis para agrupar lo que imprime; la forma correcta es 'echo "texto";'
+0004 echo;
+Error 801. La sentencia echo no tiene una expresión o cadena para imprimir
+0005 echo 'Texto literal';
+0006 echo "Hola mundo;
+Error 803. La cadena "Hola mundo; del echo no tiene la comilla doble (") de cierre
+0007 echo 'Texto;
+Error 804. La cadena 'Texto; del echo no tiene la comilla simple (') de cierre
+0008 echo "Hola";
+0009 echo "Hola"
+Error 805. Falta el punto y coma ';' al final de la sentencia echo
+0010 ?>

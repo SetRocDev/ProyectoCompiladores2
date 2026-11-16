@@ -138,6 +138,9 @@ public class AnalizadorSintactico {
             // Una instancia por while: los while anidados se analizan en forma recursiva
             return new ValidadorWhile().analizar(this);
         }
+        if (palabra.equals("echo") && token.es(TipoToken.PALABRA_RESERVADA)) {
+            return new ValidadorEcho().analizar(this);
+        }
         if (palabra.equals("if") && token.es(TipoToken.PALABRA_RESERVADA)) {
             return new ValidadorIf().analizar(this);
         }
