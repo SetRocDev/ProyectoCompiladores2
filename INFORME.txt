@@ -489,16 +489,19 @@ respuesta confirmó o corrigió cada punto):
     compara byte por byte con el esperado. Resultado: 118 de 118, con Java 8
     y Java 21.
   - Pruebas de "mutación tipo tutor": un programa cambió el código de
-    ejemplo de 620 formas distintas, como lo haría el tutor (cada error del
-    enunciado en cada lugar posible, variantes válidas de espacios y de
-    expresiones, y 400 combinaciones de dos errores), más 3000 combinaciones
-    de tres errores. En todas aparecieron exactamente los errores esperados
-    y ningún otro.
+    ejemplo de 625 formas distintas, como lo haría el tutor (cada error del
+    enunciado en cada lugar posible, variantes válidas de espacios, de
+    llaves y de expresiones, y 400 combinaciones de dos errores), más 3000
+    combinaciones de tres errores. También se probó el programa completo
+    escrito con cada llave y cada else en su propia línea. En todas
+    aparecieron exactamente los errores esperados y ningún otro.
   - Comparación con PHP real (versión 8.3): los casos "válidos" son código
     PHP correcto, y los errores de estructura (paréntesis, llaves, punto y
     coma, comillas) también los rechaza PHP. Los errores 901 coinciden con
-    los avisos "Undefined variable" de PHP al ejecutar los mismos casos.
-  - Robustez: 14 000 archivos con cambios al azar; el programa nunca se
+    los avisos "Undefined variable" de PHP al ejecutar los mismos casos
+    (72 de 72).
+  - Robustez: más de 35 000 archivos con cambios al azar (también sobre el
+    programa con las llaves en su propia línea); el programa nunca se
     detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
     numeración y los errores queda el .php original byte por byte (R2).
   - Compilación con Ant (lo mismo que hace "Clean and Build" de NetBeans).
@@ -507,7 +510,7 @@ respuesta confirmó o corrigió cada punto):
     Compiladores Pablo Cortés"), se compiló desde cero y se ejecutó solo con
     Java 8, desde otra carpeta de trabajo y con la configuración de idioma de
     Windows en español (Cp1252). Resultado: 118 de 118.
-  - Revisión del .jar: sus 42 clases están compiladas para Java 8 y cada
+  - Revisión del .jar: sus 39 clases están compiladas para Java 8 y cada
     método de Java que usan existe en Java 8 (se comprobó uno por uno).
 
 
