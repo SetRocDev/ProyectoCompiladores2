@@ -46,11 +46,14 @@ public final class ErrorCompilacion {
     }
 
     /**
-     * Formato del .log (Opción 1, el error va debajo de su línea):
-     * {@code Error 201. El identificador '$1x' no puede iniciar con un dígito...}
+     * Formato del .log (Opción 1, el error va debajo de su línea). La
+     * descripción empieza con el tipo de análisis que encontró el error, para
+     * distinguir las validaciones léxicas, sintácticas y semánticas:
+     * {@code Error 607. [Sintáctico] Indentación incorrecta dentro del while...}
+     * {@code Error 901. [Semántico] La variable '$x' se usa pero...}
      */
     @Override
     public String toString() {
-        return "Error " + codigo.getNumero() + ". " + descripcion;
+        return "Error " + codigo.getNumero() + ". [" + codigo.getEtapa() + "] " + descripcion;
     }
 }

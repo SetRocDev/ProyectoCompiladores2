@@ -21,6 +21,9 @@ public class TablaSimbolos {
             "$this", "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE",
             "$_SESSION", "$_REQUEST", "$_ENV", "$argv", "$argc");
 
+    /** Largo mínimo del nombre (sin el $) para sugerir una variable que difiere en una letra. */
+    private static final int LARGO_MINIMO_PARA_SUGERIR = 3;
+
     private final Map<String, Integer> asignadas = new LinkedHashMap<>();
 
     /** Registra que la variable recibió un valor en esa línea (se guarda la primera vez). */
@@ -43,6 +46,10 @@ public class TablaSimbolos {
         for (String asignada : asignadas.keySet()) {
             int distancia = asignada.equalsIgnoreCase(variable) ? 0
                     : Patrones.distanciaDeEdicion(asignada, variable);
+            // En nombres muy cortos una letra de diferencia no es una pista: $x y $i son variables distintas
+            if (distancia == 1 && Math.min(asignada.length(), variable.length()) - 1 < LARGO_MINIMO_PARA_SUGERIR) {
+                continue;
+            }
             if (distancia < mejorDistancia) {
                 mejor = asignada;
                 mejorDistancia = distancia;

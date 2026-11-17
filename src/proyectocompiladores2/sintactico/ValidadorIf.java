@@ -17,11 +17,16 @@ import proyectocompiladores2.sintactico.arbol.NodoIf;
  *
  * Los tres aspectos del enunciado:
  *   1. Estructura del if: paréntesis (701, 702), condición (703), llaves
- *      (704, 705; '{' en otra línea: 710).
- *   2. Bloque else, si existe: palabra else, llaves (711, 712; '{' en otra
- *      línea: 719), al menos una línea (713). Además, "} else {" va en una
- *      sola línea (718, decisión Q7) y un else sin if es error (714).
+ *      (704, 705).
+ *   2. Bloque else, si existe: palabra else, llaves (711, 712), al menos una
+ *      línea (713); un else sin if es error (714).
  *   3. Indentación en el if (707, 708, 709) y en el else (715, 716, 717).
+ *
+ * La '{' puede ir en la misma línea o sola en la siguiente, y el else puede
+ * ir junto a la '}' ("} else {") o en su propia línea: la profesora aclaró
+ * que eso no es error (decisión Q7). Lo que se revisa es que estén alineados
+ * con el if: la '{' sola en su línea (710, 719) y el else en su propia
+ * línea (718).
  *
  * La cabecera y el cuerpo del if los revisa la clase base,
  * ValidadorEstructuraControl, con los códigos de TipoBloque.IF; el bloque del
@@ -50,7 +55,7 @@ public class ValidadorIf extends ValidadorEstructuraControl {
     private NodoIf analizarIf(AnalizadorSintactico analizador, int anchoReferencia) {
         Token palabraIf = analizador.actual();
         String palabraClave = palabraIf.getLexema().toLowerCase(Locale.ROOT);
-        NodoIf nodo = new NodoIf(palabraIf.getLinea(), palabraClave);
+        NodoIf nodo = new NodoIf(palabraIf.getLinea());
         nodo.agregarHijo(analizarCabecera(analizador, TipoBloque.IF));
         nodo.agregarHijo(analizarCuerpo(analizador, TipoBloque.IF, palabraClave, palabraIf, anchoReferencia));
         if (!analizador.fin() && (AnalizadorSintactico.esPalabra(analizador.actual(), "else")
@@ -68,11 +73,10 @@ public class ValidadorIf extends ValidadorEstructuraControl {
         Token palabraElse = analizador.actual();
         NodoElse nodo = new NodoElse(palabraElse.getLinea());
 
-        // Decisión Q7: "} else {" en una sola línea
-        Token anterior = analizador.anterior();
-        if (AnalizadorSintactico.es(anterior, "}") && anterior.getLinea() != palabraElse.getLinea()) {
-            analizador.registrar(CodigoError.ELSE_EN_OTRA_LINEA, palabraElse, palabraElse.getLexema());
-        }
+        // El else en su propia línea va alineado con el if (decisión Q7)
+        analizador.getIndentacion().validarAlineacion(palabraElse, anchoReferencia,
+                CodigoError.ELSE_DESALINEADO, CodigoError.ELSE_TABULACION,
+                palabraElse.getLexema().toLowerCase(Locale.ROOT));
 
         if (AnalizadorSintactico.esPalabra(palabraElse, "elseif")) {
             nodo.agregarHijo(new ValidadorIf().analizarIf(analizador, anchoReferencia));
@@ -94,7 +98,8 @@ public class ValidadorIf extends ValidadorEstructuraControl {
         if (!analizador.fin() && AnalizadorSintactico.es(analizador.actual(), "{")) {
             Token llave = analizador.actual();
             if (llave.getLinea() != palabraElse.getLinea()) {
-                analizador.registrar(CodigoError.ELSE_LLAVE_EN_OTRA_LINEA, llave);
+                analizador.getIndentacion().validarAlineacion(llave, anchoReferencia,
+                        CodigoError.ELSE_APERTURA_DESALINEADA, CodigoError.ELSE_TABULACION);
             }
             return analizador.bloque(TipoBloque.ELSE, "else", palabraElse, anchoReferencia);
         }

@@ -19,10 +19,14 @@ import proyectocompiladores2.sintactico.arbol.NodoEcho;
  *               | '->' | '::' (acceso a un objeto o a una clase)
  *
  * Los tres aspectos del enunciado:
- *   1. Estructura: inicia con echo, sin paréntesis que agrupen lo que se
- *      imprime (802; los de una llamada a función sí se permiten, decisión
- *      Q10) y con una expresión o cadena válida (801 si no hay nada, 806 si
- *      a un operador le falta un valor o faltan operadores entre valores).
+ *   1. Estructura: inicia con echo, sin paréntesis (802) y con una expresión
+ *      o cadena válida (801 si no hay nada, 806 si a un operador le falta un
+ *      valor o faltan operadores entre valores). La profesora aclaró que el
+ *      enunciado no hace excepciones: son error los paréntesis que agrupan y
+ *      también los de una llamada a función o de una conversión (decisión
+ *      Q10). Los paréntesis dentro de una cadena ("Hola (Pablo)") son texto,
+ *      no código, y no generan el error. Se reporta un solo 802 por echo, y
+ *      la expresión se sigue revisando para encontrar los demás errores.
  *   2. Comillas: dobles o simples, siempre cerradas (803, 804). Este error
  *      reemplaza al 502 general de la etapa 4 para no repetir el mensaje, y
  *      no se reporta además la falta de ';' (la cadena abierta llega hasta el
@@ -55,6 +59,9 @@ public class ValidadorEcho {
     /** Palabras reservadas que son valores. */
     private static final Set<String> VALORES_RESERVADOS = Patrones.conjunto("true", "false", "null");
 
+    /** true cuando ya se reportó el 802 de este echo (se crea un validador por cada echo). */
+    private boolean parentesisReportado;
+
     /**
      * @param analizador el analizador sintáctico, con el token actual en 'echo'
      * @return el nodo del echo (sus tokens son los de la expresión)
@@ -65,7 +72,6 @@ public class ValidadorEcho {
         analizador.avanzar();
 
         boolean esperoValor = true;
-        boolean parentesisReportado = false;
         int profundidad = 0;
         Token ultimo = palabraEcho;
 
@@ -80,16 +86,14 @@ public class ValidadorEcho {
             }
             if (esperoValor) {
                 if (esConversion(analizador, token)) {
-                    // (int) $x: el paréntesis convierte el valor, no agrupa
+                    // (int) $x: también son paréntesis en el código del echo
+                    reportarParentesis(analizador, token);
                     ultimo = consumirConversion(analizador, nodo);
                     continue;
                 }
                 if (AnalizadorSintactico.es(token, "(")) {
-                    // Paréntesis que agrupan (no son de una llamada a función)
-                    if (!parentesisReportado) {
-                        analizador.registrar(CodigoError.ECHO_CON_PARENTESIS, token);
-                        parentesisReportado = true;
-                    }
+                    // Paréntesis que agrupan
+                    reportarParentesis(analizador, token);
                     profundidad++;
                 } else if (token.es(TipoToken.CADENA)) {
                     if (!Patrones.CADENA.matcher(token.getLexema()).matches()) {
@@ -209,6 +213,14 @@ public class ValidadorEcho {
         return lineaNueva && !continuaLaExpresion;
     }
 
+    /** Error 802, una sola vez por echo (un error, un mensaje). */
+    private void reportarParentesis(AnalizadorSintactico analizador, Token parentesis) {
+        if (!parentesisReportado) {
+            analizador.registrar(CodigoError.ECHO_CON_PARENTESIS, parentesis);
+            parentesisReportado = true;
+        }
+    }
+
     /** Error 803 o 804, en lugar del 502 general que ya registró la etapa 4. */
     private void reportarComillaAbierta(AnalizadorSintactico analizador, Token cadena) {
         analizador.getErrores().quitar(CodigoError.CADENA_SIN_CERRAR, cadena.getLinea(), cadena.getColumna());
@@ -284,6 +296,10 @@ public class ValidadorEcho {
     /** Toma los argumentos de una función o el índice de un arreglo, con sus paréntesis o corchetes. */
     private Token consumirGrupo(AnalizadorSintactico analizador, NodoEcho nodo) {
         Token apertura = analizador.actual();
+        if (AnalizadorSintactico.es(apertura, "(")) {
+            // count($notas): los paréntesis de una función también son error en el echo
+            reportarParentesis(analizador, apertura);
+        }
         String cierre = AnalizadorSintactico.es(apertura, "(") ? ")" : "]";
         nodo.agregarToken(apertura);
         analizador.avanzar();
@@ -309,6 +325,10 @@ public class ValidadorEcho {
                 profundidad++;
             } else if (AnalizadorSintactico.es(token, cierre)) {
                 profundidad--;
+            }
+            if (AnalizadorSintactico.es(token, "(")) {
+                // $notas[count($notas) - 1]: también es un paréntesis en el código del echo
+                reportarParentesis(analizador, token);
             }
             nodo.agregarToken(token);
             ultimo = token;

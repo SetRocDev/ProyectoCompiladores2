@@ -11,10 +11,11 @@ import proyectocompiladores2.sintactico.arbol.NodoWhile;
  * Los tres aspectos del enunciado:
  *   1. Estructura sintáctica: palabra reservada while, paréntesis de
  *      apertura (601) y cierre (602), condición presente (603), llave de
- *      apertura (604, en la misma línea: 610) y de cierre (605).
+ *      apertura (604) y de cierre (605).
  *   2. Contenido del bloque: al menos una línea de código (606).
  *   3. Indentación: 4 espacios por nivel (607), sin tabulaciones (608) y la
- *      '}' alineada con el while (609).
+ *      '}' alineada con el while (609). La '{' puede ir sola en la línea
+ *      siguiente (aclaración de la profesora), pero alineada con el while (610).
  *
  * La cabecera y el cuerpo los revisa la clase base, ValidadorEstructuraControl,
  * con los códigos 6xx de TipoBloque.WHILE.

@@ -5,16 +5,17 @@ import proyectocompiladores2.errores.CodigoError;
 /**
  * Tipos de bloque { } que reconoce el análisis sintáctico y el código de
  * error que corresponde a cada regla en cada tipo (incluidas las de la
- * cabecera "palabra (condición)" del while, del if y del for).
+ * cabecera "palabra (condición)" del while y del if).
  *
  * Así las reglas comunes a todos los bloques (llaves, bloque vacío,
  * indentación) se programan una sola vez en el AnalizadorSintactico y en el
  * ValidadorIndentacion, y cada estructura reporta con sus propios números de
- * error (6xx el while y el for, 7xx el if...).
+ * error (6xx el while, 7xx el if...).
  *
  * Un código null significa que esa regla no se valida para ese tipo de
- * bloque. Por ejemplo, el enunciado no pide validar foreach ni function
- * (decisión Q12): su bloque es GENERICO, solo se exige que cierre su llave.
+ * bloque. Por ejemplo, el enunciado no pide validar for, foreach ni function
+ * (decisión Q12, confirmada por la profesora): su bloque es GENERICO, solo
+ * se exige que cierre su llave.
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -23,30 +24,24 @@ public enum TipoBloque {
     /** Bloque del while (R3): errores 6xx. */
     WHILE(CodigoError.WHILE_FALTA_PARENTESIS_APERTURA, CodigoError.WHILE_FALTA_PARENTESIS_CIERRE,
             CodigoError.WHILE_CONDICION_VACIA,
-            CodigoError.WHILE_FALTA_LLAVE_APERTURA, CodigoError.WHILE_LLAVE_EN_OTRA_LINEA,
+            CodigoError.WHILE_FALTA_LLAVE_APERTURA, CodigoError.WHILE_APERTURA_DESALINEADA,
             CodigoError.WHILE_FALTA_LLAVE_CIERRE, CodigoError.WHILE_BLOQUE_VACIO,
             CodigoError.WHILE_INDENTACION, CodigoError.WHILE_TABULACION, CodigoError.WHILE_CIERRE_DESALINEADO),
-
-    /** Bloque del for: errores 611-620 (la rúbrica menciona los errores del for). */
-    FOR(CodigoError.FOR_FALTA_PARENTESIS_APERTURA, CodigoError.FOR_FALTA_PARENTESIS_CIERRE, null,
-            CodigoError.FOR_FALTA_LLAVE_APERTURA, CodigoError.FOR_LLAVE_EN_OTRA_LINEA,
-            CodigoError.FOR_FALTA_LLAVE_CIERRE, CodigoError.FOR_BLOQUE_VACIO,
-            CodigoError.FOR_INDENTACION, CodigoError.FOR_TABULACION, CodigoError.FOR_CIERRE_DESALINEADO),
 
     /** Bloque del if y del elseif (R4): errores 701-710. */
     IF(CodigoError.IF_FALTA_PARENTESIS_APERTURA, CodigoError.IF_FALTA_PARENTESIS_CIERRE,
             CodigoError.IF_CONDICION_VACIA,
-            CodigoError.IF_FALTA_LLAVE_APERTURA, CodigoError.IF_LLAVE_EN_OTRA_LINEA,
+            CodigoError.IF_FALTA_LLAVE_APERTURA, CodigoError.IF_APERTURA_DESALINEADA,
             CodigoError.IF_FALTA_LLAVE_CIERRE, CodigoError.IF_BLOQUE_VACIO,
             CodigoError.IF_INDENTACION, CodigoError.IF_TABULACION, CodigoError.IF_CIERRE_DESALINEADO),
 
     /** Bloque del else (R4): errores 711-719. El else no tiene condición. */
     ELSE(null, null, null,
-            CodigoError.ELSE_FALTA_LLAVE_APERTURA, CodigoError.ELSE_LLAVE_EN_OTRA_LINEA,
+            CodigoError.ELSE_FALTA_LLAVE_APERTURA, CodigoError.ELSE_APERTURA_DESALINEADA,
             CodigoError.ELSE_FALTA_LLAVE_CIERRE, CodigoError.ELSE_BLOQUE_VACIO,
             CodigoError.ELSE_INDENTACION, CodigoError.ELSE_TABULACION, CodigoError.ELSE_CIERRE_DESALINEADO),
 
-    /** foreach, function, switch, class... y bloques { } sueltos. */
+    /** for, foreach, function, switch, class... y bloques { } sueltos. */
     GENERICO(null, null, null, null, null, CodigoError.BLOQUE_SIN_CIERRE, null, null, null, null);
 
     private final CodigoError faltaParentesisApertura;
@@ -54,7 +49,7 @@ public enum TipoBloque {
     private final CodigoError condicionVacia;
 
     private final CodigoError faltaApertura;
-    private final CodigoError aperturaEnOtraLinea;
+    private final CodigoError aperturaDesalineada;
     private final CodigoError faltaCierre;
     private final CodigoError bloqueVacio;
     private final CodigoError indentacion;
@@ -63,14 +58,14 @@ public enum TipoBloque {
 
     TipoBloque(CodigoError faltaParentesisApertura, CodigoError faltaParentesisCierre,
                CodigoError condicionVacia,
-               CodigoError faltaApertura, CodigoError aperturaEnOtraLinea, CodigoError faltaCierre,
+               CodigoError faltaApertura, CodigoError aperturaDesalineada, CodigoError faltaCierre,
                CodigoError bloqueVacio, CodigoError indentacion, CodigoError tabulacion,
                CodigoError cierreDesalineado) {
         this.faltaParentesisApertura = faltaParentesisApertura;
         this.faltaParentesisCierre = faltaParentesisCierre;
         this.condicionVacia = condicionVacia;
         this.faltaApertura = faltaApertura;
-        this.aperturaEnOtraLinea = aperturaEnOtraLinea;
+        this.aperturaDesalineada = aperturaDesalineada;
         this.faltaCierre = faltaCierre;
         this.bloqueVacio = bloqueVacio;
         this.indentacion = indentacion;
@@ -78,7 +73,7 @@ public enum TipoBloque {
         this.cierreDesalineado = cierreDesalineado;
     }
 
-    /** Error cuando falta el '(' después de la palabra clave (while, if, for). */
+    /** Error cuando falta el '(' después de la palabra clave (while, if). */
     public CodigoError getFaltaParentesisApertura() {
         return faltaParentesisApertura;
     }
@@ -98,9 +93,13 @@ public enum TipoBloque {
         return faltaApertura;
     }
 
-    /** Error cuando la '{' está en la línea siguiente y no en la de la cabecera (decisión Q7). */
-    public CodigoError getAperturaEnOtraLinea() {
-        return aperturaEnOtraLinea;
+    /**
+     * Error cuando la '{' está sola en su propia línea y no está alineada con
+     * la estructura (decisión Q7: puede ir en la línea siguiente, pero
+     * respetando la indentación). Su descripción recibe (esperados, encontrados).
+     */
+    public CodigoError getAperturaDesalineada() {
+        return aperturaDesalineada;
     }
 
     /** Error cuando el bloque no tiene '}'. Su descripción recibe (palabra clave, línea de inicio). */

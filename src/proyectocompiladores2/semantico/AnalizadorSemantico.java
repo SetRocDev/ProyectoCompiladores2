@@ -13,11 +13,7 @@ import proyectocompiladores2.lexico.Patrones;
 import proyectocompiladores2.lexico.TipoToken;
 import proyectocompiladores2.lexico.Token;
 import proyectocompiladores2.sintactico.arbol.Nodo;
-import proyectocompiladores2.sintactico.arbol.NodoCabeceraFor;
-import proyectocompiladores2.sintactico.arbol.NodoCondicion;
 import proyectocompiladores2.sintactico.arbol.NodoEstructura;
-import proyectocompiladores2.sintactico.arbol.NodoIf;
-import proyectocompiladores2.sintactico.arbol.NodoWhile;
 
 /**
  * ===== ETAPA 6: ANÁLISIS SEMÁNTICO =====
@@ -32,15 +28,18 @@ import proyectocompiladores2.sintactico.arbol.NodoWhile;
  *         dentro de cadenas con comillas dobles ("Promedio: $promedio"),
  *         porque PHP las reemplaza por su valor. Si existe una variable
  *         parecida se sugiere ($Total → ¿quiso decir $total?).
- *   902 - Coherencia de las instrucciones: la condición de un while o un if
- *         que ASIGNA un valor fijo ($x = 5) en lugar de compararlo ($x == 5)
- *         siempre da el mismo resultado; casi siempre es un '==' mal escrito.
- *   903 - Consistencia del programa: una división (o módulo) entre el
+ *   902 - Consistencia del programa: una división (o módulo) entre el
  *         número 0 escrito en el código detiene el programa en PHP 8.
  *
- * Una regla de "posible ciclo infinito" se descartó: el enunciado muestra
- * "while ($x < 10) { echo $x; }" como ejemplo PERMITIDO y esa regla lo
- * habría marcado como error.
+ * La profesora confirmó este alcance. No se revisa si la condición de un
+ * while o un if compara o asigna: el enunciado indica que la condición se
+ * considera correcta y solo se valida que exista. Tampoco se avisa de
+ * "posibles ciclos infinitos": el enunciado muestra
+ * "while ($x < 10) { echo $x; }" como ejemplo PERMITIDO.
+ *
+ * Las variables de una condición sí se revisan (901): la profesora aclaró
+ * que un ejemplo puede estar bien escrito (sintáctico) y aun así usar una
+ * variable sin valor (semántico); en el .log cada error indica su tipo.
  *
  * Para no repetir mensajes, cada variable se reporta una sola vez (en su
  * primer uso), y no se reporta si su asignación tiene un error léxico (por
@@ -49,12 +48,6 @@ import proyectocompiladores2.sintactico.arbol.NodoWhile;
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
 public class AnalizadorSemantico {
-
-    /** Valores fijos que no son números ni cadenas. */
-    private static final Set<String> VALORES_FIJOS = Patrones.conjunto("true", "false", "null");
-
-    /** Lo que puede seguir al valor en una condición: el final, ')' o un operador lógico. */
-    private static final Set<String> FIN_DE_CONDICION = Patrones.conjunto(")", "&&", "||", "and", "or", "xor");
 
     /** Variable dentro de una cadena con comillas dobles (sin contar "\$"). */
     private static final Pattern VARIABLE_EN_CADENA = Pattern.compile("(?<!\\\\)\\$[A-Za-z_][A-Za-z0-9_]*");
@@ -88,9 +81,6 @@ public class AnalizadorSemantico {
     /** Recorre el árbol en el orden del programa: primero los tokens del nodo y luego sus hijos. */
     private void visitar(Nodo nodo) {
         revisarDivisionEntreCero(nodo.getTokens());
-        if (nodo instanceof NodoWhile || nodo instanceof NodoIf) {
-            revisarAsignacionEnCondicion(nodo);
-        }
         if (nodo instanceof NodoEstructura && esDeclaracionDeFuncion((NodoEstructura) nodo)) {
             // function nombre($a, $b): los parámetros reciben su valor al llamar la función
             for (Token token : nodo.getTokens()) {
@@ -99,12 +89,12 @@ public class AnalizadorSemantico {
                 }
             }
         } else {
-            // Sentencias, echo, condiciones y la cabecera del for. La cabecera
-            // tiene tres partes separadas por ';', y cada parte puede tener
+            // Sentencias, echo, condiciones y cabeceras (la de un for, por
+            // ejemplo, tiene tres partes separadas por ';', y cada parte puede tener
             // varias expresiones separadas por ',' (for ($i = 0, $j = 9; ...)).
             // En una condición también puede haber una asignación:
             // en "while ($fila = leer())" $fila recibe un valor, no se usa.
-            boolean separarComas = nodo instanceof NodoCabeceraFor;
+            boolean separarComas = esCabeceraDeFor(nodo);
             for (List<Token> parte : separarEnPartes(nodo.getTokens(), separarComas)) {
                 revisarSentencia(parte);
             }
@@ -171,57 +161,7 @@ public class AnalizadorSemantico {
     }
 
 
-    /**
-     * 902: "while ($x = 5)" o "if ($estado = true)": la condición le asigna
-     * un valor fijo a la variable, así que siempre da el mismo resultado.
-     * Solo se reporta con un valor fijo a la derecha (número, texto, true,
-     * false o null); "while ($fila = siguiente())" es una forma común de PHP.
-     */
-    private void revisarAsignacionEnCondicion(Nodo estructura) {
-        if (estructura.getHijos().isEmpty() || !(estructura.getHijos().get(0) instanceof NodoCondicion)) {
-            return;
-        }
-        List<Token> condicion = estructura.getHijos().get(0).getTokens();
-        String nombre = estructura instanceof NodoWhile ? "while" : ((NodoIf) estructura).getPalabraClave();
-        for (int i = 1; i + 1 < condicion.size(); i++) {
-            Token igual = condicion.get(i);
-            Token valor = condicion.get(i + 1);
-            boolean valorTermina = i + 2 >= condicion.size()
-                    || FIN_DE_CONDICION.contains(condicion.get(i + 2).getLexema().toLowerCase(Locale.ROOT));
-            if (igual.es(TipoToken.ASIGNACION) && esValorFijo(valor) && valorTermina) {
-                errores.registrar(CodigoError.ASIGNACION_EN_CONDICION, igual.getLinea(), igual.getColumna(),
-                        nombre, ladoIzquierdo(condicion, i), valor.getLexema());
-            }
-        }
-    }
-
-    /**
-     * @param igual posición del '='
-     * @return lo que está a la izquierda del '=': la variable con sus índices
-     *         ("$notas[0]"), para mostrarla completa en el mensaje
-     */
-    private String ladoIzquierdo(List<Token> tokens, int igual) {
-        int inicio = igual - 1;
-        while (inicio > 0 && tokens.get(inicio).getLexema().equals("]")) {
-            int profundidad = 0;
-            do {
-                String lexema = tokens.get(inicio).getLexema();
-                if (lexema.equals("]")) {
-                    profundidad++;
-                } else if (lexema.equals("[")) {
-                    profundidad--;
-                }
-                inicio--;
-            } while (inicio > 0 && profundidad > 0);
-        }
-        StringBuilder texto = new StringBuilder();
-        for (int i = inicio; i < igual; i++) {
-            texto.append(tokens.get(i).getLexema());
-        }
-        return texto.toString();
-    }
-
-    /** 903: "/ 0", "% 0", "/= 0" o "%= 0" con el número 0 escrito en el código. */
+    /** 902: "/ 0", "% 0", "/= 0" o "%= 0" con el número 0 escrito en el código. */
     private void revisarDivisionEntreCero(List<Token> tokens) {
         for (int i = 0; i + 1 < tokens.size(); i++) {
             String operador = tokens.get(i).getLexema();
@@ -233,11 +173,6 @@ public class AnalizadorSemantico {
                         tokens.get(i).getColumna(), operador);
             }
         }
-    }
-
-    private boolean esValorFijo(Token token) {
-        return token.es(TipoToken.NUMERO) || token.es(TipoToken.CADENA)
-                || VALORES_FIJOS.contains(token.getLexema().toLowerCase(Locale.ROOT));
     }
 
     /** @return true si el número es cero: 0, 00, 0.0 */
@@ -374,6 +309,11 @@ public class AnalizadorSemantico {
         return token.es(TipoToken.CADENA) && token.getLexema().startsWith("\"");
     }
 
+    /** La cabecera de un for: "($i = 0, $j = 9; ...; ...)". */
+    private boolean esCabeceraDeFor(Nodo nodo) {
+        return nodo instanceof NodoEstructura && ((NodoEstructura) nodo).getPalabraClave().equals("for");
+    }
+
     private boolean esDeclaracionDeFuncion(NodoEstructura estructura) {
         String palabra = estructura.getPalabraClave();
         return palabra.equals("function") || palabra.equals("catch");
@@ -382,12 +322,14 @@ public class AnalizadorSemantico {
     /**
      * Separa los tokens de un nodo en partes por ';' (la cabecera de un for
      * tiene tres) y, si se indica, también por ',' fuera de paréntesis y
-     * corchetes (en "array(1, 2)" la coma no separa expresiones).
+     * corchetes (en "array(1, 2)" la coma no separa expresiones). La cabecera
+     * de un for empieza con su '(': lo que está dentro de ese primer
+     * paréntesis cuenta como nivel 0.
      */
     private List<List<Token>> separarEnPartes(List<Token> tokens, boolean tambienPorComas) {
         List<List<Token>> partes = new ArrayList<>();
         List<Token> actual = new ArrayList<>();
-        int profundidad = 0;
+        int profundidad = tambienPorComas && !tokens.isEmpty() && tokens.get(0).getLexema().equals("(") ? -1 : 0;
         for (Token token : tokens) {
             String lexema = token.getLexema();
             if (lexema.equals("(") || lexema.equals("[")) {
