@@ -38,6 +38,7 @@ public abstract class ValidadorEstructuraControl {
      */
     protected NodoCondicion analizarCabecera(AnalizadorSintactico analizador, TipoBloque reglas) {
         Token palabraClave = analizador.actual();
+        String nombre = AnalizadorSintactico.nombreDeEstructura(palabraClave); // "iff" -> "if"
         analizador.avanzar();
         NodoCondicion condicion = new NodoCondicion(palabraClave.getLinea());
         ultimoDeCabecera = palabraClave;
@@ -47,7 +48,7 @@ public abstract class ValidadorEstructuraControl {
             ultimoDeCabecera = analizador.actual();
             analizador.avanzar();
         } else {
-            analizador.registrar(reglas.getFaltaParentesisApertura(), palabraClave, palabraClave.getLexema());
+            analizador.registrar(reglas.getFaltaParentesisApertura(), palabraClave, nombre);
         }
 
         // La condición: hasta el ')' que cierra (contando paréntesis internos)
@@ -77,10 +78,10 @@ public abstract class ValidadorEstructuraControl {
         }
 
         if (!tieneCierre) {
-            analizador.registrar(reglas.getFaltaParentesisCierre(), ultimoDeCabecera, palabraClave.getLexema());
+            analizador.registrar(reglas.getFaltaParentesisCierre(), ultimoDeCabecera, nombre);
         }
         if (condicion.getTokens().isEmpty()) {
-            analizador.registrar(reglas.getCondicionVacia(), palabraClave, palabraClave.getLexema());
+            analizador.registrar(reglas.getCondicionVacia(), palabraClave, nombre);
         }
         return condicion;
     }

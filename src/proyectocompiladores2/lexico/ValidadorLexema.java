@@ -29,16 +29,18 @@ public class ValidadorLexema {
     private final ValidadorComentarios comentarios = new ValidadorComentarios();
 
     /**
-     * @param tokens  tokens ya clasificados (etapa 2), incluidos los comentarios
-     * @param flujo   los mismos tokens sin comentarios
+     * @param tokens  todos los tokens ya clasificados (etapa 2), incluidos los comentarios
+     * @param codigo  los tokens del código PHP (de '<?php' a '?>'; ver ValidadorEtiquetas.codigoPhp)
+     * @param flujo   los tokens del código PHP sin comentarios
      * @param fuente  archivo original (las reglas de etiquetas miran líneas completas)
      * @param errores donde se registran los errores encontrados
      */
-    public void validar(List<Token> tokens, FlujoTokens flujo, ArchivoFuente fuente, GestorErrores errores) {
-        validarReglasGenerales(tokens, errores);
+    public void validar(List<Token> tokens, List<Token> codigo, FlujoTokens flujo, ArchivoFuente fuente,
+                        GestorErrores errores) {
+        validarReglasGenerales(codigo, errores);
         identificadores.validar(flujo, errores);            // R3
-        etiquetas.validar(tokens, fuente, errores);         // R4
-        comentarios.validar(tokens, flujo, errores);        // R5
+        etiquetas.validar(tokens, fuente, errores);         // R4 (mira todo el archivo)
+        comentarios.validar(codigo, flujo, errores);        // R5
     }
 
     /** Cadenas sin cerrar (502) y caracteres que no pertenecen al lenguaje (501). */

@@ -54,7 +54,7 @@ public class ValidadorIf extends ValidadorEstructuraControl {
      */
     private NodoIf analizarIf(AnalizadorSintactico analizador, int anchoReferencia) {
         Token palabraIf = analizador.actual();
-        String palabraClave = palabraIf.getLexema().toLowerCase(Locale.ROOT);
+        String palabraClave = AnalizadorSintactico.nombreDeEstructura(palabraIf).toLowerCase(Locale.ROOT);
         NodoIf nodo = new NodoIf(palabraIf.getLinea());
         nodo.agregarHijo(analizarCabecera(analizador, TipoBloque.IF));
         nodo.agregarHijo(analizarCuerpo(analizador, TipoBloque.IF, palabraClave, palabraIf, anchoReferencia));

@@ -19,6 +19,7 @@ import proyectocompiladores2.semantico.AnalizadorSemantico;
 import proyectocompiladores2.sintactico.AnalizadorSintactico;
 import proyectocompiladores2.sintactico.FlujoTokens;
 import proyectocompiladores2.sintactico.arbol.NodoPrograma;
+import proyectocompiladores2.validacion.ValidadorEtiquetas;
 
 /**
  * Punto de entrada del analizador de PHP (léxico, sintáctico y semántico).
@@ -112,9 +113,12 @@ public class Main {
             // Etapa 2: clasificación (usa los patrones de la etapa 3)
             new ClasificadorTokens().clasificar(tokens);
 
-            // Etapa 4: validación de cada lexema según las reglas definidas
-            FlujoTokens flujo = new FlujoTokens(tokens);
-            validador.validar(tokens, flujo, fuente, errores);
+            // Etapa 4: validación de cada lexema según las reglas definidas. Lo que
+            // está fuera de las etiquetas <?php y ?> no es código: solo lo
+            // revisan las reglas de etiquetas (301, 306, 307)
+            List<Token> codigo = ValidadorEtiquetas.codigoPhp(tokens);
+            FlujoTokens flujo = new FlujoTokens(codigo);
+            validador.validar(tokens, codigo, flujo, fuente, errores);
 
             // Etapa 5: análisis sintáctico (orden de los tokens según la gramática)
             arbol = new AnalizadorSintactico(flujo, fuente, errores).analizar();
