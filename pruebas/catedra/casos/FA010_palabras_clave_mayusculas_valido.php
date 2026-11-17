@@ -1,0 +1,53 @@
+<?php
+// Sistema simple de gestión de notas
+
+# Datos del estudiante
+$nombre_estudiante = "Carlos";
+$cantidad_notas = 4;
+
+// Arreglo de notas
+$notas = array(85, 90, 78, 92);
+
+// Mostrar información inicial
+ECHO "Estudiante: $nombre_estudiante\n";
+ECHO "Cantidad de notas: $cantidad_notas\n";
+
+// Calcular promedio usando for
+$suma_notas = 0;
+
+FOR ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
+    $suma_notas = $suma_notas + $notas[$i];
+}
+
+$promedio = $suma_notas / $cantidad_notas;
+
+// Mostrar promedio
+ECHO "Promedio: $promedio\n";
+
+// Evaluar estado del estudiante
+IF ($promedio >= 70) {
+    ECHO "Estado: Aprobado\n";
+} ELSE {
+    ECHO "Estado: Reprobado\n";
+}
+
+// Contador de revisión usando while
+$contador_revision = 0;
+
+WHILE ($contador_revision < $cantidad_notas) {
+    ECHO "Revisando nota: " . $notas[$contador_revision] . "\n";
+    $contador_revision = $contador_revision + 1;
+}
+
+// Información adicional
+$mensaje_final = "Proceso finalizado correctamente";
+ECHO $mensaje_final;
+
+// Diferenciación de identificadores
+$total = 100;
+$Total = 200;
+
+$resultado = $total + $Total;
+ECHO "\nResultado final: $resultado\n";
+
+?>

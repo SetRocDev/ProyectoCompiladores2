@@ -12,6 +12,15 @@ Todo de una vez (Linux, macOS o Git Bash):
 
 Cada herramienta por separado (desde la carpeta del proyecto):
 
+  variantes_catedra.py  Variantes del codigo de la catedra (recursos/CodigoProyecto.php):
+                        cada error del enunciado en cada linea donde puede ir, formas
+                        validas y combinaciones; cada variante declara los errores
+                        EXACTOS esperados. Genera la carpeta pruebas/catedra (ver su
+                        LEEME.txt) y prueba combinaciones al azar de 2 a 5 errores.
+      python3 pruebas/herramientas/variantes_catedra.py dist/ProyectoCompiladores2.jar --carpeta pruebas/catedra
+      python3 pruebas/herramientas/variantes_catedra.py dist/ProyectoCompiladores2.jar --individuales CARPETA
+      python3 pruebas/herramientas/variantes_catedra.py dist/ProyectoCompiladores2.jar --masivo 10000 3 1 CARPETA
+
   mutaciones_tutor.py   Cambia el código de la cátedra como lo haría el tutor:
                         cada error del enunciado en cada lugar posible, formas
                         válidas que no deben dar error, y combinaciones de 2 o 3

@@ -1,0 +1,56 @@
+PRUEBAS CON EL CODIGO DE LA CATEDRA
+===============================================================================
+Cada archivo de "casos" es una copia de recursos/CodigoProyecto.php (el codigo
+que entrego la universidad) con uno o varios cambios, y "esperados" tiene el
+-errores.log EXACTO que el programa debe generar para ese archivo (la copia
+numerada del .php con cada error debajo de su linea). Como en el Proyecto 1,
+esperado.txt resume, para cada archivo, que se cambio y que errores se esperan
+("-" = ningun error: formas validas que no deben marcarse).
+
+Como correrlas (compara cada .log BYTE POR BYTE con su esperado):
+    Windows:                pruebas\catedra\ejecutar-catedra.bat
+    Linux, macOS, Git Bash: pruebas/catedra/ejecutar-catedra.sh   (-v muestra diferencias)
+
+Tambien se puede probar a mano: copiar el .jar y uno de los .php de "casos" a
+una misma carpeta, ejecutar  java -jar ProyectoCompiladores2.jar  y comparar el
+-errores.log generado con el de "esperados".
+
+Familias (616 archivos; las lineas L5, L28... son las del codigo original):
+  ID  (157)  Identificadores (2xx): en cada asignacion, digito o simbolo despues
+             del $, caracter invalido, sin $, $ solo, palabras reservadas,
+             asignaciones compuestas y en varias lineas.
+  ET   (26)  Etiquetas <?php y ?> (3xx): espacios, texto o lineas antes de
+             <?php, mal escritas, faltantes, codigo, texto o lineas en
+             blanco despues de ?>, y formas validas.
+  CO   (53)  Comentarios (4xx): en cada comentario, una sola barra (401), texto
+             suelto sin marca (402) y formas validas (#, ///, al final de una
+             linea, dentro de una cadena, palabras clave dentro).
+  WH   (64)  while (6xx): cada error del 601 al 610, espacios, llave en la
+             linea siguiente (alineada o no), formas validas, y whlie (504)
+             solo o junto con otro error de la cabecera o del bloque.
+  IF   (66)  if / elseif / else (7xx): cada error del 701 al 719, else separado
+             de la llave, formas validas, e iff, elsif y els (504) solos o
+             junto con otro error.
+  EC   (89)  echo (8xx): en cada uno de los echo, sin ; (805), parentesis para
+             agrupar, funciones o conversiones (802), comillas sin cerrar,
+             eco (504), ECHO en mayusculas y parentesis dentro de una cadena
+             (validos).
+  SE   (39)  Semantico (9xx): variable usada antes de asignarla o con otro
+             nombre o mayusculas (901), division entre el numero 0 (902) y
+             funciones anonimas (sus parametros si tienen valor).
+  FO   (10)  for: no se valida su contenido; solo que cierre su llave (505) y
+             fro (504).
+  FA   (12)  Archivo completo: saltos de linea LF, CR o mezclados, BOM, ANSI,
+             tabulaciones o sangria de 2 espacios en los bloques, estilo
+             Allman, palabras en mayusculas, archivo vacio, solo etiquetas.
+  CB   (60)  Combinaciones de 2 errores de familias distintas.
+  CC   (40)  Combinaciones de 3 errores de familias distintas.
+
+Esta carpeta se genera con (solo se escribe si todas las variantes dan
+exactamente sus errores esperados):
+    python3 pruebas/herramientas/variantes_catedra.py dist/ProyectoCompiladores2.jar --carpeta pruebas/catedra
+La misma herramienta prueba ademas combinaciones al azar de 2 a 5 errores con
+los errores exactos esperados (90 000 en total, ver la seccion 13 del INFORME):
+    python3 pruebas/herramientas/variantes_catedra.py dist/ProyectoCompiladores2.jar --masivo 10000 2 1 CARPETA
+
+Uso de IA: casos generados con apoyo de Claude Code y revisados por el estudiante.
