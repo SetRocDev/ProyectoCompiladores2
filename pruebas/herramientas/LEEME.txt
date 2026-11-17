@@ -1,0 +1,43 @@
+HERRAMIENTAS DE VERIFICACION (opcionales)
+===============================================================================
+Estas herramientas NO son parte del programa: el analizador es solo Java y no
+las necesita para funcionar. Sirven para repetir las pruebas extensas que se
+describen en la sección 13 del INFORME. Necesitan Python 3; el contraste con
+PHP real necesita además el comando php.
+
+Para la prueba normal en Windows basta con  pruebas\ejecutar-pruebas.bat .
+
+Todo de una vez (Linux, macOS o Git Bash):
+    pruebas/herramientas/bateria-completa.sh
+
+Cada herramienta por separado (desde la carpeta del proyecto):
+
+  mutaciones_tutor.py   Cambia el código de la cátedra como lo haría el tutor:
+                        cada error del enunciado en cada lugar posible, formas
+                        válidas que no deben dar error, y combinaciones de 2 o 3
+                        errores. Cada caso declara los errores EXACTOS esperados.
+      python3 pruebas/herramientas/mutaciones_tutor.py dist/ProyectoCompiladores2.jar recursos/CodigoProyecto.php CARPETA
+      python3 pruebas/herramientas/mutaciones_tutor.py dist/ProyectoCompiladores2.jar recursos/CodigoProyecto.php CARPETA 3 600 11
+
+  extremas.py           Casos límite: estructuras anidadas (base_anidada.php),
+                        estilos de llaves, reglas del Proyecto 1 y 2, archivos
+                        vacíos, de 20 000 líneas, con 60 niveles de anidamiento,
+                        con una línea de 200 000 caracteres o con bytes al azar.
+      python3 pruebas/herramientas/extremas.py dist/ProyectoCompiladores2.jar CARPETA
+
+  fuzz.py               Genera archivos con cambios al azar y revisa que el
+                        programa nunca falle y siempre genere el .log.
+      python3 pruebas/herramientas/fuzz.py SEMILLA CANTIDAD dist/ProyectoCompiladores2.jar recursos/CodigoProyecto.php CARPETA
+
+  verificar_r2.py       Comprueba R2: al quitar la numeración y los renglones de
+                        error de cada .log, queda el .php original byte por byte.
+      python3 pruebas/herramientas/verificar_r2.py CARPETA/*.php
+
+  contraste_php.py      Contraste con PHP 8: los casos sin errores son PHP válido
+                        y el Error 901 coincide con los avisos "Undefined variable".
+      python3 pruebas/herramientas/contraste_php.py
+
+  base_anidada.php      Programa de prueba con while, if, elseif y else anidados
+                        (sin errores), que usan extremas.py y fuzz.py.
+
+Uso de IA: herramientas generadas con apoyo de Claude Code y revisadas por el estudiante.
