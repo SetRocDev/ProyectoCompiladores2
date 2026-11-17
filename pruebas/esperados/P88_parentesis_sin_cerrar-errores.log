@@ -35,7 +35,7 @@
 0035 $contador_revision = 0;
 0036 
 0037 while () {
-Error 603. La condición del while está vacía; debe haber una condición entre los paréntesis
+Error 603. [Sintáctico] La condición del while está vacía; debe haber una condición entre los paréntesis
 0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 0039     $contador_revision = $contador_revision + 1;
 0040 }

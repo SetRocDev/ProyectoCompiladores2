@@ -4,7 +4,7 @@
 0004 # Datos del estudiante
 0005 $nombre_estudiante = "Carlos";
 0006 $1cantidad_notas = 4;
-Error 201. El identificador '$1cantidad_notas' no puede iniciar con un dígito después de '$'
+Error 201. [Léxico] El identificador '$1cantidad_notas' no puede iniciar con un dígito después de '$'
 0007 
 0008 // Arreglo de notas
 0009 $notas = array(85, 90, 78, 92);

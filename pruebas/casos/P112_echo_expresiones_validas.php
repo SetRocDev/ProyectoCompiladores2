@@ -50,7 +50,7 @@ $Total = 200;
 $resultado = $total + $Total;
 echo "\nResultado final: $resultado\n";
 echo 2 ** 3, $total <=> $Total, $total and $Total;
-echo $cantidad_notas++, (int) $promedio, $promedio ?: "sin promedio";
+echo $cantidad_notas++, -$promedio, $promedio ?: "sin promedio";
 echo $total << 1, $total instanceof stdClass, $notas[0] % 2;
 
 ?>

@@ -6,7 +6,7 @@
 0006 $cantidad_notas = 4;
 0007 
 0008 / Arreglo de notas
-Error 401. Comentario mal formado '/ Arreglo de notas'; un comentario de línea debe iniciar con '//' o '#'
+Error 401. [Léxico] Comentario mal formado '/ Arreglo de notas'; un comentario de línea debe iniciar con '//' o '#'
 0009 $notas = array(85, 90, 78, 92);
 0010 
 0011 // Mostrar información inicial

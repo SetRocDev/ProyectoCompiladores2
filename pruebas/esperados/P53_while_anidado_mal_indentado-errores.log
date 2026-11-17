@@ -31,7 +31,7 @@
 0031     $vueltas = 0;
 0032     while ($vueltas < 2) {
 0033     $vueltas = $vueltas + 1;
-Error 607. Indentación incorrecta dentro del while: se esperaban 8 espacios y hay 4
+Error 607. [Sintáctico] Indentación incorrecta dentro del while: se esperaban 8 espacios y hay 4
 0034     }
 0035     echo "Estado: Reprobado\n";
 0036 }

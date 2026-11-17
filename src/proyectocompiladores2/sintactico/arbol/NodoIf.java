@@ -8,20 +8,8 @@ package proyectocompiladores2.sintactico.arbol;
  */
 public class NodoIf extends Nodo {
 
-    private final String palabraClave;
-
-    /**
-     * @param linea        línea donde empieza
-     * @param palabraClave "if" o "elseif" (en minúscula)
-     */
-    public NodoIf(int linea, String palabraClave) {
+    public NodoIf(int linea) {
         super(linea);
-        this.palabraClave = palabraClave;
-    }
-
-    /** @return "if" o "elseif": la palabra con la que se escribió en el código. */
-    public String getPalabraClave() {
-        return palabraClave;
     }
 
     @Override

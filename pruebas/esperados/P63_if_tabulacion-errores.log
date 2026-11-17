@@ -27,7 +27,7 @@
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {
 0029 	echo "Estado: Aprobado\n";
-Error 708. Se usó una tabulación para indentar dentro del if; solo se permiten espacios (4 por nivel)
+Error 708. [Sintáctico] Se usó una tabulación en la indentación del if; solo se permiten espacios (4 por nivel)
 0030 } else {
 0031     echo "Estado: Reprobado\n";
 0032 }

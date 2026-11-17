@@ -4,7 +4,7 @@
 0004 # Datos del estudiante
 0005 $nombre_estudiante = "Carlos";
 0006 $-cantidad_notas = 4;
-Error 202. El identificador '$-cantidad_notas' tiene el carácter inválido '-' después de '$'; debe iniciar con una letra o guion bajo
+Error 202. [Léxico] El identificador '$-cantidad_notas' tiene el carácter inválido '-' después de '$'; debe iniciar con una letra o guion bajo
 0007 
 0008 // Arreglo de notas
 0009 $notas = array(85, 90, 78, 92);

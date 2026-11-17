@@ -29,14 +29,14 @@ import proyectocompiladores2.sintactico.arbol.NodoSentencia;
  *
  *   programa    → '<?php' sentencias '?>'                 analizar()
  *   sentencias  → { sentencia }
- *   sentencia   → while | if | for | echo | estructura | simple  sentencia()
+ *   sentencia   → while | if | echo | estructura | simple  sentencia()
  *   bloque      → '{' sentencia { sentencia } '}'         bloque()
- *   estructura  → ('foreach' | 'function' ...) cabecera bloque
+ *   estructura  → ('for' | 'foreach' | 'function' ...) cabecera bloque
  *                                                         estructuraGenerica()
  *   simple      → token { token } ';'                     sentenciaSimple()
  *
- * Las reglas de while, if, for y echo están en sus propias clases
- * (ValidadorWhile, ValidadorIf, ValidadorFor, ValidadorEcho), que usan los métodos
+ * Las reglas de while, if y echo están en sus propias clases
+ * (ValidadorWhile, ValidadorIf, ValidadorEcho), que usan los métodos
  * públicos de esta clase para avanzar por los tokens y analizar sus bloques.
  *
  * RECUPERACIÓN DE ERRORES (modo pánico): cuando algo no cumple la gramática
@@ -50,7 +50,7 @@ public class AnalizadorSintactico {
 
     /** Estructuras que el enunciado no pide validar; solo se respetan sus llaves (decisión Q12). */
     private static final Set<String> ESTRUCTURAS_GENERICAS = Patrones.conjunto(
-            "foreach", "function", "switch", "class", "interface", "trait",
+            "for", "foreach", "function", "switch", "class", "interface", "trait",
             "do", "try", "catch", "finally");
 
     /** Palabras con las que se compara una estructura mal escrita (Error 504). */
@@ -117,7 +117,7 @@ public class AnalizadorSintactico {
     }
 
     /**
-     * sentencia → while | if | for | echo | estructura | simple
+     * sentencia → while | if | echo | estructura | simple
      * Decide qué regla aplicar según el primer token.
      *
      * @return el nodo de la sentencia reconocida
@@ -131,9 +131,6 @@ public class AnalizadorSintactico {
         if (palabra.equals("while") && token.es(TipoToken.PALABRA_RESERVADA)) {
             // Una instancia por while: los while anidados se analizan en forma recursiva
             return new ValidadorWhile().analizar(this);
-        }
-        if (palabra.equals("for") && token.es(TipoToken.PALABRA_RESERVADA)) {
-            return new ValidadorFor().analizar(this);
         }
         if (palabra.equals("echo") && token.es(TipoToken.PALABRA_RESERVADA)) {
             return new ValidadorEcho().analizar(this);
@@ -196,7 +193,7 @@ public class AnalizadorSintactico {
     /**
      * estructura → palabraClave cabecera ( bloque | ';' | sentencia )
      *
-     * Estructuras que no pide el enunciado (foreach, function...): se
+     * Estructuras que no pide el enunciado (for, foreach, function...): se
      * toma la cabecera hasta la '{' y se analiza el bloque, para respetar sus
      * llaves y la indentación de lo que tiene dentro (decisión Q12).
      */
@@ -346,9 +343,9 @@ public class AnalizadorSintactico {
     /**
      * La primera línea de cada sentencia dentro de un bloque lleva 4 espacios
      * más que la línea que abrió el bloque. Los códigos de error son los de
-     * la estructura validada más cercana (while, if, else o for); el bloque
-     * de un foreach o function que no está dentro de ninguna de ellas no se
-     * revisa (decisión Q9).
+     * la estructura validada más cercana (while, if o else); el bloque de un
+     * for, foreach o function que no está dentro de ninguna de ellas no se
+     * revisa (decisión Q9, confirmada por la profesora).
      */
     private void validarIndentacionDeSentencia(Token primero) {
         BloqueAbierto actual = abiertos.peek();
@@ -367,7 +364,7 @@ public class AnalizadorSintactico {
         }
     }
 
-    /** @return las reglas del bloque validado (while, if, else, for) más interno, o null si no hay. */
+    /** @return las reglas del bloque validado (while, if, else) más interno, o null si no hay. */
     private TipoBloque reglasDeIndentacion() {
         for (BloqueAbierto bloque : abiertos) {
             if (bloque.tipo.validaIndentacion()) {
@@ -521,7 +518,6 @@ public class AnalizadorSintactico {
         }
         String palabra = token.getLexema().toLowerCase(Locale.ROOT);
         boolean esEstructura = ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("while")
-                || palabra.equals("for")
                 || palabra.equals("if") || palabra.equals("else") || palabra.equals("elseif")
                 || palabra.equals("echo");
         return esEstructura && (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA))
@@ -566,7 +562,7 @@ public class AnalizadorSintactico {
 
 
     // =====================================================================
-    //  Movimiento por los tokens (lo usan también ValidadorWhile, If, For y Echo)
+    //  Movimiento por los tokens (lo usan también ValidadorWhile, If y Echo)
     // =====================================================================
 
     /** @return true si ya no quedan tokens. */

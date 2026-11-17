@@ -28,12 +28,12 @@
 0028 if ($promedio >= 70) {
 0029     echo "Estado: Aprobado\n";
 0030 } elseif $promedio >= 60 {
-Error 701. Falta el paréntesis de apertura '(' después de 'elseif'; la forma correcta es 'if (condición) {'
-Error 702. Falta el paréntesis de cierre ')' de la condición del elseif
+Error 701. [Sintáctico] Falta el paréntesis de apertura '(' después de 'elseif'; la forma correcta es 'if (condición) {'
+Error 702. [Sintáctico] Falta el paréntesis de cierre ')' de la condición del elseif
 0031     echo "Estado: Reposicion\n";
 0032 } else if ($promedio >= 50) {
 0033       echo "Estado: Extraordinario\n";
-Error 707. Indentación incorrecta dentro del if: se esperaban 4 espacios y hay 6
+Error 707. [Sintáctico] Indentación incorrecta dentro del if: se esperaban 4 espacios y hay 6
 0034 } else {
 0035     echo "Estado: Reprobado\n";
 0036 }

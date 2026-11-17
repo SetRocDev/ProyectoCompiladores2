@@ -6,15 +6,15 @@ import proyectocompiladores2.sintactico.arbol.NodoBloque;
 import proyectocompiladores2.sintactico.arbol.NodoCondicion;
 
 /**
- * Parte común de las estructuras de control: while, if y for.
- * Las tres tienen la misma forma:
+ * Parte común de las estructuras de control while e if.
+ * Las dos tienen la misma forma:
  *
  *     palabraClave '(' condicion ')' '{' sentencias '}'
  *
- * Esta clase revisa esa forma una sola vez (POO: herencia). ValidadorWhile,
- * ValidadorIf y ValidadorFor solo agregan lo propio de cada una (el if agrega
- * el else; el for tiene tres partes en su cabecera). Los números de error
- * salen del TipoBloque de cada estructura (6xx el while y el for, 7xx el if).
+ * Esta clase revisa esa forma una sola vez (POO: herencia). ValidadorWhile y
+ * ValidadorIf solo agregan lo propio de cada una (el if agrega el else). Los
+ * números de error salen del TipoBloque de cada estructura (6xx el while,
+ * 7xx el if).
  *
  * Uso de IA: estructura generada con apoyo de Claude Code y revisada por el estudiante.
  */
@@ -88,9 +88,10 @@ public abstract class ValidadorEstructuraControl {
     /**
      * cuerpo → '{' sentencias '}'
      *
-     * Revisa que la '{' exista y esté en la misma línea que la condición
-     * (decisión Q7), y analiza el bloque con las reglas comunes (cierre,
-     * bloque vacío, indentación).
+     * Revisa que la '{' exista y analiza el bloque con las reglas comunes
+     * (cierre, bloque vacío, indentación). La '{' puede ir al final de la
+     * cabecera o sola en la línea siguiente (decisión Q7, aclarada por la
+     * profesora); en ese caso debe estar alineada con la estructura.
      *
      * @param cabecera        token donde se ubican los errores del bloque (la palabra clave)
      * @param anchoReferencia espacios de la línea que abre la estructura; el
@@ -102,20 +103,13 @@ public abstract class ValidadorEstructuraControl {
         if (!analizador.fin() && AnalizadorSintactico.es(analizador.actual(), "{")) {
             Token llave = analizador.actual();
             if (llave.getLinea() != ultimoDeCabecera.getLinea()) {
-                analizador.registrar(reglas.getAperturaEnOtraLinea(), llave, palabraClave);
+                analizador.getIndentacion().validarAlineacion(llave, anchoReferencia,
+                        reglas.getAperturaDesalineada(), reglas.getTabulacion());
             }
             return analizador.bloque(reglas, palabraClave, cabecera, anchoReferencia);
         }
         analizador.registrar(reglas.getFaltaApertura(), ultimoDeCabecera, palabraClave);
         return analizador.cuerpoSinLlave(reglas, palabraClave, cabecera, anchoReferencia);
-    }
-
-    /**
-     * Para las estructuras con una cabecera distinta (el for): indica cuál fue
-     * el último token de su cabecera antes de analizar el cuerpo.
-     */
-    protected void setUltimoDeCabecera(Token token) {
-        ultimoDeCabecera = token;
     }
 
     /** La condición termina, si falta el ')', antes de la '{', un ';', una '}' o el cierre '?>'. */

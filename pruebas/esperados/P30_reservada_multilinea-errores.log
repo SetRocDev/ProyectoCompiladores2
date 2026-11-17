@@ -45,10 +45,10 @@
 0045 
 0046 // Diferenciación de identificadores
 0047 $if
-Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
+Error 204. [Léxico] El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
 0048     = 10;
 0049 $else // comentario entre la variable y el signo igual
-Error 204. El identificador '$else' usa la palabra reservada 'else' y no puede ser asignado
+Error 204. [Léxico] El identificador '$else' usa la palabra reservada 'else' y no puede ser asignado
 0050     = 20;
 0051 $total = 100;
 0052 $Total = 200;

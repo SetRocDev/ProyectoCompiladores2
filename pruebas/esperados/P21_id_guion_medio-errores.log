@@ -4,7 +4,7 @@
 0004 # Datos del estudiante
 0005 $nombre_estudiante = "Carlos";
 0006 $cantidad-notas = 4;
-Error 203. El identificador '$cantidad-notas' contiene el carácter inválido '-'; solo se permiten letras, dígitos y guion bajo
+Error 203. [Léxico] El identificador '$cantidad-notas' contiene el carácter inválido '-'; solo se permiten letras, dígitos y guion bajo
 0007 
 0008 // Arreglo de notas
 0009 $notas = array(85, 90, 78, 92);

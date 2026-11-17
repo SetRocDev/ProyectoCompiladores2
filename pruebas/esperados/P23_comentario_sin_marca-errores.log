@@ -2,7 +2,7 @@
 0002 // Sistema simple de gestión de notas
 0003 
 0004 Datos del estudiante
-Error 402. Texto 'Datos del estudiante' fuera de un comentario: no es código PHP válido; si es parte de un comentario, cada línea debe iniciar con '//' o '#'
+Error 402. [Léxico] Texto 'Datos del estudiante' fuera de un comentario: no es código PHP válido; si es parte de un comentario, cada línea debe iniciar con '//' o '#'
 0005 $nombre_estudiante = "Carlos";
 0006 $cantidad_notas = 4;
 0007 

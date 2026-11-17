@@ -45,16 +45,16 @@
 0045 
 0046 // Diferenciación de identificadores
 0047 $1extra[0] = 85;
-Error 201. El identificador '$1extra' no puede iniciar con un dígito después de '$'
+Error 201. [Léxico] El identificador '$1extra' no puede iniciar con un dígito después de '$'
 0048 $if[1][2] = 2;
-Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
+Error 204. [Léxico] El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
 0049 $nota_extra = 10 // comentario sin punto y coma
 0050 continua aqui
-Error 402. Texto 'continua aqui' fuera de un comentario: no es código PHP válido; si es parte de un comentario, cada línea debe iniciar con '//' o '#'
+Error 402. [Léxico] Texto 'continua aqui' fuera de un comentario: no es código PHP válido; si es parte de un comentario, cada línea debe iniciar con '//' o '#'
 0051 if ($nota_extra > 5)
-Error 704. Falta la llave de apertura '{' del bloque del if
+Error 704. [Sintáctico] Falta la llave de apertura '{' del bloque del if
 0052 / comentario mal escrito
-Error 401. Comentario mal formado '/ comentario mal escrito'; un comentario de línea debe iniciar con '//' o '#'
+Error 401. [Léxico] Comentario mal formado '/ comentario mal escrito'; un comentario de línea debe iniciar con '//' o '#'
 0053 $total = 100;
 0054 $Total = 200;
 0055 

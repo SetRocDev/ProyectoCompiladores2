@@ -45,7 +45,7 @@
 0045 
 0046 // Diferenciación de identificadores
 0047 }
-Error 503. Llave de cierre '}' sin una llave de apertura '{' que le corresponda
+Error 503. [Sintáctico] Llave de cierre '}' sin una llave de apertura '{' que le corresponda
 0048 $total = 100;
 0049 $Total = 200;
 0050 

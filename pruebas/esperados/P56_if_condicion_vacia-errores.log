@@ -26,7 +26,7 @@
 0026 
 0027 // Evaluar estado del estudiante
 0028 if () {
-Error 703. La condición del if está vacía; debe haber una condición entre los paréntesis
+Error 703. [Sintáctico] La condición del if está vacía; debe haber una condición entre los paréntesis
 0029     echo "Estado: Aprobado\n";
 0030 } else {
 0031     echo "Estado: Reprobado\n";

@@ -1,5 +1,5 @@
 0001 echo "";
-Error 301. Antes de la etiqueta de apertura '<?php' hay el texto 'echo "";'; la etiqueta debe ser lo primero del archivo
+Error 301. [Léxico] Antes de la etiqueta de apertura '<?php' hay el texto 'echo "";'; la etiqueta debe ser lo primero del archivo
 0002 <?php
 0003 // Sistema simple de gestión de notas
 0004 

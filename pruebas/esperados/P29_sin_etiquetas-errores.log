@@ -1,5 +1,5 @@
 0001 // Sistema simple de gestión de notas
-Error 303. No se encontró la etiqueta de apertura '<?php'; debe ser lo primero del archivo, al inicio de la línea 0001
+Error 303. [Léxico] No se encontró la etiqueta de apertura '<?php'; debe ser lo primero del archivo, al inicio de la línea 0001
 0002 
 0003 # Datos del estudiante
 0004 $nombre_estudiante = "Carlos";
@@ -49,4 +49,4 @@ Error 303. No se encontró la etiqueta de apertura '<?php'; debe ser lo primero 
 0048 
 0049 $resultado = $total + $Total;
 0050 echo "\nResultado final: $resultado\n";
-Error 305. No se encontró la etiqueta de cierre '?>'; debe estar en la última línea del archivo (línea 0050)
+Error 305. [Léxico] No se encontró la etiqueta de cierre '?>'; debe estar en la última línea del archivo (línea 0050)

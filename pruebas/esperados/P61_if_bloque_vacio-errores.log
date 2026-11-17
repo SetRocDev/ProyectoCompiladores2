@@ -26,7 +26,7 @@
 0026 
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {
-Error 706. El bloque del if está vacío; debe contener al menos una línea de código
+Error 706. [Sintáctico] El bloque del if está vacío; debe contener al menos una línea de código
 0029 } else {
 0030     echo "Estado: Reprobado\n";
 0031 }

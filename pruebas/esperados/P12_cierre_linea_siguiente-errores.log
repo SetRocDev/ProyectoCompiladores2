@@ -51,5 +51,5 @@
 0051 echo "\nResultado final: $resultado\n";
 0052 
 0053 ?>
-Error 307. La etiqueta de cierre '?>' no está en la última línea del archivo; después se encontró: 'echo "hola";'
+Error 307. [Léxico] La etiqueta de cierre '?>' no está en la última línea del archivo; después se encontró: 'echo "hola";'
 0054 echo "hola";

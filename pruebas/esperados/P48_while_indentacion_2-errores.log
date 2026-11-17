@@ -36,7 +36,7 @@
 0036 
 0037 while ($contador_revision < $cantidad_notas) {
 0038   echo "Revisando nota: " . $notas[$contador_revision] . "\n";
-Error 607. Indentación incorrecta dentro del while: se esperaban 4 espacios y hay 2
+Error 607. [Sintáctico] Indentación incorrecta dentro del while: se esperaban 4 espacios y hay 2
 0039     $contador_revision = $contador_revision + 1;
 0040 }
 0041 

@@ -10,7 +10,7 @@
 0010 
 0011 // Mostrar información inicial
 0012 echo "Estudiante: " $nombre_estudiante;
-Error 806. Expresión inválida en el echo: falta un operador entre '"Estudiante: "' y '$nombre_estudiante'
+Error 806. [Sintáctico] Expresión inválida en el echo: falta un operador entre '"Estudiante: "' y '$nombre_estudiante'
 0013 echo "Cantidad de notas: $cantidad_notas\n";
 0014 
 0015 // Calcular promedio usando for

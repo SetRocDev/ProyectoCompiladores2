@@ -3,7 +3,7 @@
 0003 
 0004 # Datos del estudiante
 0005 echo $cantidad_notas;
-Error 901. La variable '$cantidad_notas' se usa pero no se le asignó un valor antes
+Error 901. [Semántico] La variable '$cantidad_notas' se usa pero no se le asignó un valor antes
 0006 $nombre_estudiante = "Carlos";
 0007 $cantidad_notas = 4;
 0008 

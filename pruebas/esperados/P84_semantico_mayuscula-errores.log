@@ -42,7 +42,7 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo $Mensaje_final;
-Error 901. La variable '$Mensaje_final' se usa pero no se le asignó un valor antes; ¿quiso decir '$mensaje_final'?
+Error 901. [Semántico] La variable '$Mensaje_final' se usa pero no se le asignó un valor antes; ¿quiso decir '$mensaje_final'?
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

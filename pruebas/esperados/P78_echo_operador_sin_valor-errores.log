@@ -36,7 +36,7 @@
 0036 
 0037 while ($contador_revision < $cantidad_notas) {
 0038     echo "Revisando nota: " . ;
-Error 806. Expresión inválida en el echo: el operador '.' no tiene un valor a la derecha
+Error 806. [Sintáctico] Expresión inválida en el echo: el operador '.' no tiene un valor a la derecha
 0039     $contador_revision = $contador_revision + 1;
 0040 }
 0041 

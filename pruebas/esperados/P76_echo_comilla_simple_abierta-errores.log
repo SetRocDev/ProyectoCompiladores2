@@ -42,7 +42,7 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo 'Proceso finalizado;
-Error 804. La cadena 'Proceso finalizado; del echo no tiene la comilla simple (') de cierre
+Error 804. [Sintáctico] La cadena 'Proceso finalizado; del echo no tiene la comilla simple (') de cierre
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

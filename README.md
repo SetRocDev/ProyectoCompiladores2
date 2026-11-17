@@ -5,10 +5,12 @@ Estudiante: Pablo Cortés
 
 El programa revisa un archivo de código PHP como lo haría la primera parte de un compilador, en seis etapas:
 - **Análisis léxico** (Proyecto 1): identificadores, etiquetas `<?php`/`?>` y comentarios.
-- **Análisis sintáctico** (Proyecto 2): estructuras `while`, `if`/`else`, `for` y `echo`, con paréntesis, llaves, `;`, comillas, bloques vacíos e indentación.
-- **Análisis semántico** (Proyecto 2): variables usadas sin haber recibido un valor, condiciones que asignan un valor fijo (`if ($x = 5)`) y divisiones entre cero.
+- **Análisis sintáctico** (Proyecto 2): estructuras `while`, `if`/`else` y `echo`, con paréntesis, llaves, `;`, comillas, bloques vacíos e indentación.
+- **Análisis semántico** (Proyecto 2): variables usadas sin haber recibido un valor y divisiones entre cero.
 
-Al terminar crea `nombreArchivo-errores.log`: una copia exacta del `.php`, con cada línea numerada y los errores debajo de la línea donde ocurren.
+Al terminar crea `nombreArchivo-errores.log`: una copia exacta del `.php`, con cada línea numerada y los errores debajo de la línea donde ocurren, cada uno con su tipo: `[Léxico]`, `[Sintáctico]` o `[Semántico]`.
+
+El alcance de cada validación se consultó con la profesora; sus aclaraciones están en la sección 11 del INFORME.
 
 ## Cómo probarlo
 El programa ya viene compilado. Solo se necesita Java 8 o más nuevo.
@@ -42,8 +44,8 @@ Las instrucciones completas, en lenguaje sencillo, están en **[INFORME.txt](INF
 | 2. Clasificación | [ClasificadorTokens.java](src/proyectocompiladores2/lexico/ClasificadorTokens.java) | Dice de qué tipo es cada token |
 | 3. Patrón | [Patrones.java](src/proyectocompiladores2/lexico/Patrones.java) | Reglas de cada tipo y palabras reservadas |
 | 4. Validación del lexema | [ValidadorLexema.java](src/proyectocompiladores2/lexico/ValidadorLexema.java) | Identificadores, etiquetas y comentarios ([validacion/](src/proyectocompiladores2/validacion)) |
-| 5. Análisis sintáctico | [AnalizadorSintactico.java](src/proyectocompiladores2/sintactico/AnalizadorSintactico.java) | Descenso recursivo y árbol sintáctico; [ValidadorWhile](src/proyectocompiladores2/sintactico/ValidadorWhile.java), [ValidadorIf](src/proyectocompiladores2/sintactico/ValidadorIf.java), [ValidadorFor](src/proyectocompiladores2/sintactico/ValidadorFor.java), [ValidadorEcho](src/proyectocompiladores2/sintactico/ValidadorEcho.java) |
-| 6. Análisis semántico | [AnalizadorSemantico.java](src/proyectocompiladores2/semantico/AnalizadorSemantico.java) | Tabla de símbolos, uso de variables, asignación en condiciones y división entre cero |
+| 5. Análisis sintáctico | [AnalizadorSintactico.java](src/proyectocompiladores2/sintactico/AnalizadorSintactico.java) | Descenso recursivo y árbol sintáctico; [ValidadorWhile](src/proyectocompiladores2/sintactico/ValidadorWhile.java), [ValidadorIf](src/proyectocompiladores2/sintactico/ValidadorIf.java), [ValidadorEcho](src/proyectocompiladores2/sintactico/ValidadorEcho.java) |
+| 6. Análisis semántico | [AnalizadorSemantico.java](src/proyectocompiladores2/semantico/AnalizadorSemantico.java) | Tabla de símbolos, uso de variables y división entre cero |
 
 Lista de errores: [CodigoError.java](src/proyectocompiladores2/errores/CodigoError.java) · Punto de inicio: [Main.java](src/proyectocompiladores2/Main.java)
 
@@ -67,6 +69,7 @@ Cada tarea tiene una tarjeta en Trello y un *Pull Request* en GitHub, donde se e
 | T27 | INFORME y documentación | [#28](../../pull/28) |
 | T29 | Revisión final: comando for, semántico 902/903, codificación del `.log` y simulación en otro equipo | [#29](../../pull/29) |
 | T30 | Pulido tras el code review: expresiones válidas en echo, `%=`, mensajes del 902 y recuperación con llaves faltantes | [#30](../../pull/30) |
+| T31 | Ajustes según la respuesta de la profesora: llaves y else en su propia línea, paréntesis en el echo, sin validar el for, semántico 901/902 y tipo de error en cada mensaje | [#31](../../pull/31) |
 
 - Todos los Pull Requests: [lista completa](../../pulls?q=is%3Apr)
 - Historial de cambios: [commits](../../commits/main)

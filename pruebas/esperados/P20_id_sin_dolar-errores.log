@@ -3,7 +3,7 @@
 0003 
 0004 # Datos del estudiante
 0005 nombre_estudiante = "Carlos";
-Error 206. El identificador 'nombre_estudiante' no inicia con el símbolo '$'; todo identificador debe iniciar con '$' seguido de una letra o guion bajo
+Error 206. [Léxico] El identificador 'nombre_estudiante' no inicia con el símbolo '$'; todo identificador debe iniciar con '$' seguido de una letra o guion bajo
 0006 $cantidad_notas = 4;
 0007 
 0008 // Arreglo de notas

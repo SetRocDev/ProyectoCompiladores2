@@ -54,13 +54,14 @@ P36_casos_de_revision.php            201 204 402 704 401
                                                          '$nota_extra = 10 // ...' sin ';' seguido de 'continua aqui', y 'if (...)' seguido de '/ comentario'
 P37_llave_sobrante.php               503                 Despues de L46 se agrega una linea con '}' que no cierra nada (sintactico, T20)
 P38_estructura_mal_escrita.php       504                 L37: 'whlie (...) {' en vez de 'while' (sugiere 'while')
-P39_for_sin_cierre.php               615                 Se borra la '}' del for (L20): el bloque del for no cierra (antes 505; el for se valida desde T29)
+P39_for_sin_cierre.php               505                 Se borra la '}' del for (L20): el bloque del for no cierra (el for es un bloque generico)
 P40_while_sin_parentesis.php         601 602             L37: while $contador_revision < $cantidad_notas {   (sin parentesis)
 P41_while_condicion_vacia.php        603                 L37: while () {
 P42_while_sin_parentesis_cierre.php  602                 L37: while ($contador_revision < $cantidad_notas {
 P43_while_sin_llave_apertura.php     604                 L37 sin la '{' (la '}' de L40 sigue)
 P44_while_sin_llave_cierre.php       605                 Se borra la '}' del while (L40): un solo error, sin cascada
-P45_while_llave_otra_linea.php       610                 La '{' del while en la linea siguiente (decision Q7)
+P45_while_llave_otra_linea_valida.php
+                                     -                   La '{' del while sola en la linea siguiente, alineada (la profesora: no es error)
 P46_while_bloque_vacio.php           606                 Se borran las 2 lineas del bloque del while
 P47_while_solo_comentario.php        606                 El bloque del while solo tiene un comentario (decision Q8)
 P48_while_indentacion_2.php          607                 L38 con 2 espacios en vez de 4
@@ -76,14 +77,14 @@ P56_if_condicion_vacia.php           703                 L28: if () {
 P57_if_sin_parentesis_cierre.php     702                 L28: if ($promedio >= 70 {
 P58_if_sin_llave_apertura.php        704                 L28 sin la '{'
 P59_if_sin_llave_cierre.php          705                 L30: 'else {' (se borro la '}' del if)
-P60_if_llave_otra_linea.php          710                 La '{' del if en la linea siguiente (decision Q7)
+P60_if_llave_otra_linea_valida.php   -                   La '{' del if sola en la linea siguiente, alineada (la profesora: no es error)
 P61_if_bloque_vacio.php              706                 Se borra la unica linea del bloque del if
 P62_if_indentacion.php               707                 L29 con 2 espacios
 P63_if_tabulacion.php                708                 L29 indentada con tabulacion
 P64_if_cierre_desalineado.php        709                 L30: '  } else {' (la '}' del if con 2 espacios)
 P65_else_bloque_vacio.php            713                 Se borra la unica linea del bloque del else
 P66_else_sin_llave_apertura.php      711                 L30: '} else' sin '{' (la '}' final sigue)
-P67_else_en_otra_linea.php           718                 '}' y 'else {' en lineas distintas (decision Q7)
+P67_else_en_otra_linea_valido.php    -                   '}' y 'else {' en lineas distintas, alineados (la profesora: no es error)
 P68_else_indentacion.php             715                 L31 con 6 espacios
 P69_else_sin_if.php                  714                 Despues de L46: un 'else { ... }' sin if
 P70_elseif_valido.php                -                   if / elseif / else if / else bien escritos (decision Q12)
@@ -97,7 +98,7 @@ P76_echo_comilla_simple_abierta.php  804                 L44: echo 'Proceso fina
 P77_echo_sin_punto_y_coma.php        805                 L44: echo $mensaje_final   (sin ;)
 P78_echo_operador_sin_valor.php      806                 L38: echo "Revisando nota: " . ;
 P79_echo_falta_operador.php          806                 L12: echo "Estudiante: " $nombre_estudiante;   (sin el punto)
-P80_echo_validos.php                 -                   echo con funciones (count, trim), coma, constante, signo, indices y en dos lineas
+P80_echo_con_funciones.php           802 802 802         echo con funciones (count, trim): la profesora aclaro que tambien son parentesis prohibidos
 P81_echo_comillas_mezcladas.php      803                 L44: echo "Hola';   (abre con doble y cierra con simple)
 P82_echo_ejemplos_pdf.php            802 801 803 804 805
                                                          Los ejemplos del enunciado (permitidos y con error) uno tras otro
@@ -107,41 +108,44 @@ P85_semantico_en_cadena.php          901                 L25: echo "Promedio: $P
 P86_semantico_antes_de_asignar.php   901                 L5: echo $cantidad_notas;   (se usa antes de su asignacion)
 P87_semantico_valido.php             -                   foreach con =>, +=, ++, function con parametro, global, comillas simples, \$ y $_SERVER
 P88_parentesis_sin_cerrar.php        603                 L9: array(...;  sin ')'  y L37: while () {   (el '(' abierto no oculta el error del while, T26)
-P89_for_sin_parentesis_apertura.php  611                 L18: for $i = 0; $i < $cantidad_notas; $i = $i + 1) {
-P90_for_sin_parentesis_cierre.php    612                 L18: for ($i = 0; $i < $cantidad_notas; $i = $i + 1 {
-P91_for_cabecera_dos_partes.php      613                 L18: for ($i = 0; $i < $cantidad_notas) {
-P92_for_cabecera_con_comas.php       613                 L18: for ($i = 0, $i < $cantidad_notas, $i = $i + 1) {   (comas en lugar de ';')
-P93_for_sin_llave_apertura.php       614                 L18: el for sin '{' (la '}' de L20 sigue)
-P94_for_sin_llave_cierre.php         615                 Se borra la '}' del for (L20)
-P95_for_bloque_vacio.php             616                 L19: la unica linea del bloque se cambia por un comentario
-P96_for_indentacion.php              617                 L19 con 2 espacios
-P97_for_tabulacion.php               618                 L19 indentada con tabulacion
-P98_for_cierre_desalineado.php       619                 L20: '  }'   (la '}' del for con 2 espacios)
-P99_for_llave_otra_linea.php         620                 La '{' del for en la linea siguiente (decision Q7)
+P89_while_llave_sola_desalineada.php 610                 L37: la '{' del while sola en la linea siguiente, con 2 espacios
+P90_if_llave_sola_desalineada.php    710                 L28: la '{' del if sola en la linea siguiente, con 4 espacios
+P91_else_y_llaves_en_su_linea_validos.php
+                                     -                   La '{' del if, el else y su '{' cada uno en su propia linea, alineados
+P92_else_desalineado.php             718                 L30: '}' y en la linea siguiente '  else {'   (else con 2 espacios)
+P93_else_llave_sola_desalineada.php  719                 L30: '} else' y en la linea siguiente '    {'   (llave con 4 espacios)
+P94_echo_con_funcion.php             802                 L44: echo "Total de notas: " . count($notas);
+P95_echo_parentesis_en_cadena_valido.php
+                                     -                   L44: echo "Proceso (final): $mensaje_final";   (parentesis dentro de la cadena: es texto)
+P96_echo_conversion.php              802                 L25: echo "Promedio: " . (int) $promedio;
+P97_for_no_se_valida.php             -                   For con '{' abajo, 2 espacios, tabulacion y '}' desalineada: el for no se valida
+P98_ejemplo_pdf_sintaxis_correcta_semantico.php
+                                     901                 Al final: el while del enunciado con $x sin valor: bien escrito, error [Semantico]
+P99_programa_con_llaves_en_su_linea.php
+                                     -                   Todo el programa con cada '{' y el else en su propia linea, alineados
 P100_for_valido_comas.php            -                   L18: for ($i = 0, $j = 10; ...; $i = $i + 1, $j = $j - 1) {   (comas validas en PHP)
 P101_for_valido_anidado.php          -                   L19: un if anidado dentro del for, con 8 espacios en su contenido
-P102_semantico_asignacion_en_if.php  902                 L28: if ($promedio = 70) {   (asigna en lugar de comparar)
-P103_semantico_asignacion_en_while.php
-                                     902                 L37: while ($contador_revision = 0) {
+P102_condicion_con_asignacion_valida.php
+                                     -                   L28: if ($promedio = 70) {   (la condicion se considera correcta: no se revisa)
+P103_tabulacion_en_llave_sola.php    608                 L37: la '{' del while sola en la linea siguiente, con tabulacion
 P104_semantico_asignacion_valida.php -                   L37: while ($fila = count($notas)) {   (asignar el resultado de una funcion es valido)
-P105_semantico_division_cero.php     903                 L22: $promedio = $suma_notas / 0;   (PHP: DivisionByZeroError)
+P105_semantico_division_cero.php     902                 L22: $promedio = $suma_notas / 0;   (PHP: DivisionByZeroError)
 P106_semantico_division_cero_echo.php
-                                     903                 L44: echo 10 / 0;
+                                     902                 L44: echo 10 / 0;
 P107_semantico_division_valida.php   -                   L44: echo "10 / 0";   (dentro de una cadena no es una division)
 P108_recuperacion_for_e_if_sin_llaves.php
-                                     615 704             Sin la '}' del for (L20) y sin la '{' del if (L28): sin errores en cascada
+                                     505 704             Sin la '}' del for (L20) y sin la '{' del if (L28): sin errores en cascada
 P109_codificacion_utf8_con_bom.php   301                 El archivo guardado como "UTF-8 con BOM" (el .log conserva el BOM)
 P110_codificacion_ansi.php           -                   El archivo guardado como ANSI (Windows-1252): el .log conserva las tildes byte por byte
 P111_codificacion_byte_no_definido.php
                                      -                   ANSI con un byte que Windows-1252 no define (0x81): el .log lo copia igual
-P112_echo_expresiones_validas.php    -                   Al final: echo con **, <=>, and, $x++, (int), ?:, <<, instanceof y %   (PHP valido)
+P112_echo_expresiones_validas.php    -                   Al final: echo con **, <=>, and, $x++, -$x, ?:, <<, instanceof y %   (PHP valido)
 P113_echo_parentesis_sin_cerrar.php  802 806             L44: echo ("Final: " . $mensaje_final;   (parentesis que agrupa y sin cerrar)
-P114_semantico_asignacion_arreglo_elseif.php
-                                     902                 L30: } elseif ($notas[0] = 60) {   (el mensaje muestra $notas[0] y "elseif")
-P115_semantico_modulo_cero.php       903                 Despues de L50: $resultado %= 0;   (PHP: DivisionByZeroError "Modulo by zero")
+P114_elseif_desalineado.php          718                 L30: '}' y en la linea siguiente '    elseif (...) {'   (elseif con 4 espacios)
+P115_semantico_modulo_cero.php       902                 Despues de L50: $resultado %= 0;   (PHP: DivisionByZeroError "Modulo by zero")
 P116_id_asignacion_modulo.php        201                 Despues de L50: $1resultado %= 2;   (%= es asignacion, igual que +=)
 P117_recuperacion_for_y_while_sin_llaves.php
-                                     615 604             Sin la '}' del for (L20) y sin la '{' del while (L37): sin errores en cascada
+                                     505 604             Sin la '}' del for (L20) y sin la '{' del while (L37): sin errores en cascada
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola

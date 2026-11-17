@@ -4,8 +4,8 @@
 0004 # Datos del estudiante
 0005 $nombre_estudiante = "Carlos";
 0006 $1cantidad = 4; $if = 5;
-Error 201. El identificador '$1cantidad' no puede iniciar con un dígito después de '$'
-Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
+Error 201. [Léxico] El identificador '$1cantidad' no puede iniciar con un dígito después de '$'
+Error 204. [Léxico] El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
 0007 
 0008 // Arreglo de notas
 0009 $notas = array(85, 90, 78, 92);
@@ -13,7 +13,7 @@ Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser a
 0011 // Mostrar información inicial
 0012 echo "Estudiante: $nombre_estudiante\n";
 0013 echo "Cantidad de notas: $cantidad_notas\n";
-Error 901. La variable '$cantidad_notas' se usa pero no se le asignó un valor antes
+Error 901. [Semántico] La variable '$cantidad_notas' se usa pero no se le asignó un valor antes
 0014 
 0015 // Calcular promedio usando for
 0016 $suma_notas = 0;
