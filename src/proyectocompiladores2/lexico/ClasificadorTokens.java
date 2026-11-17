@@ -52,7 +52,7 @@ public class ClasificadorTokens {
         if (primero == '"' || primero == '\'') {
             return TipoToken.CADENA;
         }
-        if (Character.isDigit(primero)) {
+        if (Patrones.NUMERO.matcher(lexema).matches()) {
             return TipoToken.NUMERO;
         }
         if (Patrones.PALABRA.matcher(lexema).matches()) {

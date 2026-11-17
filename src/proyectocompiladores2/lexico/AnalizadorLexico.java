@@ -25,7 +25,7 @@ import proyectocompiladores2.io.ArchivoFuente;
  *   "?" ... ">"      intento de etiqueta de cierre (incluye "? >")
  *   comillas         cadena hasta la comilla de cierre
  *   "$"              identificador hasta un separador
- *   dígito           número
+ *   dígito           número (85, 3.5, 1e3, 0x1F, 1_000)
  *   letra o "_"      palabra
  *   otro             operador, delimitador o carácter desconocido
  *
@@ -229,16 +229,40 @@ public class AnalizadorLexico {
                 && (Character.isLetter(linea.charAt(j + 1)) || linea.charAt(j + 1) == '_');
     }
 
+    /**
+     * Un número de PHP: 85, 3.5, 1e3, 2.5E-4, 0x1F, 0b101, 0o17 o 1_000.
+     * La forma exacta la define Patrones.NUMERO (etapa 3).
+     */
     private int finNumero(String linea, int i) {
-        int j = i;
-        while (j < linea.length() && Character.isDigit(linea.charAt(j))) {
-            j++;
-        }
-        if (j + 1 < linea.length() && linea.charAt(j) == '.' && Character.isDigit(linea.charAt(j + 1))) {
-            j++;
-            while (j < linea.length() && Character.isDigit(linea.charAt(j))) {
-                j++;
+        if (linea.charAt(i) == '0' && i + 2 < linea.length()) {
+            char base = Character.toLowerCase(linea.charAt(i + 1));
+            String digitos = base == 'x' ? "0123456789abcdefABCDEF_" : base == 'b' ? "01_" : base == 'o' ? "01234567_" : "";
+            if (!digitos.isEmpty() && digitos.indexOf(linea.charAt(i + 2)) >= 0) {
+                return saltar(linea, i + 2, digitos);
             }
+        }
+        String decimales = "0123456789_";
+        int j = saltar(linea, i, decimales);
+        if (j + 1 < linea.length() && linea.charAt(j) == '.' && Character.isDigit(linea.charAt(j + 1))) {
+            j = saltar(linea, j + 1, decimales);
+        }
+        if (j < linea.length() && (linea.charAt(j) == 'e' || linea.charAt(j) == 'E')) {
+            int k = j + 1;
+            if (k < linea.length() && (linea.charAt(k) == '+' || linea.charAt(k) == '-')) {
+                k++;
+            }
+            if (k < linea.length() && Character.isDigit(linea.charAt(k))) {
+                j = saltar(linea, k, decimales);
+            }
+        }
+        return j;
+    }
+
+    /** @return la primera posición, desde i, cuyo carácter no está en los permitidos. */
+    private int saltar(String linea, int i, String permitidos) {
+        int j = i;
+        while (j < linea.length() && permitidos.indexOf(linea.charAt(j)) >= 0) {
+            j++;
         }
         return j;
     }
