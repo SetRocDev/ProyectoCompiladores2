@@ -146,18 +146,20 @@ para que las tildes queden exactamente iguales.
      4. Abrir el .log: debajo de esa línea aparece el error.
 
   Forma 2: ejecutar todas las pruebas automáticas (recomendado).
-     La carpeta "pruebas" tiene 118 casos de prueba:
+     La carpeta "pruebas" tiene 122 casos de prueba:
        - pruebas\casos       los archivos .php, cada uno con un error puesto a
                              propósito (algunos no tienen errores, para
                              comprobar que no se marcan errores falsos)
        - pruebas\esperados   el .log EXACTO que debe generar cada caso
        - pruebas\esperado.txt  tabla con lo que se cambió en cada caso y el
                              error que debe aparecer
+       - pruebas\herramientas  pruebas extensas opcionales (necesitan
+                             Python 3; ver su LEEME.txt y la sección 13)
      Para ejecutarlas: hacer doble clic en
             pruebas\ejecutar-pruebas.bat
      El script ejecuta el programa con todos los casos, compara cada .log con
      el esperado byte por byte y al final muestra:
-            Pruebas correctas: 118   Fallidas: 0
+            Pruebas correctas: 122   Fallidas: 0
 
 
 6. CÓMO COMPILARLO EN NETBEANS
@@ -233,6 +235,16 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
        P112). También: "$x %= 0" da el Error 902 (P115), "$1x %= 2" da el
        201 como "$1x += 2" (P116) y un echo con "(" sin cerrar avisa que
        falta el ")" (P113).
+     - En la revisión integral final se encontró que una cadena de texto de
+       unos 3000 caracteres o más detenía el programa (la expresión regular
+       que revisaba las comillas desbordaba la memoria de la pila) y no se
+       generaba el .log. Ahora las comillas se revisan carácter por
+       carácter (prueba P118), y si un archivo extremo detiene el análisis,
+       igual se escribe su .log y se siguen revisando los demás archivos.
+       También: los números válidos de PHP como 1e3, 0x1F o 1_000 ya no dan
+       errores falsos (P119), y un echo o un else mal escritos ("eco $x;",
+       "} els {") dan el Error 504 con la sugerencia, en lugar del 402 de
+       texto suelto (P120, P121).
 
 
 8. LISTA DE ERRORES QUE DETECTA
@@ -273,8 +285,9 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
     501  Carácter que no pertenece al lenguaje      @
     502  Texto entre comillas sin cerrar (fuera de un echo)
     503  Llave de cierre } sin una llave de apertura
-    504  Estructura de control mal escrita, con sugerencia
-                                                    whlie (...) {  -> ¿quiso decir 'while'?
+    504  Palabra clave mal escrita, con sugerencia  whlie (...) {  -> ¿quiso decir 'while'?
+                                                    eco "Hola";    -> ¿quiso decir 'echo'?
+                                                    } els {        -> ¿quiso decir 'else'?
     505  Bloque de for, foreach, function, etc. sin llave de cierre }
 
   Comando while
@@ -478,6 +491,10 @@ respuesta confirmó o corrigió cada punto):
     (echo $x = 5;) ni un arreglo escrito con corchetes (echo [1, 2][0];).
   - El for, foreach y function no se validan (sección 11): un for mal
     escrito solo se reporta si deja una llave sin pareja (503 o 505).
+  - Con miles de niveles de anidamiento (más de los que admite la pila de
+    Java) el análisis se detiene: la consola lo avisa y el .log se escribe
+    con los errores encontrados hasta ese punto. Con 60 niveles funciona
+    normalmente.
   - Cuando faltan llaves en varias estructuras a la vez, la recuperación
     decide por la indentación a qué estructura pertenece cada "}"; si el
     código además está mal indentado, puede asignarla a otra.
@@ -485,23 +502,34 @@ respuesta confirmó o corrigió cada punto):
 
 13. PRUEBAS REALIZADAS
 -------------------------------------------------------------------------------
-  - 118 casos de prueba automáticos (sección 5, Forma 2): cada .log se
-    compara byte por byte con el esperado. Resultado: 118 de 118, con Java 8
+  Las pruebas extensas se pueden repetir con las herramientas de la carpeta
+  pruebas\herramientas (necesitan Python 3; ver su LEEME.txt). En Linux,
+  macOS o Git Bash, todas de una vez: pruebas/herramientas/bateria-completa.sh
+
+  - 122 casos de prueba automáticos (sección 5, Forma 2): cada .log se
+    compara byte por byte con el esperado. Resultado: 122 de 122, con Java 8
     y Java 21.
-  - Pruebas de "mutación tipo tutor": un programa cambió el código de
-    ejemplo de 625 formas distintas, como lo haría el tutor (cada error del
-    enunciado en cada lugar posible, variantes válidas de espacios, de
-    llaves y de expresiones, y 400 combinaciones de dos errores), más 3000
-    combinaciones de tres errores. También se probó el programa completo
-    escrito con cada llave y cada else en su propia línea. En todas
-    aparecieron exactamente los errores esperados y ningún otro.
+  - Pruebas de "mutación tipo tutor" (mutaciones_tutor.py): un programa
+    cambió el código de ejemplo de 630 formas distintas, como lo haría el
+    tutor (cada error del enunciado en cada lugar posible, variantes válidas
+    de espacios, de llaves y de expresiones, y 400 combinaciones de dos
+    errores), más combinaciones de tres errores (3000 en cinco corridas).
+    En todas aparecieron exactamente los errores esperados y ningún otro.
+  - Batería extrema (extremas.py, 716 casos): un programa con while, if,
+    elseif y else anidados hasta tres niveles, con cada error en cada nivel
+    y 600 combinaciones de dos y tres errores; los casos límite del
+    Proyecto 1 (identificadores, etiquetas, comentarios) y del Proyecto 2;
+    el programa completo con las llaves en su propia línea; y archivos
+    extremos: vacío, de 20 000 líneas, con 60 niveles de anidamiento, con
+    una línea de 200 000 caracteres y con bytes al azar.
   - Comparación con PHP real (versión 8.3): los casos "válidos" son código
     PHP correcto, y los errores de estructura (paréntesis, llaves, punto y
     coma, comillas) también los rechaza PHP. Los errores 901 coinciden con
     los avisos "Undefined variable" de PHP al ejecutar los mismos casos
-    (72 de 72).
-  - Robustez: más de 35 000 archivos con cambios al azar (también sobre el
-    programa con las llaves en su propia línea); el programa nunca se
+    (74 de 74; contraste_php.py).
+  - Robustez (fuzz.py y verificar_r2.py): más de 45 000 archivos con
+    cambios al azar (también sobre el programa anidado y el de las llaves en
+    su propia línea); el programa nunca se
     detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
     numeración y los errores queda el .php original byte por byte (R2).
   - Compilación con Ant (lo mismo que hace "Clean and Build" de NetBeans).
@@ -509,7 +537,7 @@ respuesta confirmó o corrigió cada punto):
     descomprimió en una carpeta con espacios y tildes ("Mis Documentos\
     Compiladores Pablo Cortés"), se compiló desde cero y se ejecutó solo con
     Java 8, desde otra carpeta de trabajo y con la configuración de idioma de
-    Windows en español (Cp1252). Resultado: 118 de 118.
+    Windows en español (Cp1252). Resultado: 122 de 122.
   - Revisión del .jar: sus 39 clases están compiladas para Java 8 y cada
     método de Java que usan existe en Java 8 (se comprobó uno por uno).
 
@@ -527,7 +555,7 @@ un equipo distinto al de desarrollo:
   Ejecución (sección 3): java -jar ProyectoCompiladores2.jar
                          -> se generó CodigoProyecto-errores.log sin errores
   Pruebas (sección 5):   pruebas\ejecutar-pruebas.bat
-                         -> Pruebas correctas: 118   Fallidas: 0
+                         -> Pruebas correctas: 122   Fallidas: 0
   Responsable:           Pablo Cortés
 
 
@@ -600,6 +628,12 @@ Prompts principales cuyo resultado se incorporó al proyecto:
      necesario y quitar las cosas innecesarias una vez comprendido lo
      solicitado y de igual forma estar dentro del marco de lo solicitado con
      todas las pruebas que estos cambios pueden conllevar" (PR #31).
+ 12. "Propongo que hagamos otro code review de absolutamente todo y hagas
+     pruebas extremas con todos los errores posibles que se puedan
+     verificar, errores propios de lo que era parte del proyecto 1 así como
+     del proyecto 2 ... debe estar perfecto ... y revisa también que el
+     repositorio esté limpio y documentado además de ordenado para
+     compartir" (revisión integral final, PR #32).
 
 
 16. FUENTES

@@ -96,7 +96,7 @@ public class ValidadorEcho {
                     reportarParentesis(analizador, token);
                     profundidad++;
                 } else if (token.es(TipoToken.CADENA)) {
-                    if (!Patrones.CADENA.matcher(token.getLexema()).matches()) {
+                    if (!Patrones.esCadenaCerrada(token.getLexema())) {
                         reportarComillaAbierta(analizador, token);
                         nodo.agregarToken(token);
                         analizador.avanzar();
@@ -167,7 +167,7 @@ public class ValidadorEcho {
             }
             nodo.agregarToken(token);
             analizador.avanzar();
-            if (token.es(TipoToken.CADENA) && !Patrones.CADENA.matcher(token.getLexema()).matches()) {
+            if (token.es(TipoToken.CADENA) && !Patrones.esCadenaCerrada(token.getLexema())) {
                 reportarComillaAbierta(analizador, token);
                 return nodo;
             }

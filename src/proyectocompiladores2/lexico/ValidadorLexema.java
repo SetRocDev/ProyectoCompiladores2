@@ -44,7 +44,7 @@ public class ValidadorLexema {
     /** Cadenas sin cerrar (502) y caracteres que no pertenecen al lenguaje (501). */
     private void validarReglasGenerales(List<Token> tokens, GestorErrores errores) {
         for (Token token : tokens) {
-            if (token.es(TipoToken.CADENA) && !Patrones.CADENA.matcher(token.getLexema()).matches()) {
+            if (token.es(TipoToken.CADENA) && !Patrones.esCadenaCerrada(token.getLexema())) {
                 errores.registrar(CodigoError.CADENA_SIN_CERRAR, token.getLinea(), token.getColumna(),
                         token.getLexema());
             }

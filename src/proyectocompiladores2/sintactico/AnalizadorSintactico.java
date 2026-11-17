@@ -150,6 +150,16 @@ public class AnalizadorSintactico {
                 registrar(CodigoError.ESTRUCTURA_DESCONOCIDA, token, token.getLexema(), sugerencia(palabra));
                 return estructuraGenerica();
             }
+            if (token.es(TipoToken.PALABRA) && pareceEchoMalEscrito(token)) {
+                // "eco $x;": se reporta como echo mal escrito y se revisa el resto como echo
+                reemplazarTextoSuelto(token, "echo");
+                return new ValidadorEcho().analizar(this);
+            }
+            if (token.es(TipoToken.PALABRA) && pareceElseMalEscrito(token)) {
+                // "} els {": se reporta como else mal escrito y su bloque se revisa igual
+                reemplazarTextoSuelto(token, "else");
+                return estructuraGenerica();
+            }
         }
         return sentenciaSimple();
     }
@@ -548,6 +558,42 @@ public class AnalizadorSintactico {
             }
         }
         return false;
+    }
+
+    /**
+     * "eco $x;" o "ehco "Hola";": una palabra que se parece a echo (una o dos
+     * letras de diferencia) seguida directamente de un valor. En PHP una
+     * palabra suelta nunca va seguida de un valor, así que es un echo mal
+     * escrito.
+     */
+    private boolean pareceEchoMalEscrito(Token palabra) {
+        Token siguiente = siguiente();
+        return seParece(palabra.getLexema(), "echo") && siguiente != null
+                && (siguiente.es(TipoToken.CADENA) || siguiente.es(TipoToken.IDENTIFICADOR)
+                        || siguiente.es(TipoToken.NUMERO));
+    }
+
+    /** "} els {": una palabra que se parece a else seguida directamente de '{'. */
+    private boolean pareceElseMalEscrito(Token palabra) {
+        return seParece(palabra.getLexema(), "else") && es(siguiente(), "{");
+    }
+
+    /** Al menos 3 letras y a lo sumo 2 de diferencia con la palabra clave. */
+    private static boolean seParece(String palabra, String palabraClave) {
+        String minuscula = palabra.toLowerCase(Locale.ROOT);
+        return minuscula.length() >= 3 && !minuscula.equals(palabraClave)
+                && Patrones.distanciaDeEdicion(minuscula, palabraClave) <= 2;
+    }
+
+    /**
+     * La etapa 4 ya reportó la palabra como texto suelto (402); como aquí se
+     * sabe que es una palabra clave mal escrita, se reemplaza por el 504, que
+     * es más específico (un error, un mensaje).
+     */
+    private void reemplazarTextoSuelto(Token palabra, String palabraClave) {
+        errores.quitar(CodigoError.TEXTO_FUERA_DE_COMENTARIO, palabra.getLinea(), palabra.getColumna());
+        registrar(CodigoError.ESTRUCTURA_DESCONOCIDA, palabra, palabra.getLexema(),
+                "; ¿quiso decir '" + palabraClave + "'?");
     }
 
     /** @return "; ¿quiso decir 'while'?" si la palabra se parece a una estructura conocida. */

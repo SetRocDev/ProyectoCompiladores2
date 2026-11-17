@@ -40,11 +40,46 @@ public final class Patrones {
     /** R3: '$' seguido de letra o '_', y luego letras, dígitos o '_'. */
     public static final Pattern IDENTIFICADOR = Pattern.compile("\\$[A-Za-z_][A-Za-z0-9_]*");
 
-    /** Entero o decimal: 85, 3.5 */
-    public static final Pattern NUMERO = Pattern.compile("[0-9]+(\\.[0-9]+)?");
+    /**
+     * Número de PHP: entero o decimal (85, 3.5), con exponente (1e3, 2.5E-4),
+     * hexadecimal (0x1F), binario (0b101), octal (0o17) y con separadores '_'
+     * (1_000_000). Solo usa clases de caracteres, sin grupos que se repitan,
+     * para que no se vuelva recursivo con números muy largos.
+     */
+    public static final Pattern NUMERO = Pattern.compile(
+            "0[xX][0-9A-Fa-f_]+|0[bB][01_]+|0[oO][0-7_]+"
+            + "|[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?");
 
-    /** Cadena cerrada con comillas dobles o simples (admite \" dentro). */
-    public static final Pattern CADENA = Pattern.compile("\"(\\\\.|[^\"\\\\])*\"|'(\\\\.|[^'\\\\])*'");
+    /**
+     * Cadena cerrada: empieza y termina con la misma comilla (doble o simple)
+     * y la comilla final no está escapada con '\\'. Se revisa carácter por
+     * carácter en lugar de con una expresión regular: una expresión con
+     * alternativas repetidas se vuelve recursiva en java.util.regex y con una
+     * cadena de miles de caracteres desborda la pila (StackOverflowError).
+     *
+     * @return true si el lexema es una cadena con su comilla de cierre
+     */
+    public static boolean esCadenaCerrada(String lexema) {
+        if (lexema.length() < 2) {
+            return false;
+        }
+        char comilla = lexema.charAt(0);
+        if (comilla != '"' && comilla != '\'') {
+            return false;
+        }
+        int i = 1;
+        while (i < lexema.length()) {
+            char c = lexema.charAt(i);
+            if (c == '\\') {
+                i += 2;
+            } else if (c == comilla) {
+                return i == lexema.length() - 1;
+            } else {
+                i++;
+            }
+        }
+        return false;
+    }
 
     /** R5: comentario de línea, inicia con // o # y llega hasta el final de la línea. */
     public static final Pattern COMENTARIO = Pattern.compile("(//|#).*");
@@ -69,7 +104,10 @@ public final class Patrones {
             "as", "and", "or", "xor", "new", "elseif", "break", "switch", "case",
             "default", "static", "global", "extends", "implements", "interface",
             "throw", "try", "catch", "finally", "instanceof", "var", "use",
-            "namespace", "exit", "die", "endif", "endwhile", "endfor", "endforeach");
+            "namespace", "exit", "die", "endif", "endwhile", "endfor", "endforeach",
+            "require", "require_once", "include_once", "goto", "abstract", "final", "protected",
+            "clone", "yield", "declare", "enddeclare", "endswitch", "insteadof", "list",
+            "unset", "isset", "empty", "eval", "readonly", "enum", "match", "fn");
 
     /** Operadores (el '=' solo se considera ASIGNACIÓN, decisión Q5). */
     public static final Set<String> OPERADORES = conjunto(

@@ -38,7 +38,7 @@ import proyectocompiladores2.sintactico.arbol.NodoPrograma;
  *   Etapa 3         -> Patrones             patrón de cada tipo (lo usan las etapas 2 y 4)
  *   Etapa 4         -> ValidadorLexema      validación del lexema (R3, R4, R5 del Proyecto 1)
  *   Etapa 5         -> AnalizadorSintactico análisis sintáctico: while, if/else, echo (Proyecto 2)
- *   Etapa 6         -> AnalizadorSemantico  análisis semántico: uso de variables y coherencia (Proyecto 2)
+ *   Etapa 6         -> AnalizadorSemantico  análisis semántico: variables sin valor y división entre cero (Proyecto 2)
  *   Archivo de log  -> EscritorLog          nombreArchivo-errores.log (R2)
  *
  * Uso de IA: la estructura de esta clase fue generada con apoyo de
@@ -121,8 +121,9 @@ public class Main {
 
             // Etapa 6: análisis semántico (significado: uso de las variables)
             semantico.analizar(arbol);
-        } catch (RuntimeException e) {
-            // Un fallo inesperado no impide escribir el .log con lo encontrado hasta ahí
+        } catch (RuntimeException | StackOverflowError e) {
+            // Un fallo inesperado no impide escribir el .log con lo encontrado
+            // hasta ahí, ni revisar los demás archivos de la carpeta
             imprimir("  Aviso: el analisis se detuvo antes de terminar (" + e + ")");
         }
 

@@ -61,7 +61,7 @@ public enum CodigoError {
     CADENA_SIN_CERRAR(502, "La cadena de texto %s no tiene la comilla de cierre"),
     // 503 a 505: estructura general del código (análisis sintáctico, etapa 5)
     LLAVE_SIN_APERTURA(503, "Llave de cierre '}' sin una llave de apertura '{' que le corresponda"),
-    ESTRUCTURA_DESCONOCIDA(504, "'%s' no es una estructura de control válida%s"),
+    ESTRUCTURA_DESCONOCIDA(504, "'%s' no es una palabra clave de PHP%s"),
     BLOQUE_SIN_CIERRE(505, "El bloque de '%s' que inicia en la línea %s no tiene llave de cierre '}'"),
 
     // ===== 6xx: Comando while (R3 del Proyecto 2) =====
