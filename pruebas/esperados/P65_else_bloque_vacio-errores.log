@@ -28,7 +28,7 @@
 0028 if ($promedio >= 70) {
 0029     echo "Estado: Aprobado\n";
 0030 } else {
-Error 713. El bloque del else está vacío; debe contener al menos una línea de código
+Error 713. [Sintáctico] El bloque del else está vacío; debe contener al menos una línea de código
 0031 }
 0032 
 0033 // Contador de revisión usando while

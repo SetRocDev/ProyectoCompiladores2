@@ -26,7 +26,7 @@
 0026 
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {
-Error 705. El bloque del if que inicia en la línea 0028 no tiene llave de cierre '}'
+Error 705. [Sintáctico] El bloque del if que inicia en la línea 0028 no tiene llave de cierre '}'
 0029     echo "Estado: Aprobado\n";
 0030 else {
 0031     echo "Estado: Reprobado\n";

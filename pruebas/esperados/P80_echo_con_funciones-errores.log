@@ -34,8 +34,7 @@
 0034 // Contador de revisión usando while
 0035 $contador_revision = 0;
 0036 
-0037 while ($contador_revision = 0) {
-Error 902. La condición del while asigna un valor fijo ('$contador_revision = 0') en lugar de compararlo; para comparar se usa '=='
+0037 while ($contador_revision < $cantidad_notas) {
 0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 0039     $contador_revision = $contador_revision + 1;
 0040 }
@@ -49,6 +48,17 @@ Error 902. La condición del while asigna un valor fijo ('$contador_revision = 0
 0048 $Total = 200;
 0049 
 0050 $resultado = $total + $Total;
-0051 echo "\nResultado final: $resultado\n";
-0052 
-0053 ?>
+0051 echo count($notas);
+Error 802. [Sintáctico] La sentencia echo no debe usar paréntesis (ni para agrupar ni en llamadas a funciones); la forma correcta es 'echo "texto";'
+0052 echo $total, $Total;
+0053 echo "Notas: "
+0054     . count($notas) . "\n";
+Error 802. [Sintáctico] La sentencia echo no debe usar paréntesis (ni para agrupar ni en llamadas a funciones); la forma correcta es 'echo "texto";'
+0055 echo PHP_EOL;
+0056 echo 'Texto literal';
+0057 echo -5 + $notas[0];
+0058 echo trim(" hola ") . strtoupper("x");
+Error 802. [Sintáctico] La sentencia echo no debe usar paréntesis (ni para agrupar ni en llamadas a funciones); la forma correcta es 'echo "texto";'
+0059 echo "\nResultado final: $resultado\n";
+0060 
+0061 ?>

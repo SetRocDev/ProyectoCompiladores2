@@ -42,7 +42,7 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo $mensaje_final
-Error 805. Falta el punto y coma ';' al final de la sentencia echo
+Error 805. [Sintáctico] Falta el punto y coma ';' al final de la sentencia echo
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

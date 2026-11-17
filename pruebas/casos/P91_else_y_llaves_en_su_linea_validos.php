@@ -16,7 +16,7 @@ echo "Cantidad de notas: $cantidad_notas\n";
 $suma_notas = 0;
 
 for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
-	$suma_notas = $suma_notas + $notas[$i];
+    $suma_notas = $suma_notas + $notas[$i];
 }
 
 $promedio = $suma_notas / $cantidad_notas;
@@ -25,9 +25,12 @@ $promedio = $suma_notas / $cantidad_notas;
 echo "Promedio: $promedio\n";
 
 // Evaluar estado del estudiante
-if ($promedio >= 70) {
+if ($promedio >= 70)
+{
     echo "Estado: Aprobado\n";
-} else {
+}
+else
+{
     echo "Estado: Reprobado\n";
 }
 

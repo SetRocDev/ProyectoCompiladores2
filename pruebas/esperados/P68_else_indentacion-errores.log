@@ -29,7 +29,7 @@
 0029     echo "Estado: Aprobado\n";
 0030 } else {
 0031       echo "Estado: Reprobado\n";
-Error 715. Indentación incorrecta dentro del else: se esperaban 4 espacios y hay 6
+Error 715. [Sintáctico] Indentación incorrecta dentro del else: se esperaban 4 espacios y hay 6
 0032 }
 0033 
 0034 // Contador de revisión usando while

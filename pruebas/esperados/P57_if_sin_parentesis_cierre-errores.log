@@ -26,7 +26,7 @@
 0026 
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70 {
-Error 702. Falta el paréntesis de cierre ')' de la condición del if
+Error 702. [Sintáctico] Falta el paréntesis de cierre ')' de la condición del if
 0029     echo "Estado: Aprobado\n";
 0030 } else {
 0031     echo "Estado: Reprobado\n";

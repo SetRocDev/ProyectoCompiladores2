@@ -42,7 +42,7 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo;
-Error 801. La sentencia echo no tiene una expresión o cadena para imprimir
+Error 801. [Sintáctico] La sentencia echo no tiene una expresión o cadena para imprimir
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

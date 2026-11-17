@@ -35,7 +35,7 @@
 0035 $contador_revision = 0;
 0036 
 0037 while ($contador_revision < $cantidad_notas) {
-Error 606. El bloque del while está vacío; debe contener al menos una línea de código
+Error 606. [Sintáctico] El bloque del while está vacío; debe contener al menos una línea de código
 0038     // pendiente: revisar las notas
 0039 }
 0040 

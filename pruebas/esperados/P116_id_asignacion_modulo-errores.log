@@ -49,7 +49,7 @@
 0049 
 0050 $resultado = $total + $Total;
 0051 $1resultado %= 2;
-Error 201. El identificador '$1resultado' no puede iniciar con un dígito después de '$'
+Error 201. [Léxico] El identificador '$1resultado' no puede iniciar con un dígito después de '$'
 0052 echo "\nResultado final: $resultado\n";
 0053 
 0054 ?>

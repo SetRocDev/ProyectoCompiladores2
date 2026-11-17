@@ -28,7 +28,7 @@
 0028 if ($promedio >= 70) {
 0029     echo "Estado: Aprobado\n";
 0030   } else {
-Error 709. La llave de cierre '}' del if no está alineada con 'if': se esperaban 0 espacios y hay 2
+Error 709. [Sintáctico] La llave de cierre '}' del if no está alineada con 'if': se esperaban 0 espacios y hay 2
 0031     echo "Estado: Reprobado\n";
 0032 }
 0033 

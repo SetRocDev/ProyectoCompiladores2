@@ -27,7 +27,7 @@
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {
 0029   echo "Estado: Aprobado\n";
-Error 707. Indentación incorrecta dentro del if: se esperaban 4 espacios y hay 2
+Error 707. [Sintáctico] Indentación incorrecta dentro del if: se esperaban 4 espacios y hay 2
 0030 } else {
 0031     echo "Estado: Reprobado\n";
 0032 }

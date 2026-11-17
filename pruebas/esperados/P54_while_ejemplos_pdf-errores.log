@@ -5,27 +5,27 @@
 0005     $x = $x + 1;
 0006 }
 0007 while $x < 10 {
-Error 601. Falta el paréntesis de apertura '(' después de 'while'; la forma correcta es 'while (condición) {'
-Error 602. Falta el paréntesis de cierre ')' de la condición del while
+Error 601. [Sintáctico] Falta el paréntesis de apertura '(' después de 'while'; la forma correcta es 'while (condición) {'
+Error 602. [Sintáctico] Falta el paréntesis de cierre ')' de la condición del while
 0008     echo $x;
 0009 }
 0010 while () {
-Error 603. La condición del while está vacía; debe haber una condición entre los paréntesis
-Error 606. El bloque del while está vacío; debe contener al menos una línea de código
+Error 603. [Sintáctico] La condición del while está vacía; debe haber una condición entre los paréntesis
+Error 606. [Sintáctico] El bloque del while está vacío; debe contener al menos una línea de código
 0011 }
 0012 while ($x < 10 {
-Error 602. Falta el paréntesis de cierre ')' de la condición del while
+Error 602. [Sintáctico] Falta el paréntesis de cierre ')' de la condición del while
 0013     echo $x;
 0014 }
 0015 while ($x < 10) {
-Error 606. El bloque del while está vacío; debe contener al menos una línea de código
+Error 606. [Sintáctico] El bloque del while está vacío; debe contener al menos una línea de código
 0016 }
 0017 while ($x < 10) {
 0018   echo $x;
-Error 607. Indentación incorrecta dentro del while: se esperaban 4 espacios y hay 2
+Error 607. [Sintáctico] Indentación incorrecta dentro del while: se esperaban 4 espacios y hay 2
 0019 }
 0020 while ($x < 10) {
 0021       echo $x;
-Error 607. Indentación incorrecta dentro del while: se esperaban 4 espacios y hay 6
+Error 607. [Sintáctico] Indentación incorrecta dentro del while: se esperaban 4 espacios y hay 6
 0022 }
 0023 ?>

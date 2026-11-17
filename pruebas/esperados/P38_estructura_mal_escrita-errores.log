@@ -35,7 +35,7 @@
 0035 $contador_revision = 0;
 0036 
 0037 whlie ($contador_revision < $cantidad_notas) {
-Error 504. 'whlie' no es una estructura de control válida; ¿quiso decir 'while'?
+Error 504. [Sintáctico] 'whlie' no es una estructura de control válida; ¿quiso decir 'while'?
 0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 0039     $contador_revision = $contador_revision + 1;
 0040 }

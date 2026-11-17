@@ -51,4 +51,4 @@
 0051 echo "\nResultado final: $resultado\n";
 0052 
 0053 ?> echo "hola";
-Error 306. Se encontró contenido después de la etiqueta de cierre '?>': 'echo "hola";'
+Error 306. [Léxico] Se encontró contenido después de la etiqueta de cierre '?>': 'echo "hola";'

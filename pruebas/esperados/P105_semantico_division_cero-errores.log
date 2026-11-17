@@ -20,7 +20,7 @@
 0020 }
 0021 
 0022 $promedio = $suma_notas / 0;
-Error 903. División entre cero ('/ 0'): en PHP 8 detiene el programa con DivisionByZeroError
+Error 902. [Semántico] División entre cero ('/ 0'): en PHP 8 detiene el programa con DivisionByZeroError
 0023 
 0024 // Mostrar promedio
 0025 echo "Promedio: $promedio\n";

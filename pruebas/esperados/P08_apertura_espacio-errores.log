@@ -1,5 +1,5 @@
 0001  <?php
-Error 301. Antes de la etiqueta de apertura '<?php' hay espacios en blanco; la etiqueta debe ser lo primero del archivo
+Error 301. [Léxico] Antes de la etiqueta de apertura '<?php' hay espacios en blanco; la etiqueta debe ser lo primero del archivo
 0002 // Sistema simple de gestión de notas
 0003 
 0004 # Datos del estudiante

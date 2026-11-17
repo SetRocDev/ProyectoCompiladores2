@@ -46,7 +46,7 @@
 0046 // Diferenciación de identificadores
 0047 $copia = $1abc . $-d;
 0048 $1suma += 5;
-Error 201. El identificador '$1suma' no puede iniciar con un dígito después de '$'
+Error 201. [Léxico] El identificador '$1suma' no puede iniciar con un dígito después de '$'
 0049 $total = 100;
 0050 $Total = 200;
 0051 

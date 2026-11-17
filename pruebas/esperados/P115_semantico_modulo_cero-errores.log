@@ -49,7 +49,7 @@
 0049 
 0050 $resultado = $total + $Total;
 0051 $resultado %= 0;
-Error 903. División entre cero ('%= 0'): en PHP 8 detiene el programa con DivisionByZeroError
+Error 902. [Semántico] División entre cero ('%= 0'): en PHP 8 detiene el programa con DivisionByZeroError
 0052 echo "\nResultado final: $resultado\n";
 0053 
 0054 ?>

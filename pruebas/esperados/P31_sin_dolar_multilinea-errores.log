@@ -45,7 +45,7 @@
 0045 
 0046 // Diferenciación de identificadores
 0047 nombre_curso
-Error 206. El identificador 'nombre_curso' no inicia con el símbolo '$'; todo identificador debe iniciar con '$' seguido de una letra o guion bajo
+Error 206. [Léxico] El identificador 'nombre_curso' no inicia con el símbolo '$'; todo identificador debe iniciar con '$' seguido de una letra o guion bajo
 0048     = "Compiladores";
 0049 $total = 100;
 0050 $Total = 200;

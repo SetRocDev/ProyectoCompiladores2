@@ -27,8 +27,6 @@ echo "Promedio: $promedio\n";
 // Evaluar estado del estudiante
 if ($promedio >= 70) {
     echo "Estado: Aprobado\n";
-} elseif ($notas[0] = 60) {
-    echo "Estado: Reposicion\n";
 } else {
     echo "Estado: Reprobado\n";
 }
@@ -36,7 +34,8 @@ if ($promedio >= 70) {
 // Contador de revisión usando while
 $contador_revision = 0;
 
-while ($contador_revision < $cantidad_notas) {
+while ($contador_revision < $cantidad_notas)
+  {
     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
     $contador_revision = $contador_revision + 1;
 }

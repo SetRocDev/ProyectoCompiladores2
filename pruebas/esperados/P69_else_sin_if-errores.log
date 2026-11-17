@@ -45,7 +45,7 @@
 0045 
 0046 // Diferenciación de identificadores
 0047 else {
-Error 714. 'else' sin un 'if' previo: debe ir justo después de la llave de cierre '}' de un if
+Error 714. [Sintáctico] 'else' sin un 'if' previo: debe ir justo después de la llave de cierre '}' de un if
 0048     echo "sin if\n";
 0049 }
 0050 $total = 100;

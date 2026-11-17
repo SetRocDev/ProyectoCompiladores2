@@ -1,5 +1,5 @@
 0001 // Sistema simple de gestión de notas
-Error 303. No se encontró la etiqueta de apertura '<?php'; debe ser lo primero del archivo, al inicio de la línea 0001
+Error 303. [Léxico] No se encontró la etiqueta de apertura '<?php'; debe ser lo primero del archivo, al inicio de la línea 0001
 0002 
 0003 # Datos del estudiante
 0004 $nombre_estudiante = "Carlos";

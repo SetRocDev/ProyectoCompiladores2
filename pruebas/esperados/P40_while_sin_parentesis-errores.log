@@ -35,8 +35,8 @@
 0035 $contador_revision = 0;
 0036 
 0037 while $contador_revision < $cantidad_notas {
-Error 601. Falta el paréntesis de apertura '(' después de 'while'; la forma correcta es 'while (condición) {'
-Error 602. Falta el paréntesis de cierre ')' de la condición del while
+Error 601. [Sintáctico] Falta el paréntesis de apertura '(' después de 'while'; la forma correcta es 'while (condición) {'
+Error 602. [Sintáctico] Falta el paréntesis de cierre ')' de la condición del while
 0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
 0039     $contador_revision = $contador_revision + 1;
 0040 }

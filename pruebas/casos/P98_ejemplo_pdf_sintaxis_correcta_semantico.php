@@ -15,7 +15,7 @@ echo "Cantidad de notas: $cantidad_notas\n";
 // Calcular promedio usando for
 $suma_notas = 0;
 
-for ($i = 0, $i < $cantidad_notas, $i = $i + 1) {
+for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
     $suma_notas = $suma_notas + $notas[$i];
 }
 
@@ -49,5 +49,9 @@ $Total = 200;
 
 $resultado = $total + $Total;
 echo "\nResultado final: $resultado\n";
+while ($x < 10) {
+    echo $x;
+    $x = $x + 1;
+}
 
 ?>

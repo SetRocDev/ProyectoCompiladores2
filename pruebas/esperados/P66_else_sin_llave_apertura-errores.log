@@ -28,7 +28,7 @@
 0028 if ($promedio >= 70) {
 0029     echo "Estado: Aprobado\n";
 0030 } else
-Error 711. Falta la llave de apertura '{' después de 'else'; la forma correcta es '} else {'
+Error 711. [Sintáctico] Falta la llave de apertura '{' después de 'else'; la forma correcta es 'else { ... }'
 0031     echo "Estado: Reprobado\n";
 0032 }
 0033 

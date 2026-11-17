@@ -1,3 +1,3 @@
 0001 
-Error 303. No se encontró la etiqueta de apertura '<?php'; debe ser lo primero del archivo, al inicio de la línea 0001
-Error 305. No se encontró la etiqueta de cierre '?>'; debe estar en la última línea del archivo (línea 0001)
+Error 303. [Léxico] No se encontró la etiqueta de apertura '<?php'; debe ser lo primero del archivo, al inicio de la línea 0001
+Error 305. [Léxico] No se encontró la etiqueta de cierre '?>'; debe estar en la última línea del archivo (línea 0001)

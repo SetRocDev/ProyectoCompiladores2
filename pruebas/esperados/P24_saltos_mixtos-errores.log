@@ -20,7 +20,7 @@
 0020 }
 0021 
 0022 $1promedio = $suma_notas / $cantidad_notas;
-Error 201. El identificador '$1promedio' no puede iniciar con un dígito después de '$'
+Error 201. [Léxico] El identificador '$1promedio' no puede iniciar con un dígito después de '$'
 0023 
 0024 // Mostrar promedio
 0025 echo "Promedio: $promedio\n";
@@ -34,4 +34,4 @@ Error 201. El identificador '$1promedio' no puede iniciar con un dígito despué
 0033 
 0034 // Contador de revisión usando while
 0035 $contador_revision = 0;
-0036 0037 while ($contador_revision < $cantidad_notas) {0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";0039     $contador_revision = $contador_revision + 1;0040 }0041 0042 // Información adicional0043 $if = "Proceso finalizado correctamente";Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado0044 echo $mensaje_final;Error 901. La variable '$mensaje_final' se usa pero no se le asignó un valor antes0045 0046 // Diferenciación de identificadores0047 $total = 100;0048 $Total = 200;0049 0050 $resultado = $total + $Total;0051 echo "\nResultado final: $resultado\n";0052 0053 ?>
+0036 0037 while ($contador_revision < $cantidad_notas) {0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";0039     $contador_revision = $contador_revision + 1;0040 }0041 0042 // Información adicional0043 $if = "Proceso finalizado correctamente";Error 204. [Léxico] El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado0044 echo $mensaje_final;Error 901. [Semántico] La variable '$mensaje_final' se usa pero no se le asignó un valor antes0045 0046 // Diferenciación de identificadores0047 $total = 100;0048 $Total = 200;0049 0050 $resultado = $total + $Total;0051 echo "\nResultado final: $resultado\n";0052 0053 ?>

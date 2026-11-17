@@ -42,7 +42,7 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo 10 / 0;
-Error 903. División entre cero ('/ 0'): en PHP 8 detiene el programa con DivisionByZeroError
+Error 902. [Semántico] División entre cero ('/ 0'): en PHP 8 detiene el programa con DivisionByZeroError
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

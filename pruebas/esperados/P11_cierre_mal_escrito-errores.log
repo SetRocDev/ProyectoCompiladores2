@@ -51,4 +51,4 @@
 0051 echo "\nResultado final: $resultado\n";
 0052 
 0053 ? >
-Error 304. Etiqueta de cierre mal escrita '? >'; se esperaba exactamente '?>'
+Error 304. [Léxico] Etiqueta de cierre mal escrita '? >'; se esperaba exactamente '?>'

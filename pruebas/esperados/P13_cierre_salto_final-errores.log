@@ -51,4 +51,4 @@
 0051 echo "\nResultado final: $resultado\n";
 0052 
 0053 ?>
-Error 308. Hay saltos de línea después de la etiqueta de cierre '?>'; el archivo debe terminar exactamente en '?>'
+Error 308. [Léxico] Hay saltos de línea después de la etiqueta de cierre '?>'; el archivo debe terminar exactamente en '?>'

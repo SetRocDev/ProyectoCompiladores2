@@ -23,7 +23,7 @@
 0023 
 0024 // Mostrar promedio
 0025 echo "Promedio: $Promedio\n";
-Error 901. La variable '$Promedio' se usa pero no se le asignó un valor antes; ¿quiso decir '$promedio'?
+Error 901. [Semántico] La variable '$Promedio' se usa pero no se le asignó un valor antes; ¿quiso decir '$promedio'?
 0026 
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {

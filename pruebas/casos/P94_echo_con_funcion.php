@@ -17,6 +17,7 @@ $suma_notas = 0;
 
 for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
     $suma_notas = $suma_notas + $notas[$i];
+}
 
 $promedio = $suma_notas / $cantidad_notas;
 
@@ -40,7 +41,7 @@ while ($contador_revision < $cantidad_notas) {
 
 // Información adicional
 $mensaje_final = "Proceso finalizado correctamente";
-echo $mensaje_final;
+echo "Total de notas: " . count($notas);
 
 // Diferenciación de identificadores
 $total = 100;

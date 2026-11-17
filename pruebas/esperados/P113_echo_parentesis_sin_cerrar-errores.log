@@ -42,8 +42,8 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo ("Final: " . $mensaje_final;
-Error 802. La sentencia echo no debe usar paréntesis para agrupar lo que imprime; la forma correcta es 'echo "texto";'
-Error 806. Expresión inválida en el echo: falta el paréntesis de cierre ')'
+Error 802. [Sintáctico] La sentencia echo no debe usar paréntesis (ni para agrupar ni en llamadas a funciones); la forma correcta es 'echo "texto";'
+Error 806. [Sintáctico] Expresión inválida en el echo: falta el paréntesis de cierre ')'
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

@@ -23,7 +23,7 @@
 0023 
 0024 // Mostrar promedio
 0025 echo "Promedio: $promedio\n;
-Error 803. La cadena "Promedio: $promedio\n; del echo no tiene la comilla doble (") de cierre
+Error 803. [Sintáctico] La cadena "Promedio: $promedio\n; del echo no tiene la comilla doble (") de cierre
 0026 
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {

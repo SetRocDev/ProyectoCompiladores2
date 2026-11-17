@@ -15,14 +15,14 @@ echo "Cantidad de notas: $cantidad_notas\n";
 // Calcular promedio usando for
 $suma_notas = 0;
 
-for ($i = 0; $i < $cantidad_notas; $i = $i + 1 {
+for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
     $suma_notas = $suma_notas + $notas[$i];
 }
 
 $promedio = $suma_notas / $cantidad_notas;
 
 // Mostrar promedio
-echo "Promedio: $promedio\n";
+echo "Promedio: " . (int) $promedio;
 
 // Evaluar estado del estudiante
 if ($promedio >= 70) {

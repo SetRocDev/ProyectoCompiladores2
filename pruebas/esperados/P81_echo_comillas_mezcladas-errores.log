@@ -42,7 +42,7 @@
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
 0044 echo "Hola';
-Error 803. La cadena "Hola'; del echo no tiene la comilla doble (") de cierre
+Error 803. [Sintáctico] La cadena "Hola'; del echo no tiene la comilla doble (") de cierre
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

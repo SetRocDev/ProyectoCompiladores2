@@ -15,8 +15,7 @@
 0015 // Calcular promedio usando for
 0016 $suma_notas = 0;
 0017 
-0018 for ($i = 0; $i < $cantidad_notas; $i = $i + 1)
-Error 614. Falta la llave de apertura '{' del bloque del for
+0018 for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
 0019     $suma_notas = $suma_notas + $notas[$i];
 0020 }
 0021 
@@ -42,7 +41,8 @@ Error 614. Falta la llave de apertura '{' del bloque del for
 0041 
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
-0044 echo $mensaje_final;
+0044 echo "Total de notas: " . count($notas);
+Error 802. [Sintáctico] La sentencia echo no debe usar paréntesis (ni para agrupar ni en llamadas a funciones); la forma correcta es 'echo "texto";'
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;

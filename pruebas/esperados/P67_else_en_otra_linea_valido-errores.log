@@ -17,8 +17,7 @@
 0017 
 0018 for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
 0019     $suma_notas = $suma_notas + $notas[$i];
-0020   }
-Error 619. La llave de cierre '}' del for no está alineada con 'for': se esperaban 0 espacios y hay 2
+0020 }
 0021 
 0022 $promedio = $suma_notas / $cantidad_notas;
 0023 
@@ -28,27 +27,28 @@ Error 619. La llave de cierre '}' del for no está alineada con 'for': se espera
 0027 // Evaluar estado del estudiante
 0028 if ($promedio >= 70) {
 0029     echo "Estado: Aprobado\n";
-0030 } else {
-0031     echo "Estado: Reprobado\n";
-0032 }
-0033 
-0034 // Contador de revisión usando while
-0035 $contador_revision = 0;
-0036 
-0037 while ($contador_revision < $cantidad_notas) {
-0038     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
-0039     $contador_revision = $contador_revision + 1;
-0040 }
-0041 
-0042 // Información adicional
-0043 $mensaje_final = "Proceso finalizado correctamente";
-0044 echo $mensaje_final;
-0045 
-0046 // Diferenciación de identificadores
-0047 $total = 100;
-0048 $Total = 200;
-0049 
-0050 $resultado = $total + $Total;
-0051 echo "\nResultado final: $resultado\n";
-0052 
-0053 ?>
+0030 }
+0031 else {
+0032     echo "Estado: Reprobado\n";
+0033 }
+0034 
+0035 // Contador de revisión usando while
+0036 $contador_revision = 0;
+0037 
+0038 while ($contador_revision < $cantidad_notas) {
+0039     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
+0040     $contador_revision = $contador_revision + 1;
+0041 }
+0042 
+0043 // Información adicional
+0044 $mensaje_final = "Proceso finalizado correctamente";
+0045 echo $mensaje_final;
+0046 
+0047 // Diferenciación de identificadores
+0048 $total = 100;
+0049 $Total = 200;
+0050 
+0051 $resultado = $total + $Total;
+0052 echo "\nResultado final: $resultado\n";
+0053 
+0054 ?>

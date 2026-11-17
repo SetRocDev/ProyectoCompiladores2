@@ -41,21 +41,13 @@
 0041 
 0042 // Información adicional
 0043 $mensaje_final = "Proceso finalizado correctamente";
-0044 echo $mensaje_final;
+0044 echo "Proceso (final): $mensaje_final";
 0045 
 0046 // Diferenciación de identificadores
 0047 $total = 100;
 0048 $Total = 200;
 0049 
 0050 $resultado = $total + $Total;
-0051 echo count($notas);
-0052 echo $total, $Total;
-0053 echo "Notas: "
-0054     . count($notas) . "\n";
-0055 echo PHP_EOL;
-0056 echo 'Texto literal';
-0057 echo -5 + $notas[0];
-0058 echo trim(" hola ") . strtoupper("x");
-0059 echo "\nResultado final: $resultado\n";
-0060 
-0061 ?>
+0051 echo "\nResultado final: $resultado\n";
+0052 
+0053 ?>

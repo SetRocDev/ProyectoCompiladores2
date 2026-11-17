@@ -15,9 +15,11 @@ echo "Cantidad de notas: $cantidad_notas\n";
 // Calcular promedio usando for
 $suma_notas = 0;
 
-for ($i = 0; $i < $cantidad_notas; $i = $i + 1) {
-    $suma_notas = $suma_notas + $notas[$i];
-}
+for ($i = 0; $i < $cantidad_notas; $i = $i + 1)
+{
+  $suma_notas = $suma_notas + $notas[$i];
+	$suma_notas = $suma_notas + 0;
+  }
 
 $promedio = $suma_notas / $cantidad_notas;
 
@@ -34,7 +36,7 @@ if ($promedio >= 70) {
 // Contador de revisión usando while
 $contador_revision = 0;
 
-while ($contador_revision = 0) {
+while ($contador_revision < $cantidad_notas) {
     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
     $contador_revision = $contador_revision + 1;
 }
