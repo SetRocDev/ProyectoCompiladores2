@@ -146,6 +146,10 @@ P115_semantico_modulo_cero.php       902                 Despues de L50: $result
 P116_id_asignacion_modulo.php        201                 Despues de L50: $1resultado %= 2;   (%= es asignacion, igual que +=)
 P117_recuperacion_for_y_while_sin_llaves.php
                                      505 604             Sin la '}' del for (L20) y sin la '{' del while (L37): sin errores en cascada
+P118_cadena_muy_larga.php            -                   Al final: echo con una cadena de 6800 caracteres (antes detenia el programa)
+P119_numeros_de_php.php              -                   Al final: 1e3, 0x1F, 0b101, 1_000_000 y 2.5E-1   (numeros validos de PHP)
+P120_echo_mal_escrito.php            504                 L44: eco $mensaje_final;   (sugiere 'echo')
+P121_else_mal_escrito.php            504                 L30: } els {   (sugiere 'else')
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola
