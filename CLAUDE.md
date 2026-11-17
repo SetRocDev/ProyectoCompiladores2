@@ -15,16 +15,18 @@ Analizador de PHP en Java: etapas léxicas del Proyecto 1 + análisis sintáctic
 - Cada clase indica en su comentario inicial que se hizo con apoyo de IA (lo exige el enunciado).
 - `pruebas/casos/`: entradas `.php` (byte por byte, no editarlas a mano con un editor que cambie los saltos de línea).
 - `pruebas/esperados/`: el `-errores.log` exacto que debe generar cada caso.
+- `pruebas/herramientas/`: verificación extensa en Python (opcional; no es parte del programa).
 - `dist/`: el `.jar` compilado + `CodigoProyecto.php` de ejemplo (se entrega así). `recursos/`: copia del PHP de la cátedra.
 
 ## Comandos
 - Compilar como NetBeans: `ant clean jar` (el `-post-jar` de `build.xml` copia `recursos/CodigoProyecto.php` a `dist/`, que el clean borra).
 - Pruebas: `pruebas/ejecutar-pruebas.sh` (`-v` muestra diferencias; `JAVA=/ruta/java` para probar con Java 8). En Windows: `pruebas\ejecutar-pruebas.bat`.
 - Actualizar esperados (solo si el cambio es intencional y se explica en el PR): `pruebas/ejecutar-pruebas.sh --actualizar`.
-- Contraste con PHP real: `php -l archivo.php`.
+- Contraste con PHP real: `php -l archivo.php` o `python3 pruebas/herramientas/contraste_php.py`.
+- Verificación completa (casos fijos, mutaciones de 2 y 3 errores, batería extrema, fuzz + R2, PHP): `pruebas/herramientas/bateria-completa.sh` (ver `pruebas/herramientas/LEEME.txt`).
 
 ## Flujo de trabajo
-- Planificación en Trello (tablero "Proyecto Compiladores 2"): una tarjeta por tarea (T14–T31), decisiones Q1–Q13 en la lista Questions/Done.
+- Planificación en Trello (tablero "Proyecto Compiladores 2"): una tarjeta por tarea (T14–T32), decisiones Q1–Q13 en la lista Questions/Done.
 - Una rama por tarea (`fix/T15-...`, `feature/T20-...`) y un PR por tarea, **directo a `main`** (los PR encadenados #18–#28 no llegaron a main; ver Trello 🔀). Fusionar con "Create a merge commit".
 - Si una revisión pide un cambio sobre una tarea ya fusionada, se corrige hacia adelante en la rama actual.
 - Plantilla del PR: Tarjeta, Qué cambia, Requerimiento cubierto, Cómo se probó (resultado de la batería n/n), Para la defensa, Uso de IA.
