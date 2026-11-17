@@ -146,7 +146,7 @@ para que las tildes queden exactamente iguales.
      4. Abrir el .log: debajo de esa línea aparece el error.
 
   Forma 2: ejecutar todas las pruebas automáticas (recomendado).
-     La carpeta "pruebas" tiene 122 casos de prueba:
+     La carpeta "pruebas" tiene 127 casos de prueba:
        - pruebas\casos       los archivos .php, cada uno con un error puesto a
                              propósito (algunos no tienen errores, para
                              comprobar que no se marcan errores falsos)
@@ -159,7 +159,17 @@ para que las tildes queden exactamente iguales.
             pruebas\ejecutar-pruebas.bat
      El script ejecuta el programa con todos los casos, compara cada .log con
      el esperado byte por byte y al final muestra:
-            Pruebas correctas: 122   Fallidas: 0
+            Pruebas correctas: 127   Fallidas: 0
+
+  Forma 3: variantes del código de la cátedra (como en el Proyecto 1).
+     La carpeta "pruebas\catedra" tiene 616 copias de CodigoProyecto.php,
+     cada una con uno, dos o tres cambios: cada error del enunciado en cada
+     línea donde puede aparecer y formas válidas que no deben marcarse. Su
+     carpeta "esperados" tiene el .log exacto de cada una y su esperado.txt
+     dice qué se cambió y qué errores deben aparecer. Para ejecutarlas:
+            pruebas\catedra\ejecutar-catedra.bat
+     Al final muestra:
+            Pruebas correctas: 616   Fallidas: 0
 
 
 6. CÓMO COMPILARLO EN NETBEANS
@@ -245,6 +255,18 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
        errores falsos (P119), y un echo o un else mal escritos ("eco $x;",
        "} els {") dan el Error 504 con la sugerencia, en lugar del 402 de
        texto suelto (P120, P121).
+     - Al probar el código de la cátedra con cientos de cambios (sección 13)
+       se encontró y se corrigió: un texto antes de "<?php" daba, además del
+       301, un 402 por el mismo texto; ahora solo se analiza el código que
+       está dentro de las etiquetas (P122). Un while o un if mal escritos
+       ("whlie", "iff") se revisan como la estructura que se quiso escribir:
+       así aparecen también los demás errores de su línea, por ejemplo el
+       paréntesis que falta (504 y 602), y su bloque y su else no dan
+       errores en cascada (P123, P125). "fro (...; ...; ...) {" no daba el
+       504 por los ";" de la cabecera (P124). Una instrucción sin ";" ya no
+       se "traga" un "whlie" o un "eco" de la línea siguiente. Y los
+       parámetros de una función anónima, como en usort($notas, function
+       ($a, $b) {...}), ya no dan el Error 901 (P126).
 
 
 8. LISTA DE ERRORES QUE DETECTA
@@ -288,6 +310,8 @@ corrigió cada una y qué caso de prueba lo demuestra (carpeta pruebas\casos).
     504  Palabra clave mal escrita, con sugerencia  whlie (...) {  -> ¿quiso decir 'while'?
                                                     eco "Hola";    -> ¿quiso decir 'echo'?
                                                     } els {        -> ¿quiso decir 'else'?
+         Un while o un if mal escritos se siguen revisando como while o if:
+         "whlie ($x < 4 {" da el 504 y el 602 (falta el ')').
     505  Bloque de for, foreach, function, etc. sin llave de cierre }
 
   Comando while
@@ -490,7 +514,8 @@ respuesta confirmó o corrigió cada punto):
     aceptan. Dentro de un echo tampoco se aceptan una asignación
     (echo $x = 5;) ni un arreglo escrito con corchetes (echo [1, 2][0];).
   - El for, foreach y function no se validan (sección 11): un for mal
-    escrito solo se reporta si deja una llave sin pareja (503 o 505).
+    escrito solo se reporta si deja una llave sin pareja (503 o 505) o si
+    la palabra for está mal escrita (504).
   - Con miles de niveles de anidamiento (más de los que admite la pila de
     Java) el análisis se detiene: la consola lo avisa y el .log se escribe
     con los errores encontrados hasta ese punto. Con 60 niveles funciona
@@ -506,9 +531,21 @@ respuesta confirmó o corrigió cada punto):
   pruebas\herramientas (necesitan Python 3; ver su LEEME.txt). En Linux,
   macOS o Git Bash, todas de una vez: pruebas/herramientas/bateria-completa.sh
 
-  - 122 casos de prueba automáticos (sección 5, Forma 2): cada .log se
-    compara byte por byte con el esperado. Resultado: 122 de 122, con Java 8
+  - 127 casos de prueba automáticos (sección 5, Forma 2): cada .log se
+    compara byte por byte con el esperado. Resultado: 127 de 127, con Java 8
     y Java 21.
+  - Variantes del código de la cátedra (variantes_catedra.py, sección 5,
+    Forma 3): 516 cambios distintos de CodigoProyecto.php, cada uno con los
+    errores EXACTOS que debe dar (ni uno más ni uno menos): cada error del
+    Proyecto 1 y del Proyecto 2 en cada línea donde puede ir, las palabras
+    clave mal escritas solas o con otro error, el archivo completo con
+    otros saltos de línea, codificación o sangría, y formas válidas. Con
+    ellas se armaron 90 000 archivos más, combinando al azar de 2 a 5
+    errores en partes distintas del programa (40 000 de dos errores,
+    30 000 de tres, 10 000 de cuatro y 10 000 de cinco). Resultado sobre
+    la versión final: todos exactos. Así se encontraron las correcciones
+    de la sección 7 marcadas con P122 a P126. La carpeta pruebas\catedra
+    guarda 616 de estos casos (los 516 y 100 combinaciones) con su .log.
   - Pruebas de "mutación tipo tutor" (mutaciones_tutor.py): un programa
     cambió el código de ejemplo de 630 formas distintas, como lo haría el
     tutor (cada error del enunciado en cada lugar posible, variantes válidas
@@ -528,16 +565,17 @@ respuesta confirmó o corrigió cada punto):
     los avisos "Undefined variable" de PHP al ejecutar los mismos casos
     (74 de 74; contraste_php.py).
   - Robustez (fuzz.py y verificar_r2.py): más de 45 000 archivos con
-    cambios al azar (también sobre el programa anidado y el de las llaves en
-    su propia línea); el programa nunca se
-    detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
+    cambios al azar en las revisiones anteriores y 23 000 más sobre la
+    versión final (también sobre el programa anidado y el de las llaves en
+    su propia línea); el programa nunca se detuvo, siempre generó el .log, y en todos se comprobó que al quitar la
     numeración y los errores queda el .php original byte por byte (R2).
   - Compilación con Ant (lo mismo que hace "Clean and Build" de NetBeans).
   - Simulación de otro equipo: el proyecto se empaquetó en .zip, se
     descomprimió en una carpeta con espacios y tildes ("Mis Documentos\
     Compiladores Pablo Cortés"), se compiló desde cero y se ejecutó solo con
     Java 8, desde otra carpeta de trabajo y con la configuración de idioma de
-    Windows en español (Cp1252). Resultado: 122 de 122.
+    Windows en español (Cp1252). Resultado: 127 de 127 y, en la carpeta
+    de la cátedra, 616 de 616.
   - Revisión del .jar: sus 39 clases están compiladas para Java 8 y cada
     método de Java que usan existe en Java 8 (se comprobó uno por uno).
 
@@ -555,7 +593,9 @@ un equipo distinto al de desarrollo:
   Ejecución (sección 3): java -jar ProyectoCompiladores2.jar
                          -> se generó CodigoProyecto-errores.log sin errores
   Pruebas (sección 5):   pruebas\ejecutar-pruebas.bat
-                         -> Pruebas correctas: 122   Fallidas: 0
+                         -> Pruebas correctas: 127   Fallidas: 0
+                         pruebas\catedra\ejecutar-catedra.bat
+                         -> Pruebas correctas: 616   Fallidas: 0
   Responsable:           Pablo Cortés
 
 
@@ -634,6 +674,12 @@ Prompts principales cuyo resultado se incorporó al proyecto:
      del proyecto 2 ... debe estar perfecto ... y revisa también que el
      repositorio esté limpio y documentado además de ordenado para
      compartir" (revisión integral final, PR #32).
+ 13. "Nada más por asegurarme, haz más pruebas considerando el código que
+     nos proporciona la universidad y hazle todos los cambios que se te
+     ocurran, si hace falta hacer 100 000 pruebas, hazlas con todo lo que
+     te puedas imaginar y haz una carpeta de pruebas con los distintos
+     códigos modificados con los errores que en teoría debería de lanzar
+     como en el proyecto 1" (carpeta pruebas\catedra, PR #33).
 
 
 16. FUENTES

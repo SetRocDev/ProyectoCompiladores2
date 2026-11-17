@@ -33,7 +33,8 @@ Las instrucciones completas, en lenguaje sencillo, están en **[INFORME.txt](INF
 | [`INFORME.txt`](INFORME.txt) | Instrucciones, correcciones del Proyecto 1, lista de errores, etapas, gramática, decisiones, pruebas y uso de IA |
 | [`dist/`](dist) | El programa listo para usar (`.jar`) y el archivo PHP de ejemplo |
 | [`src/`](src/proyectocompiladores2) | El código fuente en Java |
-| [`pruebas/`](pruebas) | 122 casos (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt), los scripts `ejecutar-pruebas.bat` / `.sh` que los comparan automáticamente y las [herramientas](pruebas/herramientas/LEEME.txt) de las pruebas extensas (opcionales, Python 3) |
+| [`pruebas/`](pruebas) | 127 casos (`casos/`), el `.log` exacto que debe salir de cada uno (`esperados/`), la tabla [`esperado.txt`](pruebas/esperado.txt), los scripts `ejecutar-pruebas.bat` / `.sh` que los comparan automáticamente y las [herramientas](pruebas/herramientas/LEEME.txt) de las pruebas extensas (opcionales, Python 3) |
+| [`pruebas/catedra/`](pruebas/catedra/LEEME.txt) | 616 copias del código de la cátedra con errores introducidos (uno, dos o tres), el `.log` exacto de cada una, la tabla [`esperado.txt`](pruebas/catedra/esperado.txt) con lo que se cambió y los scripts `ejecutar-catedra.bat` / `.sh` |
 | [`recursos/`](recursos) | Copia del código PHP original de la cátedra |
 | `nbproject/`, `build.xml`, `manifest.mf`, `test/` | Archivos del proyecto NetBeans (*Java with Ant*) |
 | [`CLAUDE.md`](CLAUDE.md) | Reglas del proyecto para el asistente de IA (Claude Code): restricciones, comandos y decisiones vigentes |
@@ -72,6 +73,7 @@ Cada tarea tiene una tarjeta en Trello y un *Pull Request* en GitHub, donde se e
 | T30 | Pulido tras el code review: expresiones válidas en echo, `%=`, mensajes del 902 y recuperación con llaves faltantes | [#30](../../pull/30) |
 | T31 | Ajustes según la respuesta de la profesora: llaves y else en su propia línea, paréntesis en el echo, sin validar el for, semántico 901/902 y tipo de error en cada mensaje | [#31](../../pull/31) |
 | T32 | Revisión integral final: cadenas muy largas, números de PHP, echo y else mal escritos, herramientas de verificación en el repositorio | [#32](../../pull/32) |
+| T33 | Pruebas con el código de la cátedra (carpeta `pruebas/catedra`, más de 100 000 pruebas): palabras clave mal escritas junto con otros errores, texto antes de `<?php`, funciones anónimas | [#33](../../pull/33) |
 
 - Todos los Pull Requests: [lista completa](../../pulls?q=is%3Apr)
 - Historial de cambios: [commits](../../commits/main)
