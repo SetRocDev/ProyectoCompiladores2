@@ -1,0 +1,54 @@
+0001 <?php
+0002 // Sistema simple de gestión de notas
+0003 
+0004 # Datos del estudiante
+0005 $nombre_estudiante = "Carlos";
+0006 $cantidad_notas = 4;
+0007 
+0008 // Arreglo de notas
+0009 $notas = array(85, 90, 78, 92);
+0010 
+0011 // Mostrar información inicial
+0012 echo "Estudiante: $nombre_estudiante\n";
+0013 echo "Cantidad de notas: $cantidad_notas\n";
+0014 
+0015 // Calcular promedio usando for
+0016 $suma_notas = 0;
+0017 
+0018 for ($i = 0; $i < $cantidad_notas; $i = $i + 1)
+0019     $suma_notas = $suma_notas + $notas[$i];
+0020 }
+Error 503. [Sintáctico] Llave de cierre '}' sin una llave de apertura '{' que le corresponda
+0021 
+0022 $promedio = $suma_notas / $cantidad_notas;
+0023 
+0024 // Mostrar promedio
+0025 echo "Promedio: $promedio\n";
+0026 
+0027 // Evaluar estado del estudiante
+0028 if ($promedio >= 70) {
+0029     echo "Estado: Aprobado\n";
+0030 } else {
+Error 712. [Sintáctico] El bloque del else que inicia en la línea 0030 no tiene llave de cierre '}'
+0031     echo "Estado: Reprobado\n";
+0032 
+0033 // Contador de revisión usando while
+0034 $contador_revision = 0;
+0035 
+0036 while ($contador_revision < $cantidad_notas) {
+0037     echo "Revisando nota: " . $notas[$contador_revision] . "\n";
+0038     $contador_revision = $contador_revision + 1;
+0039 }
+0040 
+0041 // Información adicional
+0042 $mensaje_final = "Proceso finalizado correctamente";
+0043 echo $mensaje_final;
+0044 
+0045 // Diferenciación de identificadores
+0046 $total = 100;
+0047 $Total = 200;
+0048 
+0049 $resultado = $total + $Total;
+0050 echo "\nResultado final: $resultado\n";
+0051 
+0052 ?>

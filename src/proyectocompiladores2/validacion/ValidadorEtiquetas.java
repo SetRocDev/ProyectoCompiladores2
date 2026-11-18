@@ -110,7 +110,35 @@ public class ValidadorEtiquetas {
         return contenido.contains("\n") ? "líneas en blanco" : "espacios en blanco";
     }
 
-    private Token primero(List<Token> tokens, TipoToken tipo) {
+    /**
+     * El código PHP es lo que va desde '<?php' hasta '?>' (incluidas las
+     * etiquetas). Lo que está antes o después no es código: ya lo reportan los
+     * errores 301, 306 y 307, así que las demás reglas no lo revisan (un
+     * error, un mensaje). Si falta alguna de las dos etiquetas, se toma como
+     * código desde el inicio o hasta el final del archivo.
+     *
+     * @param tokens todos los tokens del archivo
+     * @return los tokens del código PHP
+     */
+    public static List<Token> codigoPhp(List<Token> tokens) {
+        int inicio = 0;
+        int fin = tokens.size();
+        for (int i = 0; i < tokens.size(); i++) {
+            if (tokens.get(i).es(TipoToken.ETIQUETA_APERTURA)) {
+                inicio = i;
+                break;
+            }
+        }
+        for (int i = inicio; i < tokens.size(); i++) {
+            if (tokens.get(i).es(TipoToken.ETIQUETA_CIERRE)) {
+                fin = i + 1;
+                break;
+            }
+        }
+        return tokens.subList(inicio, fin);
+    }
+
+    private static Token primero(List<Token> tokens, TipoToken tipo) {
         for (Token token : tokens) {
             if (token.es(tipo)) {
                 return token;

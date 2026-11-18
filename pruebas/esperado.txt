@@ -150,6 +150,11 @@ P118_cadena_muy_larga.php            -                   Al final: echo con una 
 P119_numeros_de_php.php              -                   Al final: 1e3, 0x1F, 0b101, 1_000_000 y 2.5E-1   (numeros validos de PHP)
 P120_echo_mal_escrito.php            504                 L44: eco $mensaje_final;   (sugiere 'echo')
 P121_else_mal_escrito.php            504                 L30: } els {   (sugiere 'else')
+P122_texto_antes_de_apertura.php     301                 Nueva primera linea: Hola   antes de <?php (solo se analiza el codigo PHP: sin 402, T33)
+P123_if_mal_escrito.php              504                 L28: iff (...) {   (sugiere 'if'; el bloque y el else se revisan como if, T33)
+P124_for_mal_escrito.php             504                 L18: fro (...; ...; ...) {   (sugiere 'for'; los ';' van dentro de los parentesis, T33)
+P125_while_mal_escrito_con_error.php 504 602             L37: whlie (... {   (mal escrito y sin ')': se revisa como while, T33)
+P126_funcion_anonima.php             -                   Al final: usort(..., function ($a, $b) {...}) y fn($n) => ...   (parametros con valor, T33)
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola

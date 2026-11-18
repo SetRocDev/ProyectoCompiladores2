@@ -3,9 +3,10 @@
 #  Verificación completa (Linux / macOS / Git Bash). Necesita Java y Python 3;
 #  el contraste con PHP real se omite si no está instalado el comando php.
 #
-#  Corre, en orden: la batería de casos fijos, las mutaciones tipo tutor
-#  (combinaciones de 2 y de 3 errores), la batería extrema, el fuzz con la
-#  verificación de R2 y el contraste con PHP. No modifica el proyecto: todo se
+#  Corre, en orden: la batería de casos fijos, las variantes del código de la
+#  cátedra (pruebas/catedra y combinaciones al azar de 2 a 5 errores), las
+#  mutaciones tipo tutor (combinaciones de 2 y de 3 errores), la batería
+#  extrema, el fuzz con la verificación de R2 y el contraste con PHP. No modifica el proyecto: todo se
 #  genera en una carpeta temporal.
 #
 #  Uso:  pruebas/herramientas/bateria-completa.sh
@@ -21,6 +22,13 @@ TMP="$(mktemp -d)"
 
 echo "== Casos fijos (byte por byte)"
 "$RAIZ/pruebas/ejecutar-pruebas.sh" | tail -1
+echo "== Variantes del codigo de la catedra (carpeta pruebas/catedra)"
+"$RAIZ/pruebas/catedra/ejecutar-catedra.sh" | tail -1
+echo "== Variantes del codigo de la catedra: cada una por separado y combinaciones al azar"
+python3 "$H/variantes_catedra.py" "$JAR" --individuales "$TMP/catedra1" | tail -1
+for errores in 2 3 4 5; do
+    python3 "$H/variantes_catedra.py" "$JAR" --masivo 2000 "$errores" 1 "$TMP/catedra$errores" | tail -1
+done
 echo "== Mutaciones tipo tutor (combinaciones de 2 errores)"
 python3 "$H/mutaciones_tutor.py" "$JAR" "$BASE" "$TMP/tutor2" | tail -1
 echo "== Mutaciones tipo tutor (combinaciones de 3 errores)"

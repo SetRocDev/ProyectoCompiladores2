@@ -1,0 +1,623 @@
+VARIANTES DEL CODIGO DE LA CATEDRA (recursos/CodigoProyecto.php)
+Cada archivo de "casos" es una copia del codigo de la catedra con un cambio (o una combinacion
+de cambios) y "esperados" tiene el -errores.log exacto que debe generar. "-" = sin errores.
+Las lineas (L28, L37...) son las del codigo original.
+
+Archivo                                         Errores esperados       Cambio
+ID001_L05_digito.php                            201                     L5: '$nombre_estudiante' -> '$1nombre_estudiante' (digito despues de $)
+ID002_L05_simbolo_guion.php                     202                     L5: '$nombre_estudiante' -> '$-nombre_estudiante' (simbolo despues de $)
+ID003_L05_simbolo_arroba.php                    202                     L5: '$nombre_estudiante' -> '$@nombre_estudiante' (simbolo despues de $)
+ID004_L05_simbolo_mas.php                       202                     L5: '$nombre_estudiante' -> '$+nombre_estudiante' (simbolo despues de $)
+ID005_L05_simbolo_admiracion.php                202                     L5: '$nombre_estudiante' -> '$!nombre_estudiante' (simbolo despues de $)
+ID006_L05_caracter_arroba.php                   203                     L5: '$nombre_estudiante' -> '$no@mbre_estudiante' (caracter invalido en el nombre)
+ID007_L05_caracter_enie.php                     203                     L5: '$nombre_estudiante' -> '$noñmbre_estudiante' (caracter invalido en el nombre)
+ID008_L05_caracter_dolar.php                    203                     L5: '$nombre_estudiante' -> '$no$mbre_estudiante' (caracter invalido en el nombre)
+ID009_L05_sin_dolar.php                         206                     L5: '$nombre_estudiante' -> 'nombre_estudiante' (sin $)
+ID010_L05_dolar_solo.php                        205 901                 L5: '$nombre_estudiante' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID011_L06_digito.php                            201                     L6: '$cantidad_notas' -> '$1cantidad_notas' (digito despues de $)
+ID012_L06_simbolo_guion.php                     202                     L6: '$cantidad_notas' -> '$-cantidad_notas' (simbolo despues de $)
+ID013_L06_simbolo_arroba.php                    202                     L6: '$cantidad_notas' -> '$@cantidad_notas' (simbolo despues de $)
+ID014_L06_simbolo_mas.php                       202                     L6: '$cantidad_notas' -> '$+cantidad_notas' (simbolo despues de $)
+ID015_L06_simbolo_admiracion.php                202                     L6: '$cantidad_notas' -> '$!cantidad_notas' (simbolo despues de $)
+ID016_L06_caracter_arroba.php                   203                     L6: '$cantidad_notas' -> '$ca@ntidad_notas' (caracter invalido en el nombre)
+ID017_L06_caracter_enie.php                     203                     L6: '$cantidad_notas' -> '$cañntidad_notas' (caracter invalido en el nombre)
+ID018_L06_caracter_dolar.php                    203                     L6: '$cantidad_notas' -> '$ca$ntidad_notas' (caracter invalido en el nombre)
+ID019_L06_sin_dolar.php                         206                     L6: '$cantidad_notas' -> 'cantidad_notas' (sin $)
+ID020_L06_dolar_solo.php                        205 901                 L6: '$cantidad_notas' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID021_L09_digito.php                            201                     L9: '$notas' -> '$1notas' (digito despues de $)
+ID022_L09_simbolo_guion.php                     202                     L9: '$notas' -> '$-notas' (simbolo despues de $)
+ID023_L09_simbolo_arroba.php                    202                     L9: '$notas' -> '$@notas' (simbolo despues de $)
+ID024_L09_simbolo_mas.php                       202                     L9: '$notas' -> '$+notas' (simbolo despues de $)
+ID025_L09_simbolo_admiracion.php                202                     L9: '$notas' -> '$!notas' (simbolo despues de $)
+ID026_L09_caracter_arroba.php                   203                     L9: '$notas' -> '$no@tas' (caracter invalido en el nombre)
+ID027_L09_caracter_enie.php                     203                     L9: '$notas' -> '$noñtas' (caracter invalido en el nombre)
+ID028_L09_caracter_dolar.php                    203                     L9: '$notas' -> '$no$tas' (caracter invalido en el nombre)
+ID029_L09_sin_dolar.php                         206                     L9: '$notas' -> 'notas' (sin $)
+ID030_L09_dolar_solo.php                        205 901                 L9: '$notas' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID031_L16_digito.php                            201                     L16: '$suma_notas' -> '$1suma_notas' (digito despues de $)
+ID032_L16_simbolo_guion.php                     202                     L16: '$suma_notas' -> '$-suma_notas' (simbolo despues de $)
+ID033_L16_simbolo_arroba.php                    202                     L16: '$suma_notas' -> '$@suma_notas' (simbolo despues de $)
+ID034_L16_simbolo_mas.php                       202                     L16: '$suma_notas' -> '$+suma_notas' (simbolo despues de $)
+ID035_L16_simbolo_admiracion.php                202                     L16: '$suma_notas' -> '$!suma_notas' (simbolo despues de $)
+ID036_L16_caracter_arroba.php                   203                     L16: '$suma_notas' -> '$su@ma_notas' (caracter invalido en el nombre)
+ID037_L16_caracter_enie.php                     203                     L16: '$suma_notas' -> '$suñma_notas' (caracter invalido en el nombre)
+ID038_L16_caracter_dolar.php                    203                     L16: '$suma_notas' -> '$su$ma_notas' (caracter invalido en el nombre)
+ID039_L16_sin_dolar.php                         206                     L16: '$suma_notas' -> 'suma_notas' (sin $)
+ID040_L16_dolar_solo.php                        205 901                 L16: '$suma_notas' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID041_L19_digito.php                            201                     L19: '$suma_notas' -> '$1suma_notas' (digito despues de $)
+ID042_L19_simbolo_guion.php                     202                     L19: '$suma_notas' -> '$-suma_notas' (simbolo despues de $)
+ID043_L19_simbolo_arroba.php                    202                     L19: '$suma_notas' -> '$@suma_notas' (simbolo despues de $)
+ID044_L19_simbolo_mas.php                       202                     L19: '$suma_notas' -> '$+suma_notas' (simbolo despues de $)
+ID045_L19_simbolo_admiracion.php                202                     L19: '$suma_notas' -> '$!suma_notas' (simbolo despues de $)
+ID046_L19_caracter_arroba.php                   203                     L19: '$suma_notas' -> '$su@ma_notas' (caracter invalido en el nombre)
+ID047_L19_caracter_enie.php                     203                     L19: '$suma_notas' -> '$suñma_notas' (caracter invalido en el nombre)
+ID048_L19_caracter_dolar.php                    203                     L19: '$suma_notas' -> '$su$ma_notas' (caracter invalido en el nombre)
+ID049_L19_sin_dolar.php                         206                     L19: '$suma_notas' -> 'suma_notas' (sin $)
+ID050_L19_dolar_solo.php                        205                     L19: '$suma_notas' -> '$' ($ sin nombre)
+ID051_L22_digito.php                            201                     L22: '$promedio' -> '$1promedio' (digito despues de $)
+ID052_L22_simbolo_guion.php                     202                     L22: '$promedio' -> '$-promedio' (simbolo despues de $)
+ID053_L22_simbolo_arroba.php                    202                     L22: '$promedio' -> '$@promedio' (simbolo despues de $)
+ID054_L22_simbolo_mas.php                       202                     L22: '$promedio' -> '$+promedio' (simbolo despues de $)
+ID055_L22_simbolo_admiracion.php                202                     L22: '$promedio' -> '$!promedio' (simbolo despues de $)
+ID056_L22_caracter_arroba.php                   203                     L22: '$promedio' -> '$pr@omedio' (caracter invalido en el nombre)
+ID057_L22_caracter_enie.php                     203                     L22: '$promedio' -> '$prñomedio' (caracter invalido en el nombre)
+ID058_L22_caracter_dolar.php                    203                     L22: '$promedio' -> '$pr$omedio' (caracter invalido en el nombre)
+ID059_L22_sin_dolar.php                         206                     L22: '$promedio' -> 'promedio' (sin $)
+ID060_L22_dolar_solo.php                        205 901                 L22: '$promedio' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID061_L35_digito.php                            201                     L35: '$contador_revision' -> '$1contador_revision' (digito despues de $)
+ID062_L35_simbolo_guion.php                     202                     L35: '$contador_revision' -> '$-contador_revision' (simbolo despues de $)
+ID063_L35_simbolo_arroba.php                    202                     L35: '$contador_revision' -> '$@contador_revision' (simbolo despues de $)
+ID064_L35_simbolo_mas.php                       202                     L35: '$contador_revision' -> '$+contador_revision' (simbolo despues de $)
+ID065_L35_simbolo_admiracion.php                202                     L35: '$contador_revision' -> '$!contador_revision' (simbolo despues de $)
+ID066_L35_caracter_arroba.php                   203                     L35: '$contador_revision' -> '$co@ntador_revision' (caracter invalido en el nombre)
+ID067_L35_caracter_enie.php                     203                     L35: '$contador_revision' -> '$coñntador_revision' (caracter invalido en el nombre)
+ID068_L35_caracter_dolar.php                    203                     L35: '$contador_revision' -> '$co$ntador_revision' (caracter invalido en el nombre)
+ID069_L35_sin_dolar.php                         206                     L35: '$contador_revision' -> 'contador_revision' (sin $)
+ID070_L35_dolar_solo.php                        205 901                 L35: '$contador_revision' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID071_L39_digito.php                            201                     L39: '$contador_revision' -> '$1contador_revision' (digito despues de $)
+ID072_L39_simbolo_guion.php                     202                     L39: '$contador_revision' -> '$-contador_revision' (simbolo despues de $)
+ID073_L39_simbolo_arroba.php                    202                     L39: '$contador_revision' -> '$@contador_revision' (simbolo despues de $)
+ID074_L39_simbolo_mas.php                       202                     L39: '$contador_revision' -> '$+contador_revision' (simbolo despues de $)
+ID075_L39_simbolo_admiracion.php                202                     L39: '$contador_revision' -> '$!contador_revision' (simbolo despues de $)
+ID076_L39_caracter_arroba.php                   203                     L39: '$contador_revision' -> '$co@ntador_revision' (caracter invalido en el nombre)
+ID077_L39_caracter_enie.php                     203                     L39: '$contador_revision' -> '$coñntador_revision' (caracter invalido en el nombre)
+ID078_L39_caracter_dolar.php                    203                     L39: '$contador_revision' -> '$co$ntador_revision' (caracter invalido en el nombre)
+ID079_L39_sin_dolar.php                         206                     L39: '$contador_revision' -> 'contador_revision' (sin $)
+ID080_L39_dolar_solo.php                        205                     L39: '$contador_revision' -> '$' ($ sin nombre)
+ID081_L43_digito.php                            201                     L43: '$mensaje_final' -> '$1mensaje_final' (digito despues de $)
+ID082_L43_simbolo_guion.php                     202                     L43: '$mensaje_final' -> '$-mensaje_final' (simbolo despues de $)
+ID083_L43_simbolo_arroba.php                    202                     L43: '$mensaje_final' -> '$@mensaje_final' (simbolo despues de $)
+ID084_L43_simbolo_mas.php                       202                     L43: '$mensaje_final' -> '$+mensaje_final' (simbolo despues de $)
+ID085_L43_simbolo_admiracion.php                202                     L43: '$mensaje_final' -> '$!mensaje_final' (simbolo despues de $)
+ID086_L43_caracter_arroba.php                   203                     L43: '$mensaje_final' -> '$me@nsaje_final' (caracter invalido en el nombre)
+ID087_L43_caracter_enie.php                     203                     L43: '$mensaje_final' -> '$meñnsaje_final' (caracter invalido en el nombre)
+ID088_L43_caracter_dolar.php                    203                     L43: '$mensaje_final' -> '$me$nsaje_final' (caracter invalido en el nombre)
+ID089_L43_sin_dolar.php                         206                     L43: '$mensaje_final' -> 'mensaje_final' (sin $)
+ID090_L43_dolar_solo.php                        205 901                 L43: '$mensaje_final' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID091_L47_digito.php                            201                     L47: '$total' -> '$1total' (digito despues de $)
+ID092_L47_simbolo_guion.php                     202                     L47: '$total' -> '$-total' (simbolo despues de $)
+ID093_L47_simbolo_arroba.php                    202                     L47: '$total' -> '$@total' (simbolo despues de $)
+ID094_L47_simbolo_mas.php                       202                     L47: '$total' -> '$+total' (simbolo despues de $)
+ID095_L47_simbolo_admiracion.php                202                     L47: '$total' -> '$!total' (simbolo despues de $)
+ID096_L47_caracter_arroba.php                   203                     L47: '$total' -> '$to@tal' (caracter invalido en el nombre)
+ID097_L47_caracter_enie.php                     203                     L47: '$total' -> '$toñtal' (caracter invalido en el nombre)
+ID098_L47_caracter_dolar.php                    203                     L47: '$total' -> '$to$tal' (caracter invalido en el nombre)
+ID099_L47_sin_dolar.php                         206                     L47: '$total' -> 'total' (sin $)
+ID100_L47_dolar_solo.php                        205 901                 L47: '$total' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID101_L48_digito.php                            201                     L48: '$Total' -> '$1Total' (digito despues de $)
+ID102_L48_simbolo_guion.php                     202                     L48: '$Total' -> '$-Total' (simbolo despues de $)
+ID103_L48_simbolo_arroba.php                    202                     L48: '$Total' -> '$@Total' (simbolo despues de $)
+ID104_L48_simbolo_mas.php                       202                     L48: '$Total' -> '$+Total' (simbolo despues de $)
+ID105_L48_simbolo_admiracion.php                202                     L48: '$Total' -> '$!Total' (simbolo despues de $)
+ID106_L48_caracter_arroba.php                   203                     L48: '$Total' -> '$To@tal' (caracter invalido en el nombre)
+ID107_L48_caracter_enie.php                     203                     L48: '$Total' -> '$Toñtal' (caracter invalido en el nombre)
+ID108_L48_caracter_dolar.php                    203                     L48: '$Total' -> '$To$tal' (caracter invalido en el nombre)
+ID109_L48_sin_dolar.php                         206                     L48: '$Total' -> 'Total' (sin $)
+ID110_L48_dolar_solo.php                        205 901                 L48: '$Total' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID111_L50_digito.php                            201                     L50: '$resultado' -> '$1resultado' (digito despues de $)
+ID112_L50_simbolo_guion.php                     202                     L50: '$resultado' -> '$-resultado' (simbolo despues de $)
+ID113_L50_simbolo_arroba.php                    202                     L50: '$resultado' -> '$@resultado' (simbolo despues de $)
+ID114_L50_simbolo_mas.php                       202                     L50: '$resultado' -> '$+resultado' (simbolo despues de $)
+ID115_L50_simbolo_admiracion.php                202                     L50: '$resultado' -> '$!resultado' (simbolo despues de $)
+ID116_L50_caracter_arroba.php                   203                     L50: '$resultado' -> '$re@sultado' (caracter invalido en el nombre)
+ID117_L50_caracter_enie.php                     203                     L50: '$resultado' -> '$reñsultado' (caracter invalido en el nombre)
+ID118_L50_caracter_dolar.php                    203                     L50: '$resultado' -> '$re$sultado' (caracter invalido en el nombre)
+ID119_L50_sin_dolar.php                         206                     L50: '$resultado' -> 'resultado' (sin $)
+ID120_L50_dolar_solo.php                        205 901                 L50: '$resultado' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+ID121_reservada_class.php                       204                     Despues de L46: '$class = 1;' (palabra reservada)
+ID122_reservada_function.php                    204                     Despues de L46: '$function = 1;' (palabra reservada)
+ID123_reservada_if.php                          204                     Despues de L46: '$if = 1;' (palabra reservada)
+ID124_reservada_while.php                       204                     Despues de L46: '$while = 1;' (palabra reservada)
+ID125_reservada_echo.php                        204                     Despues de L46: '$echo = 1;' (palabra reservada)
+ID126_reservada_else.php                        204                     Despues de L46: '$else = 1;' (palabra reservada)
+ID127_reservada_continue.php                    204                     Despues de L46: '$continue = 1;' (palabra reservada)
+ID128_reservada_for.php                         204                     Despues de L46: '$for = 1;' (palabra reservada)
+ID129_reservada_return.php                      204                     Despues de L46: '$return = 1;' (palabra reservada)
+ID130_reservada_public.php                      204                     Despues de L46: '$public = 1;' (palabra reservada)
+ID131_reservada_null.php                        204                     Despues de L46: '$null = 1;' (palabra reservada)
+ID132_reservada_false.php                       204                     Despues de L46: '$false = 1;' (palabra reservada)
+ID133_reservada_true.php                        204                     Despues de L46: '$true = 1;' (palabra reservada)
+ID134_reservada_trim.php                        204                     Despues de L46: '$trim = 1;' (palabra reservada)
+ID135_reservada_foreach.php                     204                     Despues de L46: '$foreach = 1;' (palabra reservada)
+ID136_reservada_private.php                     204                     Despues de L46: '$private = 1;' (palabra reservada)
+ID137_reservada_include.php                     204                     Despues de L46: '$include = 1;' (palabra reservada)
+ID138_reservada_print.php                       204                     Despues de L46: '$print = 1;' (palabra reservada)
+ID139_reservada_const.php                       204                     Despues de L46: '$const = 1;' (palabra reservada)
+ID140_reservada_do.php                          204                     Despues de L46: '$do = 1;' (palabra reservada)
+ID141_reservada_IF.php                          204                     Despues de L46: '$IF = 1;' (palabra reservada)
+ID142_reservada_While.php                       204                     Despues de L46: '$While = 1;' (palabra reservada)
+ID143_reservada_ECHO.php                        204                     Despues de L46: '$ECHO = 1;' (palabra reservada)
+ID144_reservada_Trim.php                        204                     Despues de L46: '$Trim = 1;' (palabra reservada)
+ID145_reservada_NULL.php                        204                     Despues de L46: '$NULL = 1;' (palabra reservada)
+ID146_compuesta_mas.php                         201                     Despues de L50: '$1resultado += 2;' (asignacion compuesta)
+ID147_compuesta_menos.php                       201                     Despues de L50: '$1resultado -= 2;' (asignacion compuesta)
+ID148_compuesta_por.php                         201                     Despues de L50: '$1resultado *= 2;' (asignacion compuesta)
+ID149_compuesta_entre.php                       201                     Despues de L50: '$1resultado /= 2;' (asignacion compuesta)
+ID150_compuesta_punto.php                       201                     Despues de L50: '$1resultado .= 2;' (asignacion compuesta)
+ID151_compuesta_modulo.php                      201                     Despues de L50: '$1resultado %= 2;' (asignacion compuesta)
+ID152_reservada_en_dos_lineas.php               204                     Despues de L46: '$for' y '= 5;' en lineas distintas
+ID153_sin_dolar_en_dos_lineas.php               206                     Despues de L46: 'contador' y '= 5;' en lineas distintas
+ID154_reservada_con_comentario.php              204                     Despues de L46: '$if // nombre' y '= 5;' (comentario en medio)
+ID155_elemento_de_arreglo.php                   202                     Despues de L50: '$-notas[0] = 5;' (elemento de arreglo)
+ID156_derecha_no_se_valida.php                  -                       Despues de L50: '$copia = $1abc . $-d;' (a la derecha del = no se valida)
+ID157_nombres_validos.php                       -                       Despues de L46: nombres validos ($_x, $__, $a1b2, $X, $classes)
+ET001_apertura_espacio_antes.php                301                     L1: ' <?php' (espacio antes)
+ET002_apertura_tab_antes.php                    301                     L1: tabulacion antes de <?php
+ET003_apertura_linea_vacia_antes.php            301                     Linea en blanco antes de <?php
+ET004_apertura_texto_antes.php                  301                     Texto 'Hola' antes de <?php
+ET005_apertura_comentario_antes.php             301                     Linea '// inicio' antes de <?php
+ET006_apertura__espacio_php.php                 302                     L1: '<? php' (apertura mal escrita)
+ET007_apertura_php.php                          302                     L1: '<?PHP' (apertura mal escrita)
+ET008_apertura_php.php                          302                     L1: '<?Php' (apertura mal escrita)
+ET009_apertura_php.php                          302                     L1: '<?pHp' (apertura mal escrita)
+ET010_apertura_php.php                          302                     L1: '<php' (apertura mal escrita)
+ET011_apertura_php.php                          302                     L1: '<PHP' (apertura mal escrita)
+ET012_apertura_falta.php                        303                     Se borra la L1 (<?php)
+ET013_apertura_en_linea_2.php                   301                     <?php en la linea 2
+ET014_apertura_con_codigo_valido.php            -                       L1: '<?php echo "";' (codigo en la misma linea: valido)
+ET015_cierre_?_>.php                            304                     L53: '? >' (cierre mal escrito)
+ET016_cierre_?__>.php                           304                     L53: '?  >' (cierre mal escrito)
+ET017_cierre_falta.php                          305                     Se borra la L53 (?>)
+ET018_cierre_codigo_despues.php                 306                     L53: '?> echo "x";'
+ET019_cierre_texto_pegado.php                   306                     L53: '?>fin'
+ET020_cierre_linea_con_codigo_despues.php       307                     Despues de ?> una linea con codigo
+ET021_cierre_html_despues.php                   307                     Despues de ?> una linea con HTML
+ET022_cierre_espacios_despues.php               308                     L53: '?>' seguido de espacios
+ET023_cierre_salto_final.php                    308                     Salto de linea despues de ?>
+ET024_cierre_lineas_en_blanco.php               308                     Lineas en blanco despues de ?>
+ET025_cierre_con_codigo_antes_valido.php        -                       L53: 'echo ""; ?>' (valido)
+ET026_sin_ninguna_etiqueta.php                  303 305                 Se borran <?php y ?>
+CO001_L02_una_barra.php                         401                     L2: '//' -> '/'
+CO002_L02_sin_marca.php                         402                     L2: se quita '// ' (texto suelto)
+CO003_L02_numeral_valido.php                    -                       L2: '//' -> '#' (valido)
+CO004_L02_triple_barra_valido.php               -                       L2: '//' -> '///' (valido)
+CO005_L02_continua_sin_marca.php                402                     Despues de L2: texto sin // (comentario que sigue)
+CO006_L08_una_barra.php                         401                     L8: '//' -> '/'
+CO007_L08_sin_marca.php                         402                     L8: se quita '// ' (texto suelto)
+CO008_L08_numeral_valido.php                    -                       L8: '//' -> '#' (valido)
+CO009_L08_triple_barra_valido.php               -                       L8: '//' -> '///' (valido)
+CO010_L08_continua_sin_marca.php                402                     Despues de L8: texto sin // (comentario que sigue)
+CO011_L11_una_barra.php                         401                     L11: '//' -> '/'
+CO012_L11_sin_marca.php                         402                     L11: se quita '// ' (texto suelto)
+CO013_L11_numeral_valido.php                    -                       L11: '//' -> '#' (valido)
+CO014_L11_triple_barra_valido.php               -                       L11: '//' -> '///' (valido)
+CO015_L11_continua_sin_marca.php                402                     Despues de L11: texto sin // (comentario que sigue)
+CO016_L15_una_barra.php                         401                     L15: '//' -> '/'
+CO017_L15_sin_marca.php                         402                     L15: se quita '// ' (texto suelto)
+CO018_L15_numeral_valido.php                    -                       L15: '//' -> '#' (valido)
+CO019_L15_triple_barra_valido.php               -                       L15: '//' -> '///' (valido)
+CO020_L15_continua_sin_marca.php                402                     Despues de L15: texto sin // (comentario que sigue)
+CO021_L24_una_barra.php                         401                     L24: '//' -> '/'
+CO022_L24_sin_marca.php                         402                     L24: se quita '// ' (texto suelto)
+CO023_L24_numeral_valido.php                    -                       L24: '//' -> '#' (valido)
+CO024_L24_triple_barra_valido.php               -                       L24: '//' -> '///' (valido)
+CO025_L24_continua_sin_marca.php                402                     Despues de L24: texto sin // (comentario que sigue)
+CO026_L27_una_barra.php                         401                     L27: '//' -> '/'
+CO027_L27_sin_marca.php                         402                     L27: se quita '// ' (texto suelto)
+CO028_L27_numeral_valido.php                    -                       L27: '//' -> '#' (valido)
+CO029_L27_triple_barra_valido.php               -                       L27: '//' -> '///' (valido)
+CO030_L27_continua_sin_marca.php                402                     Despues de L27: texto sin // (comentario que sigue)
+CO031_L34_una_barra.php                         401                     L34: '//' -> '/'
+CO032_L34_sin_marca.php                         402                     L34: se quita '// ' (texto suelto)
+CO033_L34_numeral_valido.php                    -                       L34: '//' -> '#' (valido)
+CO034_L34_triple_barra_valido.php               -                       L34: '//' -> '///' (valido)
+CO035_L34_continua_sin_marca.php                402                     Despues de L34: texto sin // (comentario que sigue)
+CO036_L42_una_barra.php                         401                     L42: '//' -> '/'
+CO037_L42_sin_marca.php                         402                     L42: se quita '// ' (texto suelto)
+CO038_L42_numeral_valido.php                    -                       L42: '//' -> '#' (valido)
+CO039_L42_triple_barra_valido.php               -                       L42: '//' -> '///' (valido)
+CO040_L42_continua_sin_marca.php                402                     Despues de L42: texto sin // (comentario que sigue)
+CO041_L46_una_barra.php                         401                     L46: '//' -> '/'
+CO042_L46_sin_marca.php                         402                     L46: se quita '// ' (texto suelto)
+CO043_L46_numeral_valido.php                    -                       L46: '//' -> '#' (valido)
+CO044_L46_triple_barra_valido.php               -                       L46: '//' -> '///' (valido)
+CO045_L46_continua_sin_marca.php                402                     Despues de L46: texto sin // (comentario que sigue)
+CO046_L04_una_barra.php                         401                     L4: '#' -> '/'
+CO047_L04_sin_marca.php                         402                     L4: se quita '# '
+CO048_L04_pegado_valido.php                     -                       L4: '#Datos' (valido)
+CO049_bloque_c_no_reconocido.php                401                     Despues de L46: '/* ... */' (solo se reconocen // y #)
+CO050_al_final_de_codigo_valido.php             -                       L47 y L48 con comentario al final (valido)
+CO051_con_palabras_clave_valido.php             -                       L2: comentario con palabras clave y simbolos (valido)
+CO052_dentro_de_cadena_valido.php               -                       L44: '//' y '#' dentro de una cadena (valido)
+CO053_division_en_dos_lineas_valido.php         -                       L22 en dos lineas: '/' al inicio es division (valido)
+WH001_sin_parentesis_apertura.php               601                     L37: sin '('
+WH002_sin_parentesis_cierre.php                 602                     L37: sin ')'
+WH003_sin_parentesis.php                        601 602                 L37: sin '(' ni ')'
+WH004_condicion_vacia.php                       603                     L37: 'while () {'
+WH005_condicion_con_espacios.php                603                     L37: 'while (   ) {'
+WH006_sin_llave_apertura.php                    604                     L37: sin '{'
+WH007_sin_llave_cierre.php                      605                     Se borra la L40 ('}')
+WH008_bloque_vacio.php                          606                     Se borran L38 y L39
+WH009_bloque_solo_comentario.php                606                     Bloque con solo un comentario
+WH010_bloque_lineas_en_blanco.php               606                     Bloque con solo lineas en blanco
+WH011_L38_0_espacios.php                        607                     L38 con 0 espacios
+WH012_L38_1_espacios.php                        607                     L38 con 1 espacios
+WH013_L38_2_espacios.php                        607                     L38 con 2 espacios
+WH014_L38_3_espacios.php                        607                     L38 con 3 espacios
+WH015_L38_5_espacios.php                        607                     L38 con 5 espacios
+WH016_L38_6_espacios.php                        607                     L38 con 6 espacios
+WH017_L38_7_espacios.php                        607                     L38 con 7 espacios
+WH018_L38_8_espacios.php                        607                     L38 con 8 espacios
+WH019_L38_tabulacion.php                        608                     L38 indentada con tabulacion
+WH020_L38_tab_y_espacios.php                    608                     L38 con tabulacion y espacios
+WH021_L39_0_espacios.php                        607                     L39 con 0 espacios
+WH022_L39_1_espacios.php                        607                     L39 con 1 espacios
+WH023_L39_2_espacios.php                        607                     L39 con 2 espacios
+WH024_L39_3_espacios.php                        607                     L39 con 3 espacios
+WH025_L39_5_espacios.php                        607                     L39 con 5 espacios
+WH026_L39_6_espacios.php                        607                     L39 con 6 espacios
+WH027_L39_7_espacios.php                        607                     L39 con 7 espacios
+WH028_L39_8_espacios.php                        607                     L39 con 8 espacios
+WH029_L39_tabulacion.php                        608                     L39 indentada con tabulacion
+WH030_L39_tab_y_espacios.php                    608                     L39 con tabulacion y espacios
+WH031_cierre_1_espacios.php                     609                     L40: '}' con 1 espacios
+WH032_cierre_2_espacios.php                     609                     L40: '}' con 2 espacios
+WH033_cierre_3_espacios.php                     609                     L40: '}' con 3 espacios
+WH034_cierre_4_espacios.php                     609                     L40: '}' con 4 espacios
+WH035_cierre_5_espacios.php                     609                     L40: '}' con 5 espacios
+WH036_cierre_8_espacios.php                     609                     L40: '}' con 8 espacios
+WH037_cierre_tabulacion.php                     608                     L40: '}' con tabulacion
+WH038_llave_sola_alineada_valido.php            -                       La '{' sola en la linea siguiente, alineada (valido)
+WH039_llave_sola_1_espacios.php                 610                     La '{' sola en la linea siguiente con 1 espacios
+WH040_llave_sola_2_espacios.php                 610                     La '{' sola en la linea siguiente con 2 espacios
+WH041_llave_sola_4_espacios.php                 610                     La '{' sola en la linea siguiente con 4 espacios
+WH042_llave_sola_8_espacios.php                 610                     La '{' sola en la linea siguiente con 8 espacios
+WH043_llave_sola_tabulacion.php                 608                     La '{' sola en la linea siguiente con tabulacion
+WH044_mal_escrito_whlie.php                     504                     L37: 'whlie' en lugar de while
+WH045_mal_escrito_wile.php                      504                     L37: 'wile' en lugar de while
+WH046_mal_escrito_whiel.php                     504                     L37: 'whiel' en lugar de while
+WH047_mal_escrito_whille.php                    504                     L37: 'whille' en lugar de while
+WH048_mal_escrito_wihle.php                     504                     L37: 'wihle' en lugar de while
+WH049_mal_escrito_hwile.php                     504                     L37: 'hwile' en lugar de while
+WH050_mal_escrito_mayusculas.php                504                     L37: 'WHLIE' (mayusculas y mal escrito)
+WH051_mal_escrito_sin_parentesis_cierre.php     504 602                 L37: 'whlie (... {' (mal escrito y sin ')')
+WH052_mal_escrito_sin_parentesis_apertura.php   504 601                 L37: 'whlie ...) {' (mal escrito y sin '(')
+WH053_mal_escrito_sin_llave.php                 504 604                 L37: 'whlie (...)' (mal escrito y sin '{')
+WH054_mal_escrito_condicion_vacia.php           504 603                 L37: 'whlie () {' (mal escrito y sin condicion)
+WH055_mal_escrito_cuerpo_mal_indentado.php      504 607                 L37 'whlie' y L38 con 2 espacios (se revisa como while)
+WH056_mal_escrito_tras_sentencia_sin_punto_y_coma.php
+                                                504                     L35 sin ';' y L37 'whlie': la sentencia no se traga la estructura
+WH057_mayusculas_valido.php                     -                       L37: 'WHILE' (valido)
+WH058_sin_espacios_valido.php                   -                       L37: 'while(...){' (valido)
+WH059_comentario_tras_llave_valido.php          -                       Comentarios despues de '{' y de '}' (valido)
+WH060_condicion_en_dos_lineas_valido.php        -                       Condicion en dos lineas (valido)
+WH061_condicion_con_parentesis_valido.php       -                       Condicion con parentesis internos (valido)
+WH062_lineas_en_blanco_dentro_valido.php        -                       Lineas en blanco dentro del bloque (valido)
+WH063_if_anidado_valido.php                     -                       Un if anidado con 8 espacios (valido)
+WH064_if_anidado_mal_indentado.php              707                     If anidado con 6 espacios en su contenido
+IF001_sin_parentesis_apertura.php               701                     L28: sin '('
+IF002_sin_parentesis_cierre.php                 702                     L28: sin ')'
+IF003_sin_parentesis.php                        701 702                 L28: sin '(' ni ')'
+IF004_condicion_vacia.php                       703                     L28: 'if () {'
+IF005_sin_llave_apertura.php                    704                     L28: sin '{'
+IF006_sin_llave_cierre.php                      705                     L30: 'else {' (falta la '}' del if)
+IF007_bloque_vacio.php                          706                     Se borra la L29
+IF008_bloque_solo_comentario.php                706                     Bloque del if con solo un comentario
+IF009_L29_0_espacios.php                        707                     L29 con 0 espacios
+IF010_L29_1_espacios.php                        707                     L29 con 1 espacios
+IF011_L29_2_espacios.php                        707                     L29 con 2 espacios
+IF012_L29_3_espacios.php                        707                     L29 con 3 espacios
+IF013_L29_5_espacios.php                        707                     L29 con 5 espacios
+IF014_L29_6_espacios.php                        707                     L29 con 6 espacios
+IF015_L29_8_espacios.php                        707                     L29 con 8 espacios
+IF016_L29_tabulacion.php                        708                     L29 con tabulacion
+IF017_cierre_1_espacios.php                     709                     L30: la '}' del if con 1 espacios
+IF018_cierre_2_espacios.php                     709                     L30: la '}' del if con 2 espacios
+IF019_cierre_4_espacios.php                     709                     L30: la '}' del if con 4 espacios
+IF020_llave_sola_alineada_valido.php            -                       La '{' del if sola en la linea siguiente, alineada (valido)
+IF021_llave_sola_2_espacios.php                 710                     La '{' del if sola con 2 espacios
+IF022_llave_sola_4_espacios.php                 710                     La '{' del if sola con 4 espacios
+IF023_else_sin_llave_apertura.php               711                     L30: '} else' sin '{'
+IF024_else_sin_llave_cierre.php                 712                     Se borra la L32 (la '}' del else)
+IF025_else_vacio.php                            713                     Se borra la L31
+IF026_else_solo_comentario.php                  713                     Bloque del else con solo un comentario
+IF027_else_sin_if.php                           714                     Despues de L46: 'else { ... }' sin if
+IF028_L31_0_espacios.php                        715                     L31 (bloque del else) con 0 espacios
+IF029_L31_2_espacios.php                        715                     L31 (bloque del else) con 2 espacios
+IF030_L31_6_espacios.php                        715                     L31 (bloque del else) con 6 espacios
+IF031_L31_8_espacios.php                        715                     L31 (bloque del else) con 8 espacios
+IF032_L31_tabulacion.php                        716                     L31 con tabulacion
+IF033_cierre_else_1_espacios.php                717                     L32: '}' del else con 1 espacios
+IF034_cierre_else_2_espacios.php                717                     L32: '}' del else con 2 espacios
+IF035_cierre_else_4_espacios.php                717                     L32: '}' del else con 4 espacios
+IF036_else_en_su_linea_valido.php               -                       '}' y 'else {' en lineas distintas, alineados (valido)
+IF037_else_en_su_linea_2_espacios.php           718                     'else' en su propia linea con 2 espacios
+IF038_else_en_su_linea_4_espacios.php           718                     'else' en su propia linea con 4 espacios
+IF039_else_llave_sola_valido.php                -                       La '{' del else sola en la linea siguiente (valido)
+IF040_else_llave_sola_4_espacios.php            719                     La '{' del else sola con 4 espacios
+IF041_estilo_allman_valido.php                  -                       Cada llave y el else en su propia linea (valido)
+IF042_mal_escrito_iff.php                       504                     L28: 'iff' en lugar de if
+IF043_mal_escrito_fi.php                        504                     L28: 'fi' en lugar de if
+IF044_mal_escrito_ifx.php                       504                     L28: 'ifx' en lugar de if
+IF045_mal_escrito_mayusculas.php                504                     L28: 'IFF' (mayusculas y mal escrito)
+IF046_mal_escrito_sin_parentesis_cierre.php     504 702                 L28: 'iff (... {' (mal escrito y sin ')')
+IF047_mal_escrito_sin_parentesis.php            504 701 702             L28: 'iff $promedio >= 70 {' (mal escrito y sin parentesis)
+IF048_mal_escrito_sin_llave.php                 504 704                 L28: 'iff (...)' (mal escrito y sin '{')
+IF049_mal_escrito_condicion_vacia.php           504 703                 L28: 'iff () {' (mal escrito y sin condicion)
+IF050_mal_escrito_cuerpo_mal_indentado.php      504 707                 L28 'iff' y L29 con 2 espacios (se revisa como if)
+IF051_elseif_mal_escrito.php                    504                     Se agrega '} elsif (...) {' en lugar de elseif
+IF052_else_mal_escrito_els.php                  504                     L30: '} els {' en lugar de else
+IF053_else_mal_escrito_esle.php                 504                     L30: '} esle {' en lugar de else
+IF054_else_mal_escrito_elze.php                 504                     L30: '} elze {' en lugar de else
+IF055_else_mal_escrito_eles.php                 504                     L30: '} eles {' en lugar de else
+IF056_else_else_valido.php                      -                       L30: '}else{' (valido)
+IF057_else__else_valido.php                     -                       L30: '} else{' (valido)
+IF058_else_else__valido.php                     -                       L30: '}else {' (valido)
+IF059_else__else__valido.php                    -                       L30: '} ELSE {' (valido)
+IF060_sin_espacios_valido.php                   -                       L28: 'if(...){' (valido)
+IF061_mayusculas_valido.php                     -                       L28: 'IF' (valido)
+IF062_elseif_valido.php                         -                       Se agrega un elseif (valido)
+IF063_else_if_valido.php                        -                       Se agrega un 'else if' (valido)
+IF064_elseif_sin_parentesis.php                 701 702                 elseif sin parentesis
+IF065_elseif_vacio.php                          706                     elseif con el bloque vacio
+IF066_condicion_con_asignacion_valido.php       -                       L28: 'if ($promedio = 70)' (la condicion se considera correcta)
+EC001_L12_sin_punto_y_coma.php                  805                     L12: sin ';'
+EC002_L12_parentesis_agrupan.php                802                     L12: 'echo (...);'
+EC003_L12_funcion.php                           802                     L12: 'echo strtoupper(...);' (tampoco en funciones)
+EC004_L12_sin_expresion.php                     801                     L12: 'echo;'
+EC005_L12_comilla_simple_abierta.php            804                     L12: "echo 'Texto;"
+EC006_L12_operador_sin_valor.php                806                     L12: operador '.' sin valor a la derecha
+EC007_L12_falta_operador.php                    806                     L12: falta el '.' entre dos valores
+EC008_L12_mal_escrito.php                       504                     L12: 'eco' en lugar de echo
+EC009_L12_mayusculas_valido.php                 -                       L12: 'ECHO' (valido)
+EC010_L12_parentesis_en_cadena_valido.php       -                       L12: parentesis dentro de una cadena (valido)
+EC011_L12_comilla_doble_abierta.php             803                     L12: falta la comilla doble de cierre
+EC012_L13_sin_punto_y_coma.php                  805                     L13: sin ';'
+EC013_L13_parentesis_agrupan.php                802                     L13: 'echo (...);'
+EC014_L13_funcion.php                           802                     L13: 'echo strtoupper(...);' (tampoco en funciones)
+EC015_L13_sin_expresion.php                     801                     L13: 'echo;'
+EC016_L13_comilla_simple_abierta.php            804                     L13: "echo 'Texto;"
+EC017_L13_operador_sin_valor.php                806                     L13: operador '.' sin valor a la derecha
+EC018_L13_falta_operador.php                    806                     L13: falta el '.' entre dos valores
+EC019_L13_mal_escrito.php                       504                     L13: 'eco' en lugar de echo
+EC020_L13_mayusculas_valido.php                 -                       L13: 'ECHO' (valido)
+EC021_L13_parentesis_en_cadena_valido.php       -                       L13: parentesis dentro de una cadena (valido)
+EC022_L13_comilla_doble_abierta.php             803                     L13: falta la comilla doble de cierre
+EC023_L25_sin_punto_y_coma.php                  805                     L25: sin ';'
+EC024_L25_parentesis_agrupan.php                802                     L25: 'echo (...);'
+EC025_L25_funcion.php                           802                     L25: 'echo strtoupper(...);' (tampoco en funciones)
+EC026_L25_sin_expresion.php                     801                     L25: 'echo;'
+EC027_L25_comilla_simple_abierta.php            804                     L25: "echo 'Texto;"
+EC028_L25_operador_sin_valor.php                806                     L25: operador '.' sin valor a la derecha
+EC029_L25_falta_operador.php                    806                     L25: falta el '.' entre dos valores
+EC030_L25_mal_escrito.php                       504                     L25: 'eco' en lugar de echo
+EC031_L25_mayusculas_valido.php                 -                       L25: 'ECHO' (valido)
+EC032_L25_parentesis_en_cadena_valido.php       -                       L25: parentesis dentro de una cadena (valido)
+EC033_L25_comilla_doble_abierta.php             803                     L25: falta la comilla doble de cierre
+EC034_L29_sin_punto_y_coma.php                  805                     L29: sin ';'
+EC035_L29_parentesis_agrupan.php                802                     L29: 'echo (...);'
+EC036_L29_funcion.php                           802                     L29: 'echo strtoupper(...);' (tampoco en funciones)
+EC037_L29_sin_expresion.php                     801                     L29: 'echo;'
+EC038_L29_comilla_simple_abierta.php            804                     L29: "echo 'Texto;"
+EC039_L29_operador_sin_valor.php                806                     L29: operador '.' sin valor a la derecha
+EC040_L29_falta_operador.php                    806                     L29: falta el '.' entre dos valores
+EC041_L29_mal_escrito.php                       504                     L29: 'eco' en lugar de echo
+EC042_L29_mayusculas_valido.php                 -                       L29: 'ECHO' (valido)
+EC043_L29_parentesis_en_cadena_valido.php       -                       L29: parentesis dentro de una cadena (valido)
+EC044_L29_comilla_doble_abierta.php             803                     L29: falta la comilla doble de cierre
+EC045_L31_sin_punto_y_coma.php                  805                     L31: sin ';'
+EC046_L31_parentesis_agrupan.php                802                     L31: 'echo (...);'
+EC047_L31_funcion.php                           802                     L31: 'echo strtoupper(...);' (tampoco en funciones)
+EC048_L31_sin_expresion.php                     801                     L31: 'echo;'
+EC049_L31_comilla_simple_abierta.php            804                     L31: "echo 'Texto;"
+EC050_L31_operador_sin_valor.php                806                     L31: operador '.' sin valor a la derecha
+EC051_L31_falta_operador.php                    806                     L31: falta el '.' entre dos valores
+EC052_L31_mal_escrito.php                       504                     L31: 'eco' en lugar de echo
+EC053_L31_mayusculas_valido.php                 -                       L31: 'ECHO' (valido)
+EC054_L31_parentesis_en_cadena_valido.php       -                       L31: parentesis dentro de una cadena (valido)
+EC055_L31_comilla_doble_abierta.php             803                     L31: falta la comilla doble de cierre
+EC056_L38_sin_punto_y_coma.php                  805                     L38: sin ';'
+EC057_L38_parentesis_agrupan.php                802                     L38: 'echo (...);'
+EC058_L38_funcion.php                           802                     L38: 'echo strtoupper(...);' (tampoco en funciones)
+EC059_L38_sin_expresion.php                     801                     L38: 'echo;'
+EC060_L38_comilla_simple_abierta.php            804                     L38: "echo 'Texto;"
+EC061_L38_operador_sin_valor.php                806                     L38: operador '.' sin valor a la derecha
+EC062_L38_falta_operador.php                    806                     L38: falta el '.' entre dos valores
+EC063_L38_mal_escrito.php                       504                     L38: 'eco' en lugar de echo
+EC064_L38_mayusculas_valido.php                 -                       L38: 'ECHO' (valido)
+EC065_L38_parentesis_en_cadena_valido.php       -                       L38: parentesis dentro de una cadena (valido)
+EC066_L38_comilla_doble_abierta.php             803                     L38: falta la comilla doble de cierre
+EC067_L38_en_dos_lineas_valido.php              -                       L38 en dos lineas (valido)
+EC068_L44_sin_punto_y_coma.php                  805                     L44: sin ';'
+EC069_L44_parentesis_agrupan.php                802                     L44: 'echo (...);'
+EC070_L44_funcion.php                           802                     L44: 'echo strtoupper(...);' (tampoco en funciones)
+EC071_L44_sin_expresion.php                     801                     L44: 'echo;'
+EC072_L44_comilla_simple_abierta.php            804                     L44: "echo 'Texto;"
+EC073_L44_operador_sin_valor.php                806                     L44: operador '.' sin valor a la derecha
+EC074_L44_falta_operador.php                    806                     L44: falta el '.' entre dos valores
+EC075_L44_mal_escrito.php                       504                     L44: 'eco' en lugar de echo
+EC076_L44_mayusculas_valido.php                 -                       L44: 'ECHO' (valido)
+EC077_L44_parentesis_en_cadena_valido.php       -                       L44: parentesis dentro de una cadena (valido)
+EC078_L51_sin_punto_y_coma.php                  805                     L51: sin ';'
+EC079_L51_parentesis_agrupan.php                802                     L51: 'echo (...);'
+EC080_L51_funcion.php                           802                     L51: 'echo strtoupper(...);' (tampoco en funciones)
+EC081_L51_sin_expresion.php                     801                     L51: 'echo;'
+EC082_L51_comilla_simple_abierta.php            804                     L51: "echo 'Texto;"
+EC083_L51_operador_sin_valor.php                806                     L51: operador '.' sin valor a la derecha
+EC084_L51_falta_operador.php                    806                     L51: falta el '.' entre dos valores
+EC085_L51_mal_escrito.php                       504                     L51: 'eco' en lugar de echo
+EC086_L51_mayusculas_valido.php                 -                       L51: 'ECHO' (valido)
+EC087_L51_parentesis_en_cadena_valido.php       -                       L51: parentesis dentro de una cadena (valido)
+EC088_L51_comilla_doble_abierta.php             803                     L51: falta la comilla doble de cierre
+SE001_L12_mayuscula.php                         901                     L12: '$nombre_estudiante' -> '$Nombre_estudiante'
+SE002_L12_letras_cambiadas.php                  901                     L12: '$nombre_estudiante' -> '$nombre_estudianet'
+SE003_L13_mayuscula.php                         901                     L13: '$cantidad_notas' -> '$Cantidad_notas'
+SE004_L13_letras_cambiadas.php                  901                     L13: '$cantidad_notas' -> '$cantidad_notsa'
+SE005_L18_mayuscula.php                         901                     L18: '$cantidad_notas' -> '$Cantidad_notas'
+SE006_L18_letras_cambiadas.php                  901                     L18: '$cantidad_notas' -> '$cantidad_notsa'
+SE007_L19_mayuscula.php                         901                     L19: '$notas' -> '$Notas'
+SE008_L19_letras_cambiadas.php                  901                     L19: '$notas' -> '$notsa'
+SE009_L22_mayuscula.php                         901                     L22: '$suma_notas' -> '$Suma_notas'
+SE010_L22_letras_cambiadas.php                  901                     L22: '$suma_notas' -> '$suma_notsa'
+SE011_L25_mayuscula.php                         901                     L25: '$promedio' -> '$Promedio'
+SE012_L25_letras_cambiadas.php                  901                     L25: '$promedio' -> '$promedoi'
+SE013_L28_mayuscula.php                         901                     L28: '$promedio' -> '$Promedio'
+SE014_L28_letras_cambiadas.php                  901                     L28: '$promedio' -> '$promedoi'
+SE015_L37_mayuscula.php                         901                     L37: '$contador_revision' -> '$Contador_revision'
+SE016_L37_letras_cambiadas.php                  901                     L37: '$contador_revision' -> '$contador_revisino'
+SE017_L38_mayuscula.php                         901                     L38: '$notas' -> '$Notas'
+SE018_L38_letras_cambiadas.php                  901                     L38: '$notas' -> '$notsa'
+SE019_L39_mayuscula.php                         901                     L39: '$contador_revision' -> '$Contador_revision'
+SE020_L39_letras_cambiadas.php                  901                     L39: '$contador_revision' -> '$contador_revisino'
+SE021_L44_mayuscula.php                         901                     L44: '$mensaje_final' -> '$Mensaje_final'
+SE022_L44_letras_cambiadas.php                  901                     L44: '$mensaje_final' -> '$mensaje_finla'
+SE023_L50_letras_cambiadas.php                  901                     L50: '$total' -> '$totla'
+SE024_L51_mayuscula.php                         901                     L51: '$resultado' -> '$Resultado'
+SE025_L51_letras_cambiadas.php                  901                     L51: '$resultado' -> '$resultaod'
+SE026_uso_antes_de_asignar.php                  901                     Despues de L46: 'echo $total;' (se asigna en L47)
+SE027_variable_inventada.php                    901                     L44: '$despedida' nunca recibe un valor
+SE028_variable_en_cadena.php                    901                     L25: '$promedio_final' dentro de la cadena
+SE029_funcion_anonima_valido.php                -                       Despues de L46: usort con function ($a, $b) (los parametros tienen valor)
+SE030_funcion_flecha_valido.php                 -                       Despues de L46: fn($n) => $n * 2 (el parametro tiene valor)
+SE031_funcion_anonima_use_sin_valor.php         901                     Despues de L46: function ($a) use ($bono): $bono no tiene valor
+EC089_eco_tras_sentencia_sin_punto_y_coma.php   504                     L43 sin ';' y L44 'eco': la sentencia no se traga el echo
+SE032_division_entre_cero.php                   902                     L22: '/ 0'
+SE033_division_entre_cero_decimal.php           902                     L22: '/ 0.0'
+SE034_modulo_entre_cero.php                     902                     L22: '% 0'
+SE035_division_asignada_entre_cero.php          902                     Despues de L50: '$resultado /= 0;'
+SE036_division_entre_cero_en_echo.php           902                     L44: 'echo 100 / 0;'
+SE037_division_decimal_valido.php               -                       L22: '/ 0.5' (valido)
+SE038_division_en_cadena_valido.php             -                       L44: '/ 0' dentro de una cadena (valido)
+SE039_division_entre_variable_valido.php        -                       L22: '/ $cantidad_notas - 0' (valido)
+FO001_cuerpo_2_espacios_valido.php              -                       L19 con 2 espacios (el for no se valida)
+FO002_cuerpo_tabulacion_valido.php              -                       L19 con tabulacion (el for no se valida)
+FO003_cierre_desalineado_valido.php             -                       L20: '  }' (el for no se valida)
+FO004_llave_abajo_valido.php                    -                       La '{' del for en la linea siguiente (valido)
+FO005_cuerpo_vacio_valido.php                   -                       Bloque del for con solo un comentario (el for no se valida)
+FO006_sin_llave_cierre.php                      505                     Se borra la L20: el bloque del for no cierra
+FO007_sin_llave_apertura.php                    503                     L18 sin '{': la '}' de L20 queda sin apertura
+FO008_mal_escrito.php                           504                     L18: 'fro' en lugar de for
+FO009_mal_escrito_sin_parentesis_cierre.php     504                     L18: 'fro (...; ...; ... {' (el for no se valida: solo el 504)
+FO010_comas_en_cabecera_valido.php              -                       Cabecera con comas (valido)
+FA001_saltos_lf.php                             -                       Todo el archivo con saltos LF (Linux)
+FA002_saltos_cr.php                             -                       Todo el archivo con saltos CR
+FA003_saltos_mezclados.php                      -                       Saltos CRLF, LF y CR mezclados
+FA004_bom_utf8.php                              301                     Guardado como 'UTF-8 con BOM'
+FA005_ansi_windows_1252.php                     -                       Guardado como ANSI (Windows-1252)
+FA006_espacios_al_final_de_lineas.php           -                       Espacios al final de cada linea (salvo la de ?>)
+FA007_tabulaciones_en_bloques.php               608 608 708 716         Tabulaciones en lugar de espacios en todos los bloques
+FA008_dos_espacios_en_bloques.php               607 607 707 715         2 espacios en lugar de 4 en todos los bloques
+FA009_estilo_allman_valido.php                  -                       Cada '{' y el else en su propia linea (valido)
+FA010_palabras_clave_mayusculas_valido.php      -                       Palabras clave en mayusculas (valido)
+FA011_archivo_vacio.php                         303 305                 Archivo vacio
+FA012_solo_etiquetas.php                        -                       Solo '<?php' y '?>'
+CB001_ID061__CO015.php                          201 402                 L35: '$contador_revision' -> '$1contador_revision' (digito despues de $) + Despues de L11: texto sin // (comentario que sigue)
+CB002_EC046__ID053.php                          202 802                 L31: 'echo (...);' + L22: '$promedio' -> '$@promedio' (simbolo despues de $)
+CB003_ID115__EC016.php                          202 804                 L50: '$resultado' -> '$!resultado' (simbolo despues de $) + L13: "echo 'Texto;"
+CB004_EC029__IF048.php                          504 704 806             L25: falta el '.' entre dos valores + L28: 'iff (...)' (mal escrito y sin '{')
+CB005_WH031__FO007.php                          503 609                 L40: '}' con 1 espacios + L18 sin '{': la '}' de L20 queda sin apertura
+CB006_SE031__IF011.php                          707 901                 Despues de L46: function ($a) use ($bono): $bono no tiene valor + L29 con 2 espacios
+CB007_SE020__SE032.php                          901 902                 L39: '$contador_revision' -> '$contador_revisino' + L22: '/ 0'
+CB008_EC007__WH042.php                          610 806                 L12: falta el '.' entre dos valores + La '{' sola en la linea siguiente con 8 espacios
+CB009_ID123__ID002.php                          202 204                 Despues de L46: '$if = 1;' (palabra reservada) + L5: '$nombre_estudiante' -> '$-nombre_estudiante' (simbolo despues de $)
+CB010_EC025__ID042.php                          202 802                 L25: 'echo strtoupper(...);' (tampoco en funciones) + L19: '$suma_notas' -> '$-suma_notas' (simbolo despues de $)
+CB011_ID057__ID148.php                          201 203                 L22: '$promedio' -> '$prñomedio' (caracter invalido en el nombre) + Despues de L50: '$1resultado *= 2;' (asignacion compuesta)
+CB012_ID051__WH047.php                          201 504                 L22: '$promedio' -> '$1promedio' (digito despues de $) + L37: 'whille' en lugar de while
+CB013_ID006__EC070.php                          203 802                 L5: '$nombre_estudiante' -> '$no@mbre_estudiante' (caracter invalido en el nombre) + L44: 'echo strtoupper(...);' (tampoco en funciones)
+CB014_IF011__EC066.php                          707 803                 L29 con 2 espacios + L38: falta la comilla doble de cierre
+CB015_CO010__ID108.php                          203 402                 Despues de L8: texto sin // (comentario que sigue) + L48: '$Total' -> '$To$tal' (caracter invalido en el nombre)
+CB016_WH019__ID129.php                          204 608                 L38 indentada con tabulacion + Despues de L46: '$return = 1;' (palabra reservada)
+CB017_CO040__CO046.php                          401 402                 Despues de L42: texto sin // (comentario que sigue) + L4: '#' -> '/'
+CB018_CO032__ID046.php                          203 402                 L34: se quita '// ' (texto suelto) + L19: '$suma_notas' -> '$su@ma_notas' (caracter invalido en el nombre)
+CB019_EC045__EC082.php                          804 805                 L31: sin ';' + L51: "echo 'Texto;"
+CB020_EC085__WH004.php                          504 603                 L51: 'eco' en lugar de echo + L37: 'while () {'
+CB021_WH032__ID047.php                          203 609                 L40: '}' con 2 espacios + L19: '$suma_notas' -> '$suñma_notas' (caracter invalido en el nombre)
+CB022_WH020__EC006.php                          608 806                 L38 con tabulacion y espacios + L12: operador '.' sin valor a la derecha
+CB023_ID060__WH033.php                          205 609 901             L22: '$promedio' -> '$' ($ sin nombre; la variable original queda sin valor: 901) + L40: '}' con 3 espacios
+CB024_IF019__SE020.php                          709 901                 L30: la '}' del if con 4 espacios + L39: '$contador_revision' -> '$contador_revisino'
+CB025_EC016__IF011.php                          707 804                 L13: "echo 'Texto;" + L29 con 2 espacios
+CB026_WH019__IF029.php                          608 715                 L38 indentada con tabulacion + L31 (bloque del else) con 2 espacios
+CB027_ID133__WH031.php                          204 609                 Despues de L46: '$true = 1;' (palabra reservada) + L40: '}' con 1 espacios
+CB028_ID013__EC001.php                          202 805                 L6: '$cantidad_notas' -> '$@cantidad_notas' (simbolo despues de $) + L12: sin ';'
+CB029_ID115__SE028.php                          202 901                 L50: '$resultado' -> '$!resultado' (simbolo despues de $) + L25: '$promedio_final' dentro de la cadena
+CB030_ID067__ID026.php                          203 203                 L35: '$contador_revision' -> '$coñntador_revision' (caracter invalido en el nombre) + L9: '$notas' -> '$no@tas' (caracter invalido en el nombre)
+CB031_EC082__IF028.php                          715 804                 L51: "echo 'Texto;" + L31 (bloque del else) con 0 espacios
+CB032_EC060__ID053.php                          202 804                 L38: "echo 'Texto;" + L22: '$promedio' -> '$@promedio' (simbolo despues de $)
+CB033_SE003__EC029.php                          806 901                 L13: '$cantidad_notas' -> '$Cantidad_notas' + L25: falta el '.' entre dos valores
+CB034_ID073__IF006.php                          202 705                 L39: '$contador_revision' -> '$@contador_revision' (simbolo despues de $) + L30: 'else {' (falta la '}' del if)
+CB035_ID118__ID063.php                          202 203                 L50: '$resultado' -> '$re$sultado' (caracter invalido en el nombre) + L35: '$contador_revision' -> '$@contador_revision' (simbolo despues de $)
+CB036_EC033__EC080.php                          802 803                 L25: falta la comilla doble de cierre + L51: 'echo strtoupper(...);' (tampoco en funciones)
+CB037_WH064__SE001.php                          707 901                 If anidado con 6 espacios en su contenido + L12: '$nombre_estudiante' -> '$Nombre_estudiante'
+CB038_IF043__ID129.php                          204 504                 L28: 'fi' en lugar de if + Despues de L46: '$return = 1;' (palabra reservada)
+CB039_IF050__WH021.php                          504 607 707             L28 'iff' y L29 con 2 espacios (se revisa como if) + L39 con 0 espacios
+CB040_EC059__CO005.php                          402 801                 L38: 'echo;' + Despues de L2: texto sin // (comentario que sigue)
+CB041_IF016__EC079.php                          708 802                 L29 con tabulacion + L51: 'echo (...);'
+CB042_IF005__WH021.php                          607 704                 L28: sin '{' + L39 con 0 espacios
+CB043_WH037__ID104.php                          202 608                 L40: '}' con tabulacion + L48: '$Total' -> '$+Total' (simbolo despues de $)
+CB044_ID151__ID138.php                          201 204                 Despues de L50: '$1resultado %= 2;' (asignacion compuesta) + Despues de L46: '$print = 1;' (palabra reservada)
+CB045_ID077__EC050.php                          203 806                 L39: '$contador_revision' -> '$coñntador_revision' (caracter invalido en el nombre) + L31: operador '.' sin valor a la derecha
+CB046_EC014__WH051.php                          504 602 802             L13: 'echo strtoupper(...);' (tampoco en funciones) + L37: 'whlie (... {' (mal escrito y sin ')')
+CB047_IF008__WH055.php                          504 607 706             Bloque del if con solo un comentario + L37 'whlie' y L38 con 2 espacios (se revisa como while)
+CB048_IF022__SE028.php                          710 901                 La '{' del if sola con 4 espacios + L25: '$promedio_final' dentro de la cadena
+CB049_IF014__WH039.php                          610 707                 L29 con 6 espacios + La '{' sola en la linea siguiente con 1 espacios
+CB050_IF049__EC056.php                          504 703 805             L28: 'iff () {' (mal escrito y sin condicion) + L38: sin ';'
+CB051_ID018__ID149.php                          201 203                 L6: '$cantidad_notas' -> '$ca$ntidad_notas' (caracter invalido en el nombre) + Despues de L50: '$1resultado /= 2;' (asignacion compuesta)
+CB052_CO012__WH051.php                          402 504 602             L11: se quita '// ' (texto suelto) + L37: 'whlie (... {' (mal escrito y sin ')')
+CB053_ID051__WH041.php                          201 610                 L22: '$promedio' -> '$1promedio' (digito despues de $) + La '{' sola en la linea siguiente con 4 espacios
+CB054_EC072__SE002.php                          804 901                 L44: "echo 'Texto;" + L12: '$nombre_estudiante' -> '$nombre_estudianet'
+CB055_FO007__IF024.php                          503 712                 L18 sin '{': la '}' de L20 queda sin apertura + Se borra la L32 (la '}' del else)
+CB056_ID133__WH048.php                          204 504                 Despues de L46: '$true = 1;' (palabra reservada) + L37: 'wihle' en lugar de while
+CB057_ID094__WH033.php                          202 609                 L47: '$total' -> '$+total' (simbolo despues de $) + L40: '}' con 3 espacios
+CB058_SE008__IF005.php                          704 901                 L19: '$notas' -> '$notsa' + L28: sin '{'
+CB059_ID033__EC047.php                          202 802                 L16: '$suma_notas' -> '$@suma_notas' (simbolo despues de $) + L31: 'echo strtoupper(...);' (tampoco en funciones)
+CB060_ID137__IF015.php                          204 707                 Despues de L46: '$include = 1;' (palabra reservada) + L29 con 8 espacios
+CC001_WH005__ID050__ID100.php                   205 205 603 901         L37: 'while (   ) {' + L19: '$suma_notas' -> '$' ($ sin nombre) + L47: '$total' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+CC002_WH047__ID008__ID048.php                   203 203 504             L37: 'whille' en lugar de while + L5: '$nombre_estudiante' -> '$no$mbre_estudiante' (caracter invalido en el nombre) + L19: '$suma_notas' -> '$su$ma_notas' (caracter invalido en el nombre)
+CC003_IF043__ID043__EC023.php                   202 504 805             L28: 'fi' en lugar de if + L19: '$suma_notas' -> '$@suma_notas' (simbolo despues de $) + L25: sin ';'
+CC004_EC028__ID023__SE020.php                   202 806 901             L25: operador '.' sin valor a la derecha + L9: '$notas' -> '$@notas' (simbolo despues de $) + L39: '$contador_revision' -> '$contador_revisino'
+CC005_IF043__ID138__EC059.php                   204 504 801             L28: 'fi' en lugar de if + Despues de L46: '$print = 1;' (palabra reservada) + L38: 'echo;'
+CC006_SE023__EC038__CO046.php                   401 804 901             L50: '$total' -> '$totla' + L29: "echo 'Texto;" + L4: '#' -> '/'
+CC007_ID080__ID003__CO010.php                   202 205 402             L39: '$contador_revision' -> '$' ($ sin nombre) + L5: '$nombre_estudiante' -> '$@nombre_estudiante' (simbolo despues de $) + Despues de L8: texto sin // (comentario que sigue)
+CC008_SE004__ID070__IF043.php                   205 504 901 901         L13: '$cantidad_notas' -> '$cantidad_notsa' + L35: '$contador_revision' -> '$' ($ sin nombre; la variable original queda sin valor: 901) + L28: 'fi' en lugar de if
+CC009_ID115__IF002__EC008.php                   202 504 702             L50: '$resultado' -> '$!resultado' (simbolo despues de $) + L28: sin ')' + L12: 'eco' en lugar de echo
+CC010_ID068__EC015__EC074.php                   203 801 806             L35: '$contador_revision' -> '$co$ntador_revision' (caracter invalido en el nombre) + L13: 'echo;' + L44: falta el '.' entre dos valores
+CC011_IF018__ID149__ID044.php                   201 202 709             L30: la '}' del if con 2 espacios + Despues de L50: '$1resultado /= 2;' (asignacion compuesta) + L19: '$suma_notas' -> '$+suma_notas' (simbolo despues de $)
+CC012_EC007__CO002__IF019.php                   402 709 806             L12: falta el '.' entre dos valores + L2: se quita '// ' (texto suelto) + L30: la '}' del if con 4 espacios
+CC013_ID008__ID055__WH015.php                   202 203 607             L5: '$nombre_estudiante' -> '$no$mbre_estudiante' (caracter invalido en el nombre) + L22: '$promedio' -> '$!promedio' (simbolo despues de $) + L38 con 5 espacios
+CC014_ID038__ID027__CO037.php                   203 203 402             L16: '$suma_notas' -> '$su$ma_notas' (caracter invalido en el nombre) + L9: '$notas' -> '$noñtas' (caracter invalido en el nombre) + L42: se quita '// ' (texto suelto)
+CC015_CO021__EC069__CO001.php                   401 401 802             L24: '//' -> '/' + L44: 'echo (...);' + L2: '//' -> '/'
+CC016_EC027__ID088__ID079.php                   203 206 804             L25: "echo 'Texto;" + L43: '$mensaje_final' -> '$me$nsaje_final' (caracter invalido en el nombre) + L39: '$contador_revision' -> 'contador_revision' (sin $)
+CC017_WH051__EC015__ID120.php                   205 504 602 801 901     L37: 'whlie (... {' (mal escrito y sin ')') + L13: 'echo;' + L50: '$resultado' -> '$' ($ sin nombre; la variable original queda sin valor: 901)
+CC018_EC066__EC085__ID036.php                   203 504 803             L38: falta la comilla doble de cierre + L51: 'eco' en lugar de echo + L16: '$suma_notas' -> '$su@ma_notas' (caracter invalido en el nombre)
+CC019_IF044__WH020__ID018.php                   203 504 608             L28: 'ifx' en lugar de if + L38 con tabulacion y espacios + L6: '$cantidad_notas' -> '$ca$ntidad_notas' (caracter invalido en el nombre)
+CC020_ID101__EC046__ID089.php                   201 206 802             L48: '$Total' -> '$1Total' (digito despues de $) + L31: 'echo (...);' + L43: '$mensaje_final' -> 'mensaje_final' (sin $)
+CC021_ID025__WH048__SE022.php                   202 504 901             L9: '$notas' -> '$!notas' (simbolo despues de $) + L37: 'wihle' en lugar de while + L44: '$mensaje_final' -> '$mensaje_finla'
+CC022_EC088__EC066__ID011.php                   201 803 803             L51: falta la comilla doble de cierre + L38: falta la comilla doble de cierre + L6: '$cantidad_notas' -> '$1cantidad_notas' (digito despues de $)
+CC023_ID112__FO008__IF025.php                   202 504 713             L50: '$resultado' -> '$-resultado' (simbolo despues de $) + L18: 'fro' en lugar de for + Se borra la L31
+CC024_ID071__ID083__EC055.php                   201 202 803             L39: '$contador_revision' -> '$1contador_revision' (digito despues de $) + L43: '$mensaje_final' -> '$@mensaje_final' (simbolo despues de $) + L31: falta la comilla doble de cierre
+CC025_ID041__WH012__CO002.php                   201 402 607             L19: '$suma_notas' -> '$1suma_notas' (digito despues de $) + L38 con 1 espacios + L2: se quita '// ' (texto suelto)
+CC026_ID135__WH054__IF014.php                   204 504 603 707         Despues de L46: '$foreach = 1;' (palabra reservada) + L37: 'whlie () {' (mal escrito y sin condicion) + L29 con 6 espacios
+CC027_SE036__WH028__ID148.php                   201 607 902             L44: 'echo 100 / 0;' + L39 con 8 espacios + Despues de L50: '$1resultado *= 2;' (asignacion compuesta)
+CC028_WH056__ID091__CO020.php                   201 402 504             L35 sin ';' y L37 'whlie': la sentencia no se traga la estructura + L47: '$total' -> '$1total' (digito despues de $) + Despues de L15: texto sin // (comentario que sigue)
+CC029_ID119__ID003__ID048.php                   202 203 206             L50: '$resultado' -> 'resultado' (sin $) + L5: '$nombre_estudiante' -> '$@nombre_estudiante' (simbolo despues de $) + L19: '$suma_notas' -> '$su$ma_notas' (caracter invalido en el nombre)
+CC030_WH049__EC045__CO025.php                   402 504 805             L37: 'hwile' en lugar de while + L31: sin ';' + Despues de L24: texto sin // (comentario que sigue)
+CC031_WH024__IF043__FO007.php                   503 504 607             L39 con 3 espacios + L28: 'fi' en lugar de if + L18 sin '{': la '}' de L20 queda sin apertura
+CC032_EC060__ID094__ID014.php                   202 202 804             L38: "echo 'Texto;" + L47: '$total' -> '$+total' (simbolo despues de $) + L6: '$cantidad_notas' -> '$+cantidad_notas' (simbolo despues de $)
+CC033_CO042__ID081__IF051.php                   201 402 504             L46: se quita '// ' (texto suelto) + L43: '$mensaje_final' -> '$1mensaje_final' (digito despues de $) + Se agrega '} elsif (...) {' en lugar de elseif
+CC034_SE002__ID144__IF048.php                   204 504 704 901         L12: '$nombre_estudiante' -> '$nombre_estudianet' + Despues de L46: '$Trim = 1;' (palabra reservada) + L28: 'iff (...)' (mal escrito y sin '{')
+CC035_SE020__IF054__SE010.php                   504 901 901             L39: '$contador_revision' -> '$contador_revisino' + L30: '} elze {' en lugar de else + L22: '$suma_notas' -> '$suma_notsa'
+CC036_IF052__ID138__EC060.php                   204 504 804             L30: '} els {' en lugar de else + Despues de L46: '$print = 1;' (palabra reservada) + L38: "echo 'Texto;"
+CC037_IF048__ID068__ID052.php                   202 203 504 704         L28: 'iff (...)' (mal escrito y sin '{') + L35: '$contador_revision' -> '$co$ntador_revision' (caracter invalido en el nombre) + L22: '$promedio' -> '$-promedio' (simbolo despues de $)
+CC038_WH040__ID088__ID055.php                   202 203 610             La '{' sola en la linea siguiente con 2 espacios + L43: '$mensaje_final' -> '$me$nsaje_final' (caracter invalido en el nombre) + L22: '$promedio' -> '$!promedio' (simbolo despues de $)
+CC039_EC070__ID031__SE024.php                   201 802 901             L44: 'echo strtoupper(...);' (tampoco en funciones) + L16: '$suma_notas' -> '$1suma_notas' (digito despues de $) + L51: '$resultado' -> '$Resultado'
+CC040_CO046__SE005__ID095.php                   202 401 901             L4: '#' -> '/' + L18: '$cantidad_notas' -> '$Cantidad_notas' + L47: '$total' -> '$!total' (simbolo despues de $)

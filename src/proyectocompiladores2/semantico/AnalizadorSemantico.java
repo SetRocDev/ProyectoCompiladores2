@@ -119,6 +119,18 @@ public class AnalizadorSemantico {
                 i = saltarParentesis(tokens, i + 1);
                 continue;
             }
+            if (esFuncionAnonima(tokens, i)) {
+                // usort($notas, function ($a, $b) {...}) o fn($x) => $x * 2: como en
+                // "function nombre($a, $b)", los parámetros reciben su valor al llamarla
+                int cierre = saltarParentesis(tokens, i + 1);
+                for (int k = i + 2; k < cierre; k++) {
+                    if (esVariable(tokens.get(k))) {
+                        tabla.asignar(tokens.get(k).getLexema(), tokens.get(k).getLinea());
+                    }
+                }
+                i = cierre;
+                continue;
+            }
             if (esVariable(token) && (!asignadas.contains(token) || esAsignacionCompuesta(tokens, i))) {
                 usadas.add(token);
             } else if (esCadenaConVariables(token)) {
@@ -216,6 +228,13 @@ public class AnalizadorSemantico {
     private boolean esRevisionDeExistencia(List<Token> tokens, int i) {
         String lexema = tokens.get(i).getLexema().toLowerCase(Locale.ROOT);
         return (lexema.equals("isset") || lexema.equals("empty"))
+                && i + 1 < tokens.size() && tokens.get(i + 1).getLexema().equals("(");
+    }
+
+    /** @return true si en esa posición empieza function( o fn( (función anónima dentro de una expresión) */
+    private boolean esFuncionAnonima(List<Token> tokens, int i) {
+        String lexema = tokens.get(i).getLexema().toLowerCase(Locale.ROOT);
+        return (lexema.equals("function") || lexema.equals("fn"))
                 && i + 1 < tokens.size() && tokens.get(i + 1).getLexema().equals("(");
     }
 

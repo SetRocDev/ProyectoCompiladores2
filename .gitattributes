@@ -16,6 +16,7 @@
 # Los .log esperados de las pruebas se comparan byte por byte con los que genera
 # el programa: se guardan tal cual (sin convertir saltos de línea).
 pruebas/esperados/*.log -text
+pruebas/catedra/esperados/*.log -text
 
 # Scripts de pruebas: el .bat necesita CRLF (Windows) y el .sh necesita LF (Linux)
 *.bat text eol=crlf

@@ -1,6 +1,7 @@
 package proyectocompiladores2.sintactico;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.Locale;
@@ -146,8 +147,18 @@ public class AnalizadorSintactico {
             if (ESTRUCTURAS_GENERICAS.contains(palabra)) {
                 return estructuraGenerica();
             }
-            if (token.es(TipoToken.PALABRA) && pareceEstructuraMalEscrita()) {
-                registrar(CodigoError.ESTRUCTURA_DESCONOCIDA, token, token.getLexema(), sugerencia(palabra));
+            if (token.es(TipoToken.PALABRA) && pareceEstructuraMalEscrita(posicion)) {
+                // "whlie (...) {": se reporta y la estructura se sigue revisando como la
+                // que se quiso escribir, para que su bloque y su else no den errores en
+                // cascada y los demás errores de la cabecera (paréntesis, llave) aparezcan
+                String sugerida = estructuraParecida(palabra);
+                reemplazarTextoSuelto(token, sugerida);
+                if ("while".equals(sugerida)) {
+                    return new ValidadorWhile().analizar(this);
+                }
+                if ("if".equals(sugerida) || "elseif".equals(sugerida)) {
+                    return new ValidadorIf().analizar(this);
+                }
                 return estructuraGenerica();
             }
             if (token.es(TipoToken.PALABRA) && pareceEchoMalEscrito(token)) {
@@ -439,7 +450,8 @@ public class AnalizadorSintactico {
             Token token = flujo.get(i);
             boolean esEstructura = esPalabra(token, "while") || esPalabra(token, "for")
                     || esPalabra(token, "if") || esPalabra(token, "elseif") || esPalabra(token, "foreach")
-                    || esPalabra(token, "else");
+                    || esPalabra(token, "else")
+                    || (token.es(TipoToken.PALABRA) && pareceEstructuraMalEscrita(i)); // "whlie (...)"
             if (esEstructura && indentacion.esPrimeroDeSuLinea(token)
                     && indentacion.anchoDe(token.getLinea()) == ancho && !abreSuLlave(i)) {
                 return true;
@@ -521,39 +533,90 @@ public class AnalizadorSintactico {
         return false;
     }
 
-    /** Si falta el ';', la sentencia termina antes de estos tokens. */
+    /**
+     * Si falta el ';', la sentencia termina antes de estos tokens (el token es
+     * el actual). También antes de una estructura o un echo mal escritos que
+     * empiezan la línea siguiente ("whlie (...) {", "eco $x;").
+     */
     private boolean terminaSentenciaSinPuntoYComa(Token token) {
         if (es(token, "{") || es(token, "}") || esEtiqueta(token)) {
             return true;
+        }
+        if (!indentacion.esPrimeroDeSuLinea(token)) {
+            return false;
         }
         String palabra = token.getLexema().toLowerCase(Locale.ROOT);
         boolean esEstructura = ESTRUCTURAS_GENERICAS.contains(palabra) || palabra.equals("while")
                 || palabra.equals("if") || palabra.equals("else") || palabra.equals("elseif")
                 || palabra.equals("echo");
-        return esEstructura && (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA))
-                && indentacion.esPrimeroDeSuLinea(token);
+        if (esEstructura && (token.es(TipoToken.PALABRA_RESERVADA) || token.es(TipoToken.PALABRA))) {
+            return true;
+        }
+        return token.es(TipoToken.PALABRA) && (pareceEstructuraMalEscrita(posicion) || pareceEchoMalEscrito(token));
     }
 
     /**
-     * Una palabra que no es palabra clave, seguida de '(' ... ')' y luego de
-     * '{', tiene la forma de una estructura de control ("whlie ($x) {"). Una
-     * llamada a función nunca va seguida de un bloque.
+     * Una palabra que no es palabra clave y tiene la forma de una estructura de
+     * control (una llamada a función nunca va seguida de un bloque):
+     *  - "whlie ($x) {": '(' ... ')' y luego '{';
+     *  - "whlie ($x {": la '{' aparece en la misma línea antes de cerrar el
+     *    paréntesis (salvo una función anónima dentro de una llamada);
+     *  - si se parece a while o if: "iff ($x)" sin '{' (después del ')' sigue
+     *    otra línea u otra instrucción, no un ';');
+     *  - si se parece a una estructura: "whlie $x < 4) {" sin '(' (la línea
+     *    termina en '{').
      */
-    private boolean pareceEstructuraMalEscrita() {
-        if (posicion + 1 >= flujo.tamano() || !es(flujo.get(posicion + 1), "(")) {
+    private boolean pareceEstructuraMalEscrita(int indice) {
+        Token palabra = flujo.get(indice);
+        if (indice + 1 >= flujo.tamano()) {
             return false;
         }
+        String sugerida = estructuraParecida(palabra.getLexema().toLowerCase(Locale.ROOT));
+        boolean alInicio = indentacion.esPrimeroDeSuLinea(palabra);
+        if (!es(flujo.get(indice + 1), "(")) {
+            return sugerida != null && alInicio && !es(flujo.get(indice + 1), "{")
+                    && lineaTerminaEnLlave(indice);
+        }
+        boolean whileOIf = "while".equals(sugerida) || "if".equals(sugerida) || "elseif".equals(sugerida);
+        boolean funcionAnonima = false;
         int profundidad = 0;
-        for (int i = posicion + 1; i < flujo.tamano(); i++) {
+        for (int i = indice + 1; i < flujo.tamano(); i++) {
             Token token = flujo.get(i);
             if (es(token, "(")) {
                 profundidad++;
             } else if (es(token, ")")) {
                 profundidad--;
                 if (profundidad == 0) {
-                    return i + 1 < flujo.tamano() && es(flujo.get(i + 1), "{");
+                    if (i + 1 >= flujo.tamano()) {
+                        return false;
+                    }
+                    Token despues = flujo.get(i + 1);
+                    return es(despues, "{") || (whileOIf && alInicio && !es(despues, ";")
+                            && !es(despues, "}") && !esEtiqueta(despues)
+                            && (despues.getLinea() > token.getLinea() || despues.es(TipoToken.PALABRA_RESERVADA)));
                 }
-            } else if (es(token, ";") || es(token, "{") || es(token, "}")) {
+            } else if (es(token, "{")) {
+                // "whlie ($x {": falta el ')' y la llave está en la misma línea
+                return profundidad > 0 && !funcionAnonima && token.getLinea() == palabra.getLinea();
+            } else if ((es(token, ";") && profundidad == 0) || es(token, "}") || esEtiqueta(token)) {
+                // dentro de los paréntesis puede haber ';' (cabecera de un for: "fro (...; ...; ...) {")
+                return false;
+            } else if (esPalabra(token, "function") || esPalabra(token, "fn")) {
+                funcionAnonima = true;
+            }
+        }
+        return false;
+    }
+
+    /** @return true si en la línea de la palabra aparece una '{' antes de un ';' o una '}'. */
+    private boolean lineaTerminaEnLlave(int indice) {
+        Token palabra = flujo.get(indice);
+        for (int i = indice + 1; i < flujo.tamano() && flujo.get(i).getLinea() == palabra.getLinea(); i++) {
+            Token token = flujo.get(i);
+            if (es(token, "{")) {
+                return true;
+            }
+            if (es(token, ";") || es(token, "}") || esEtiqueta(token)) {
                 return false;
             }
         }
@@ -586,24 +649,56 @@ public class AnalizadorSintactico {
     }
 
     /**
-     * La etapa 4 ya reportó la palabra como texto suelto (402); como aquí se
-     * sabe que es una palabra clave mal escrita, se reemplaza por el 504, que
-     * es más específico (un error, un mensaje).
+     * Registra el 504 de una palabra clave mal escrita. Si la etapa 4 ya la
+     * reportó como texto suelto (402), ese error se quita, porque el 504 es más
+     * específico (un error, un mensaje).
      */
     private void reemplazarTextoSuelto(Token palabra, String palabraClave) {
         errores.quitar(CodigoError.TEXTO_FUERA_DE_COMENTARIO, palabra.getLinea(), palabra.getColumna());
         registrar(CodigoError.ESTRUCTURA_DESCONOCIDA, palabra, palabra.getLexema(),
-                "; ¿quiso decir '" + palabraClave + "'?");
+                palabraClave == null ? "" : "; ¿quiso decir '" + palabraClave + "'?");
     }
 
-    /** @return "; ¿quiso decir 'while'?" si la palabra se parece a una estructura conocida. */
-    private String sugerencia(String palabra) {
+    /**
+     * @return la estructura conocida que se parece a la palabra (en minúsculas), o
+     *         null. Se permiten 2 letras de diferencia ("whlie", "fro"); con "if"
+     *         solo 1 o las mismas letras en otro orden ("iff", "fi"), para que
+     *         cualquier palabra de dos letras no se tome por un if.
+     */
+    private static String estructuraParecida(String palabra) {
+        if (palabra.length() < 2) {
+            return null;
+        }
         for (String conocida : ESTRUCTURAS_CONOCIDAS) {
-            if (Patrones.distanciaDeEdicion(palabra, conocida) <= 2) {
-                return "; ¿quiso decir '" + conocida + "'?";
+            int distancia = Patrones.distanciaDeEdicion(palabra, conocida);
+            if (distancia <= Math.min(2, conocida.length() - 1) || (distancia <= 2 && mismasLetras(palabra, conocida))) {
+                return conocida;
             }
         }
-        return "";
+        return null;
+    }
+
+    /** @return true si las dos palabras tienen las mismas letras, aunque en otro orden. */
+    private static boolean mismasLetras(String a, String b) {
+        char[] x = a.toCharArray();
+        char[] y = b.toCharArray();
+        Arrays.sort(x);
+        Arrays.sort(y);
+        return Arrays.equals(x, y);
+    }
+
+    /**
+     * Nombre de la estructura para los mensajes: la palabra tal como se
+     * escribió ("if", "IF", "elseif") o, si está mal escrita ("iff"), la
+     * palabra clave que se quiso escribir, que es la que ya se sugirió en el 504.
+     */
+    public static String nombreDeEstructura(Token palabraClave) {
+        String palabra = palabraClave.getLexema();
+        if (palabraClave.es(TipoToken.PALABRA_RESERVADA)) {
+            return palabra;
+        }
+        String sugerida = estructuraParecida(palabra.toLowerCase(Locale.ROOT));
+        return sugerida == null ? palabra : sugerida;
     }
 
 
