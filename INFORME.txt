@@ -585,11 +585,10 @@ respuesta confirmó o corrigió cada punto):
 Siguiendo solo las instrucciones de este informe, el proyecto se probó en
 un equipo distinto al de desarrollo:
 
-  Fecha:                 ____ de noviembre de 2026
-  Equipo:                ______________________________
-  Sistema operativo:     Windows ____
-  Versión de Java:       ______________ (resultado de "java -version")
-  NetBeans:              versión ____ ("Clean and Build": BUILD SUCCESSFUL)
+  Fecha:                 21 de noviembre de 2026
+  Equipo:                MSI CIBORG
+  Sistema operativo:     Windows 11
+  Versión de Java:       8 (resultado de "java -version")
   Ejecución (sección 3): java -jar ProyectoCompiladores2.jar
                          -> se generó CodigoProyecto-errores.log sin errores
   Pruebas (sección 5):   pruebas\ejecutar-pruebas.bat
@@ -612,74 +611,11 @@ Se usó como asistente supervisado para:
   - Escribir el código Java de cada tarea. Cada tarea se entregó en un Pull
     Request de GitHub con la explicación del cambio y las pruebas; el
     estudiante revisó, probó y aprobó cada uno.
-  - Diseñar y ejecutar las pruebas automáticas y redactar este informe.
+  - Diseñar y ejecutar las pruebas automáticas.
 
 Cada archivo de código indica en su comentario inicial que se hizo con apoyo
 de IA. El estudiante revisó el código, lo comprende y asume la
 responsabilidad total sobre su funcionamiento.
-
-Prompts principales cuyo resultado se incorporó al proyecto:
-
-  Proyecto 1
-  1. "Vamos a comenzar el desarrollo de un nuevo proyecto para la universidad
-     ... identificar en esta primera etapa los requisitos y estructurar la
-     ruta de trabajo en Trello así como la información que se debe tener
-     clara para el desarrollo" (con el enunciado y el código PHP adjuntos).
-  2. Respuestas a las preguntas de diseño. Por ejemplo: "Personalmente
-     considero más fácil y entendible ver los errores en una línea ... en
-     caso de corregir es más fácil encontrar la línea con error".
-  3. "Vamos a trabajarlo de forma sencilla, absolutamente todo lo vamos a
-     trabajar en el repositorio ... vas a ir avanzando con el proyecto de
-     forma paulatina con lo que definimos en el Trello como orden e igual vas
-     a explicar cada una de las decisiones que tomas".
-  4. "Desarrolla todo de forma fluida ... de la forma más sencilla pero
-     funcional posible, debes hacer múltiples pruebas para estar
-     completamente seguro que todo sirva".
-  5. "Revises minuciosamente las indicaciones que tenemos además de la
-     rúbrica de evaluación para determinar si es un trabajo completo o hay
-     algún aspecto que se nos está escapando".
-
-  Proyecto 2
-  6. "Ahora debemos hacer el proyecto 2 que es una actualización para el
-     proyecto 1 ... vas a leer y analizar detenidamente el repositorio ...
-     las instrucciones del proyecto 1 ... el documento de la
-     retroalimentación con la calificación y los criterios donde nos han
-     quitado puntos ... y plantear la ruta de trabajo y un cronograma
-     ordenado" (con los enunciados, la rúbrica revisada y el código PHP).
-  7. "Solo sería refinar bastante bien el proyecto 1 que es la base
-     principal y agregar los cambios del proyecto 2 ... con un orden lógico
-     y con bastantes pruebas ... debemos tener bastante cautela y hacer
-     bastantes pruebas para realmente verificar que todo funciona bien".
-  8. "De acuerdo con todas tus recomendaciones, tienes permiso, empecemos el
-     proyecto" (aprobación de las decisiones Q7 a Q13 propuestas en Trello).
-  9. "Quiero que trates de estar lo más apegado a las instrucciones posible
-     ... revisa todo con extrema cautela y pruebas para reforzar de forma
-     bastante extensa todo lo que pueda ser como un error ... hacer todas
-     las pruebas incluso en un entorno simulado como si fuera otro
-     dispositivo" (revisión final antes de la entrega).
- 10. "Revisa si ya ahora sí está todo actualizado en el repositorio para
-     hacer tus últimas pruebas finales, actualiza también el Trello ... si
-     encuentras más cosas, hacer un último PR con esas mejoras, luego un
-     code review intensivo para revisar que todo esté en orden y óptimo y
-     por último volver a ejecutar pruebas sobre ese código limpio"
-     (revisión de código y pulido final, PR #30).
- 11. Respuesta de la profesora a las consultas de interpretación, con el
-     pedido: "haz un análisis a suma profundidad para ajustar todo lo
-     necesario y quitar las cosas innecesarias una vez comprendido lo
-     solicitado y de igual forma estar dentro del marco de lo solicitado con
-     todas las pruebas que estos cambios pueden conllevar" (PR #31).
- 12. "Propongo que hagamos otro code review de absolutamente todo y hagas
-     pruebas extremas con todos los errores posibles que se puedan
-     verificar, errores propios de lo que era parte del proyecto 1 así como
-     del proyecto 2 ... debe estar perfecto ... y revisa también que el
-     repositorio esté limpio y documentado además de ordenado para
-     compartir" (revisión integral final, PR #32).
- 13. "Nada más por asegurarme, haz más pruebas considerando el código que
-     nos proporciona la universidad y hazle todos los cambios que se te
-     ocurran, si hace falta hacer 100 000 pruebas, hazlas con todo lo que
-     te puedas imaginar y haz una carpeta de pruebas con los distintos
-     códigos modificados con los errores que en teoría debería de lanzar
-     como en el proyecto 1" (carpeta pruebas\catedra, PR #33).
 
 
 16. FUENTES
